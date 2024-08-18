@@ -6,6 +6,8 @@ Module ConfigModule
     ' 定义配置类
     Public Class Config
         Public Property HVKLVersion As String
+        Public Property DeveloperMode As Boolean
+        Public Property UseCustomBackground As Boolean
     End Class
 
     ' 写入配置到JSON文件的函数
