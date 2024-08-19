@@ -2,12 +2,20 @@
 Imports Newtonsoft.Json
 
 Module ConfigModule
+    Public HVKLVersion
+    Public DeveloperMode
+    Public UseCustomBackground
+    Public LastStartVersion
+    Public TotalStartTimes
+    Public ConfigFilePath = "config.json"
 
     ' 定义配置类
     Public Class Config
         Public Property HVKLVersion As String
         Public Property DeveloperMode As Boolean
         Public Property UseCustomBackground As Boolean
+        Public Property LastStartVersion As String
+        Public Property TotalStartTimes As Long
     End Class
 
     ' 写入配置到JSON文件的函数
@@ -27,25 +35,20 @@ Module ConfigModule
         Return JsonConvert.DeserializeObject(Of Config)(json)
     End Function
 
-    Sub Main()
-        '    Dim filePath As String = "config.json"
-
-        '    ' 创建配置实例并写入文件
-        '    Dim configToWrite As New Config With {
-        '    .Setting1 = "Value1",
-        '    .Setting2 = 100,
-        '    .Setting3 = True
-        '}
-        '    WriteConfig(configToWrite, filePath)
-
-        '    ' 从文件读取配置
-        '    Dim configRead As Config = ReadConfig(filePath)
-        '    Console.WriteLine("读取的配置: ")
-        '    Console.WriteLine("Setting1: " & configRead.Setting1)
-        '    Console.WriteLine("Setting2: " & configRead.Setting2)
-        '    Console.WriteLine("Setting3: " & configRead.Setting3)
-    End Sub
-
-
-
+    Public Function SaveConfig(form)
+        Dim configToWrite As New Config With {
+                .HVKLVersion = HVKLVersion,
+                .DeveloperMode = DeveloperMode,
+                .UseCustomBackground = UseCustomBackground,
+                .LastStartVersion = LastStartVersion,
+                .TotalStartTimes = TotalStartTimes
+                }
+        Try
+            WriteConfig(configToWrite, "config.json")
+        Catch ex As Exception
+            AntdUI.Notification.error(form, "写入配置文件错误", ex.Message,,, 0)
+            Return ex.Message
+        End Try
+        Return 0
+    End Function
 End Module

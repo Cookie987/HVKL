@@ -56,6 +56,8 @@ Public Class ManageForm
         If dialogResult1 = DialogResult.OK Then
             Progress1.Value = 0.02
             DeleteFolder("version\" + Select1.SelectedValue)
+            Progress1.Value = 1
+            MainForm.RefreshVersion()
         End If
     End Sub
 

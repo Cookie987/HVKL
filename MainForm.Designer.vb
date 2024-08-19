@@ -37,9 +37,9 @@ Partial Class MainForm
         Divider3 = New AntdUI.Divider()
         SettingLabel = New AntdUI.Label()
         Panel1 = New AntdUI.Panel()
+        Select1 = New AntdUI.Select()
         Divider4 = New AntdUI.Divider()
         Label1 = New AntdUI.Label()
-        Select1 = New AntdUI.Select()
         DownloadVersionPanel.SuspendLayout()
         ManageVersionPanel.SuspendLayout()
         SettingPanel.SuspendLayout()
@@ -52,10 +52,12 @@ Partial Class MainForm
         WindowBar1.DividerShow = True
         WindowBar1.DividerThickness = 2F
         WindowBar1.Font = New Font("Segoe UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
+        WindowBar1.IconSvg = ""
         WindowBar1.Location = New Point(-1, -1)
         WindowBar1.MaximizeBox = False
         WindowBar1.Name = "WindowBar1"
         WindowBar1.Size = New Size(833, 32)
+        WindowBar1.SubText = ""
         WindowBar1.TabIndex = 0
         WindowBar1.Text = "Hello Vacko Launcher"
         ' 
@@ -210,6 +212,14 @@ Partial Class MainForm
         Panel1.TabIndex = 6
         Panel1.Text = "Panel2"
         ' 
+        ' Select1
+        ' 
+        Select1.Location = New Point(33, 66)
+        Select1.Name = "Select1"
+        Select1.Size = New Size(115, 40)
+        Select1.TabIndex = 3
+        Select1.Text = "选择版本以启动游戏"
+        ' 
         ' Divider4
         ' 
         Divider4.Location = New Point(33, 44)
@@ -230,14 +240,6 @@ Partial Class MainForm
         Label1.Text = "选择版本"
         Label1.TextAlign = ContentAlignment.MiddleCenter
         ' 
-        ' Select1
-        ' 
-        Select1.Location = New Point(33, 66)
-        Select1.Name = "Select1"
-        Select1.Size = New Size(115, 40)
-        Select1.TabIndex = 3
-        Select1.Text = "选择版本以启动游戏"
-        ' 
         ' MainForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
@@ -251,6 +253,7 @@ Partial Class MainForm
         Controls.Add(DownloadVersionPanel)
         Controls.Add(WindowBar1)
         FormBorderStyle = FormBorderStyle.FixedSingle
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
         MaximizeBox = False
         Name = "MainForm"
         Resizable = False

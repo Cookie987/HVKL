@@ -24,6 +24,7 @@ Partial Class SettingForm
     Private Sub InitializeComponent()
         WindowBar1 = New AntdUI.WindowBar()
         SettingPanel = New AntdUI.Panel()
+        StartTimesLabel = New AntdUI.Label()
         Label2 = New AntdUI.Label()
         Label1 = New AntdUI.Label()
         Divider3 = New AntdUI.Divider()
@@ -33,6 +34,7 @@ Partial Class SettingForm
         Switch1 = New AntdUI.Switch()
         Divider1 = New AntdUI.Divider()
         Label5 = New AntdUI.Label()
+        ButtonCheckUpdate = New AntdUI.Button()
         SettingPanel.SuspendLayout()
         Panel1.SuspendLayout()
         SuspendLayout()
@@ -51,21 +53,31 @@ Partial Class SettingForm
         ' 
         SettingPanel.BackColor = Color.Transparent
         SettingPanel.BorderWidth = 1F
+        SettingPanel.Controls.Add(StartTimesLabel)
         SettingPanel.Controls.Add(Label2)
         SettingPanel.Controls.Add(Label1)
         SettingPanel.Controls.Add(Divider3)
         SettingPanel.Controls.Add(SettingLabel)
-        SettingPanel.Cursor = Cursors.Hand
         SettingPanel.Location = New Point(193, 28)
         SettingPanel.Name = "SettingPanel"
         SettingPanel.Shadow = 15
         SettingPanel.ShadowOpacityAnimation = True
-        SettingPanel.Size = New Size(234, 161)
+        SettingPanel.Size = New Size(234, 171)
         SettingPanel.TabIndex = 6
         SettingPanel.Text = "Panel2"
         ' 
+        ' StartTimesLabel
+        ' 
+        StartTimesLabel.Location = New Point(33, 100)
+        StartTimesLabel.Name = "StartTimesLabel"
+        StartTimesLabel.Size = New Size(171, 23)
+        StartTimesLabel.TabIndex = 5
+        StartTimesLabel.Text = "启动游戏次数："
+        StartTimesLabel.TextAlign = ContentAlignment.MiddleCenter
+        ' 
         ' Label2
         ' 
+        Label2.Cursor = Cursors.Hand
         Label2.Font = New Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point)
         Label2.Location = New Point(80, 68)
         Label2.Name = "Label2"
@@ -77,7 +89,7 @@ Partial Class SettingForm
         ' Label1
         ' 
         Label1.Font = New Font("Segoe UI Symbol", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
-        Label1.Location = New Point(28, 108)
+        Label1.Location = New Point(28, 120)
         Label1.Name = "Label1"
         Label1.Size = New Size(183, 23)
         Label1.TabIndex = 3
@@ -113,7 +125,7 @@ Partial Class SettingForm
         Panel1.Controls.Add(Divider1)
         Panel1.Controls.Add(Label5)
         Panel1.Cursor = Cursors.Hand
-        Panel1.Location = New Point(12, 185)
+        Panel1.Location = New Point(12, 224)
         Panel1.Name = "Panel1"
         Panel1.Shadow = 15
         Panel1.ShadowOpacityAnimation = True
@@ -160,11 +172,21 @@ Partial Class SettingForm
         Label5.TabIndex = 1
         Label5.Text = "开发者选项"
         ' 
+        ' ButtonCheckUpdate
+        ' 
+        ButtonCheckUpdate.Location = New Point(258, 193)
+        ButtonCheckUpdate.Name = "ButtonCheckUpdate"
+        ButtonCheckUpdate.Size = New Size(104, 36)
+        ButtonCheckUpdate.TabIndex = 8
+        ButtonCheckUpdate.Text = "检查更新"
+        ButtonCheckUpdate.Type = AntdUI.TTypeMini.Primary
+        ' 
         ' SettingForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(609, 368)
+        Controls.Add(ButtonCheckUpdate)
         Controls.Add(Panel1)
         Controls.Add(SettingPanel)
         Controls.Add(WindowBar1)
@@ -188,4 +210,6 @@ Partial Class SettingForm
     Friend WithEvents Switch1 As AntdUI.Switch
     Friend WithEvents Divider1 As AntdUI.Divider
     Friend WithEvents Label5 As AntdUI.Label
+    Friend WithEvents ButtonCheckUpdate As AntdUI.Button
+    Friend WithEvents StartTimesLabel As AntdUI.Label
 End Class

@@ -2,11 +2,26 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows10.0.26100.0</TargetFramework>
     <StartupObject>HVKL.My.MyApplication</StartupObject>
     <UseWindowsForms>true</UseWindowsForms>
     <MyType>WindowsForms</MyType>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <AssemblyVersion>1.0.1</AssemblyVersion>
+    <FileVersion>1.0.1</FileVersion>
+    <Company>RedCookieStudios</Company>
+    <Authors>Cookie987</Authors>
+    <Title>Hello Vacko Launcher</Title>
+    <Description>Hello Vacko Launcher</Description>
+    <Copyright>[C]2024 RedCookieStudios</Copyright>
+    <PackageProjectUrl>https://cookie987.top</PackageProjectUrl>
+    <PackageIcon>a2a7641a26b367608c6ef28ce9b7e983.png</PackageIcon>
+    <ApplicationIcon>favicon (1).ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="favicon (1).ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <Import Include="System.Data" />
@@ -59,6 +74,13 @@
 
   <ItemGroup>
     <Folder Include="Resources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="F:\下载\a2a7641a26b367608c6ef28ce9b7e983.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

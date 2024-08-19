@@ -1,38 +1,42 @@
 ﻿Imports System.IO
 Imports System.IO.Compression
 Imports System.Net
+Imports System.Net.Http
 Imports AntdUI
 
 Public Class VersionForm
     Private Sub InstallVersion(ver As String, instMessage As String)
-        AntdUI.Message.loading(Me, instMessage, Sub(config)
+        AntdUI.Message.loading(Me, instMessage, Async Sub(Config)
                                                     ' 云端文件的URL
                                                     Dim zipUrl As String = "https://987assests.s3.bitiful.net/vacko2/version/Vacko" +
                                                     Select1.SelectedValue + ".zip"
                                                     ' 指定要解压到的目录
                                                     Dim extractTo As String = "version/" + ver
-                                                    Dim webClient As New WebClient()
+                                                    Dim httpClient As New HttpClient()
                                                     If Not Directory.Exists("version/" + ver) Then '检查文件夹是否存在
                                                         Directory.CreateDirectory("version/" + ver)  '不存在，创建文件夹
                                                         Progress1.Value = 0.2
                                                         Try
-                                                            webClient.DownloadFile(zipUrl, Path.Combine(extractTo, "downloaded.zip"))
+                                                            Dim fileBytes As Byte() = Await httpClient.GetByteArrayAsync(zipUrl)
+                                                            Await File.WriteAllBytesAsync(extractTo + "\downloaded.zip", fileBytes)
                                                             Progress1.Value = 0.3
                                                             ZipFile.ExtractToDirectory(Path.Combine(extractTo, "downloaded.zip"), extractTo)
                                                             Progress1.Value = 0.7
                                                             File.Delete(Path.Combine(extractTo, "downloaded.zip"))
                                                             Progress1.Value = 0.9
+                                                            Progress1.Value = 1
                                                             Console.WriteLine("ZIP文件已下载并解压到指定目录。")
                                                             Progress1.Value = 1
                                                             Progress1.State = AntdUI.TType.Success
-                                                            config.OK("安装版本成功")
+                                                            MainForm.RefreshVersion()
+                                                            Config.OK("安装版本成功")
                                                         Catch ex As Exception
                                                             Progress1.State = AntdUI.TType.Error
-                                                            config.Error("安装版本失败：" + ex.Message)
+                                                            Config.Error("安装版本失败：" + ex.Message)
                                                         End Try
                                                     Else
                                                         Progress1.State = AntdUI.TType.Error
-                                                        config.Error("指定的版本已存在，请先卸载再安装")
+                                                        Config.Error("指定的版本已存在，请先卸载再安装")
                                                     End If
 
                                                 End Sub,, 2)
@@ -45,16 +49,15 @@ Public Class VersionForm
 
     Private Sub VersionForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select1.Items.Clear()
-        AntdUI.Message.loading(Me, "获取版本中", Sub(config)
+        AntdUI.Message.loading(Me, "获取版本中", Async Sub(config)
                                                 ' 云端文件的URL
                                                 Dim fileUrl As String = "https://987assests.s3.bitiful.net/vacko2/versions.txt"
                                                 Progress1.Loading = True
                                                 ' 下载文本文件并处理
                                                 Try
-                                                    ' 创建一个WebClient来下载文件
-                                                    Dim webClient As New WebClient()
-                                                    ' 下载文件内容
-                                                    Dim fileContent As String = webClient.DownloadString(fileUrl)
+                                                    Dim httpClient As New HttpClient()
+                                                    ' 异步下载文件内容
+                                                    Dim fileContent As String = Await httpClient.GetStringAsync(fileUrl)
                                                     ' 将文件内容按行分割
                                                     Dim lines() As String = fileContent.Split(New String() {vbCrLf, vbLf, vbCr}, StringSplitOptions.None)
                                                     ' 将每一行添加到选择器（ComboBox）
@@ -77,8 +80,5 @@ Public Class VersionForm
         Button1.Enabled = True
         Progress1.State = TType.None
         Progress1.Value = 0
-    End Sub
-
-    Private Sub VersionForm_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
     End Sub
 End Class
