@@ -100,6 +100,12 @@ Public Class MainForm
         RefreshVersion()
         WindowBar1.SubText += "v" + My.Resources.Resource1.Version
         Dim floatButton = AntdUI.FloatButton.open(New AntdUI.FloatButton.Config(Me, New AntdUI.FloatButton.ConfigBtn() {
+            New AntdUI.FloatButton.ConfigBtn("OpenVersionDir", My.Resources.Resource1.FolderSVG, True) With {
+                .Badge = "",
+                .Tooltip = "打开version文件夹",
+                .Round = True,
+                .Type = AntdUI.TTypeMini.Default
+            },
             New AntdUI.FloatButton.ConfigBtn("Refresh", My.Resources.Resource1.RefreshSVG, True) With {
                 .Badge = "",
                 .Tooltip = "刷新",
@@ -118,6 +124,10 @@ Public Class MainForm
                        StartGame(Select2.SelectedValue)
                    Case "Refresh"
                        RefreshButton_Click()
+                   Case "OpenVersionDir"
+                       Dim relativePath As String = ".\version"
+                       Dim folderPath As String = Path.GetFullPath(relativePath)
+                       Process.Start("explorer.exe", folderPath)
                End Select
            End Sub))
         Dim FileExists As Boolean
