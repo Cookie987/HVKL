@@ -61,6 +61,7 @@ Partial Class VersionForm
         Progress1.Location = New Point(38, 69)
         Progress1.Name = "Progress1"
         Progress1.ShowInTaskbar = True
+        Progress1.ShowText = True
         Progress1.Size = New Size(444, 24)
         Progress1.TabIndex = 1
         Progress1.Text = ""

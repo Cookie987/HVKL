@@ -43,7 +43,11 @@ Public Class SettingForm
                 ' 获取更新日志
                 Dim logUrl As String = "https://987assests.s3.bitiful.net/vacko2/updateLog/" + cloudVersion + ".txt"
                 Dim updateLog As String = client.GetStringAsync(logUrl).Result
-                AntdUI.Modal.open(New AntdUI.Modal.Config(Me, "有新版本可用：" + cloudVersion, "更新日志：" + vbCrLf + updateLog, AntdUI.TType.Info))
+                Dim result = AntdUI.Modal.open(New AntdUI.Modal.Config(Me, "有新版本可用：" + cloudVersion, "更新日志：" + vbCrLf + updateLog + vbCrLf + vbCrLf + "点击确定将访问本项目官方Release界面", AntdUI.TType.Info))
+                If result = DialogResult.OK Then
+                    Dim url As String = "https://github.com/cookie987/hvkl/releases/latest"
+                    Process.Start(New ProcessStartInfo(url) With {.UseShellExecute = True})
+                End If
                 ButtonCheckUpdate.Type = AntdUI.TTypeMini.Success
             Else
                 AntdUI.Modal.open(New AntdUI.Modal.Config(Me, "检查更新", "当前版本已是最新版", AntdUI.TType.Info))

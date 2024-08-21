@@ -124,7 +124,6 @@ Partial Class SettingForm
         Panel1.Controls.Add(Switch1)
         Panel1.Controls.Add(Divider1)
         Panel1.Controls.Add(Label5)
-        Panel1.Cursor = Cursors.Hand
         Panel1.Location = New Point(12, 224)
         Panel1.Name = "Panel1"
         Panel1.Shadow = 15

@@ -1,6 +1,11 @@
 ﻿Imports System.IO
 
 Public Class MainForm
+    Private Function StartProcess()
+
+        Return 0
+    End Function
+
     Private Function StartGame(StartVer As String)
         ' 定义父目录路径
         If StartVer = "" Then
@@ -8,54 +13,51 @@ Public Class MainForm
             Return 1
         End If
         Dim parentDirectory As String = "version\" + StartVer
+        Dim optionFilePath = "version\" + StartVer + "\option.json"
 
-        Dim UpdaterfilePath As String = parentDirectory + "\Game\Appdata\Updater.vak2"
+        Try
+            GetOption(Me, Select2.SelectedValue)
+            UpdaterFilePath = "version\" + StartVer + "\" + UpdaterFilePath
+        Catch ex As Exception
+            AntdUI.Notification.error(Me, "读取版本配置文件错误", ex.Message,,, 0)
+            Return 1
+        End Try
 
-        Dim content As String = "updater:hrd" + vbCrLf
-        Dim subDirectory As String = "Game"
-        Dim appName As String = "Vacko2.exe"
+        Try
+            Using writer As New StreamWriter(UpdaterFilePath, False)
+                writer.WriteLine(UpdaterFileContent)
+            End Using
+        Catch ex As Exception
+            AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
+            Return 1
+        End Try
 
-        Select Case StartVer
-            Case "1.1.7"
-                ' 写入文件
-                Try
-                    UpdaterfilePath = parentDirectory + "\BasicInfo\Updater.vak2" '专为1.1.7适配
-                    Using writer As New StreamWriter(UpdaterfilePath, False) ' True 表示追加内容，False 表示覆盖
-                        writer.WriteLine(content)
-                    End Using
-                Catch ex As Exception
-                    AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
-                    Return 1
-                End Try
-            Case "1.1.6"
-                Exit Select
-            Case "0.1.0"
-                subDirectory = ""
-                appName = "Vacko #.exe"
-            Case Else
-                Try
-                    Using writer As New StreamWriter(UpdaterfilePath, False)
-                        writer.WriteLine(content)
-                    End Using
-                Catch ex As Exception
-                    AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
-                    Return 1
-                End Try
-        End Select
-
-        Dim appPath As String = Path.Combine(parentDirectory, subDirectory, appName)
+        Dim appPath As String = Path.Combine(parentDirectory, SubDirectory, ExeName)
 
         ' 创建 ProcessStartInfo 对象
         Dim startInfo As New ProcessStartInfo With {
             .FileName = appPath,
-            .WorkingDirectory = parentDirectory ' 将工作目录设置为父目录
+            .WorkingDirectory = parentDirectory,
+            .RedirectStandardOutput = False,  ' 将工作目录设置为父目录
+            .UseShellExecute = False
             }
 
+        Dim process As New Process With {
+            .StartInfo = startInfo
+        }
         ' 启动应用程序
         Try
-            Process.Start(startInfo)
+            process.Start()
             LastStartVersion = Select1.SelectedIndex
-            AntdUI.Notification.info(Me, "启动成功", "Vacko #." + StartVer,,, 5)
+            AntdUI.Notification.success(Me, "启动成功", "" + CustomName,,, 5)
+            Try
+                Dim optionRead As VersionOption = ReadOption(optionFilePath)
+                GetOption(Me, Select2.SelectedValue)
+                LastStartTime = Now
+                SaveOption(Me, Select2.SelectedValue)
+            Catch ex As Exception
+                AntdUI.Notification.error(Me, "写入版本配置文件错误", ex.Message,,, 0)
+            End Try
             TotalStartTimes += 1
             SaveConfig(Me)
             Return 0
@@ -66,7 +68,7 @@ Public Class MainForm
     End Function
     Public Function RefreshVersion()
         Select1.SelectedValue = ""
-
+        Select2.SelectedValue = ""
         ' 指定要列出子文件夹的路径
         Dim folderPath As String = "version"
         ' 检查路径是否存在
@@ -74,9 +76,18 @@ Public Class MainForm
             ' 获取所有子文件夹
             Dim subDirectories As String() = Directory.GetDirectories(folderPath)
             Select1.Items.Clear()
+            Select2.Items.Clear()
             ' 将子文件夹添加到选择器中
             For Each dir As String In subDirectories
-                Select1.Items.Add(Path.GetFileName(dir))
+                Try
+                    Dim optionRead As VersionOption = ReadOption(dir + "\option.json")
+                    Dim VerName = optionRead.Custom.Name
+                    Dim Ver = optionRead.VackoVersion
+                    Select1.Items.Add(Path.GetFileName(VerName + "（" + Ver + "）"))
+                    Select2.Items.Add(Path.GetFileName(dir))
+                Catch ex As Exception
+                    'AntdUI.Notification.error(Me, "读取版本配置文件错误", ex.Message,,, 0)
+                End Try
             Next
         Else
             AntdUI.Message.warn(Me, "未安装任何版本，请先去下载版本",, 5)
@@ -104,7 +115,7 @@ Public Class MainForm
         }, Sub(btn)
                Select Case btn.Name
                    Case "StartGame"
-                       StartGame(Select1.SelectedValue)
+                       StartGame(Select2.SelectedValue)
                    Case "Refresh"
                        RefreshButton_Click()
                End Select
@@ -114,32 +125,31 @@ Public Class MainForm
 
         If FileExists = False Then
             HVKLVersion = My.Resources.Resource1.Version
-            TotalStartTimes = 0
+            CustomDownloadUrl = DefaultDownloadUrl
             SaveConfig(Me)
         Else
             Try
-                Dim configRead As Config = ReadConfig(ConfigFilePath)
-                HVKLVersion = configRead.HVKLVersion
-                DeveloperMode = configRead.DeveloperMode
-                UseCustomBackground = configRead.UseCustomBackground
-                LastStartVersion = configRead.LastStartVersion
-                TotalStartTimes = configRead.TotalStartTimes
+                GetConfig(Me)
             Catch ex As Exception
-                AntdUI.Notification.error(Me, "读取配置文件错误", ex.Message,,, 0)
+                AntdUI.Notification.error(Me, "读取配置文件错误，已重置", ex.Message,,, 0)
                 HVKLVersion = My.Resources.Resource1.Version
                 DeveloperMode = False
                 UseCustomBackground = False
                 LastStartVersion = Nothing
+                CustomDownloadUrl = DefaultDownloadUrl
                 TotalStartTimes = 0
+                SaveConfig(Me)
             End Try
 
             If Not HVKLVersion = My.Resources.Resource1.Version Then
-                AntdUI.Message.warn(Me, "已迁移旧版本HVKL数据")
+                AntdUI.Message.info(Me, "已迁移旧版本HVKL数据")
+                CustomDownloadUrl = DefaultDownloadUrl
                 HVKLVersion = My.Resources.Resource1.Version
                 SaveConfig(Me)
             End If
             Try
                 Select1.SelectedIndex = LastStartVersion
+                Select2.SelectedIndex = LastStartVersion
             Catch ex As Exception
                 LastStartVersion = 0
             End Try
@@ -181,7 +191,7 @@ Public Class MainForm
         ManageForm.Show()
     End Sub
 
-    Private Sub SettingImage3d_Click(sender As Object, e As EventArgs) Handles SettingImage3d.Click, SettingLabel.Click, SettingPanel.Click
+    Private Sub SettingImage3d_Click(sender As Object, e As EventArgs) Handles SettingImage3d.Click, SettingLabel.Click, MainSettingPanel.Click
         SettingForm.Show()
     End Sub
 
@@ -189,7 +199,7 @@ Public Class MainForm
         RefreshVersion()
     End Sub
 
-    Private Sub RefreshButton_Click()
+    Public Sub RefreshButton_Click()
         AntdUI.Message.loading(Me, "获取版本中", Sub(config)
                                                 ' 指定要列出子文件夹的路径
                                                 Dim folderPath As String = "version"
@@ -198,14 +208,31 @@ Public Class MainForm
                                                     ' 获取所有子文件夹
                                                     Dim subDirectories As String() = Directory.GetDirectories(folderPath)
                                                     Select1.Items.Clear()
+                                                    Select2.Items.Clear()
                                                     ' 将子文件夹添加到选择器中
                                                     For Each dir As String In subDirectories
-                                                        Select1.Items.Add(Path.GetFileName(dir))
+                                                        Try
+                                                            Dim optionRead As VersionOption = ReadOption(dir + "\option.json")
+                                                            Dim VerName = optionRead.Custom.Name
+                                                            Dim Ver = optionRead.VackoVersion
+                                                            Select1.Items.Add(Path.GetFileName(VerName + "（" + Ver + "）"))
+                                                            Select2.Items.Add(Path.GetFileName(dir))
+                                                        Catch ex As Exception
+                                                            config.Error("读取版本配置文件错误：" + ex.Message)
+                                                        End Try
                                                     Next
                                                     config.OK("获取版本完成")
                                                 Else
                                                     config.Warn("未安装任何版本，请先去下载版本")
                                                 End If
                                             End Sub,, 2)
+    End Sub
+
+    Private Sub Select1_SelectedIndexChanged(sender As Object, value As Integer) Handles Select1.SelectedIndexChanged
+        Select2.SelectedIndex = Select1.SelectedIndex
+    End Sub
+
+    Private Sub ToolsImage3d_Click(sender As Object, e As EventArgs) Handles ToolsImage3d.Click, LabelTools.Click, PanelTools.Click
+        ToolForm.Show()
     End Sub
 End Class

@@ -32,7 +32,7 @@ Partial Class MainForm
         ManageVersionImage3d = New AntdUI.Image3D()
         Divider2 = New AntdUI.Divider()
         ManageVersionLabel = New AntdUI.Label()
-        SettingPanel = New AntdUI.Panel()
+        MainSettingPanel = New AntdUI.Panel()
         SettingImage3d = New AntdUI.Image3D()
         Divider3 = New AntdUI.Divider()
         SettingLabel = New AntdUI.Label()
@@ -40,10 +40,16 @@ Partial Class MainForm
         Select1 = New AntdUI.Select()
         Divider4 = New AntdUI.Divider()
         Label1 = New AntdUI.Label()
+        Select2 = New AntdUI.Select()
+        PanelTools = New AntdUI.Panel()
+        ToolsImage3d = New AntdUI.Image3D()
+        Divider5 = New AntdUI.Divider()
+        LabelTools = New AntdUI.Label()
         DownloadVersionPanel.SuspendLayout()
         ManageVersionPanel.SuspendLayout()
-        SettingPanel.SuspendLayout()
+        MainSettingPanel.SuspendLayout()
         Panel1.SuspendLayout()
+        PanelTools.SuspendLayout()
         SuspendLayout()
         ' 
         ' WindowBar1
@@ -56,7 +62,7 @@ Partial Class MainForm
         WindowBar1.Location = New Point(-1, -1)
         WindowBar1.MaximizeBox = False
         WindowBar1.Name = "WindowBar1"
-        WindowBar1.Size = New Size(833, 32)
+        WindowBar1.Size = New Size(772, 32)
         WindowBar1.SubText = ""
         WindowBar1.TabIndex = 0
         WindowBar1.Text = "Hello Vacko Launcher"
@@ -151,21 +157,21 @@ Partial Class MainForm
         ManageVersionLabel.Text = "管理版本"
         ManageVersionLabel.TextAlign = ContentAlignment.MiddleCenter
         ' 
-        ' SettingPanel
+        ' MainSettingPanel
         ' 
-        SettingPanel.BackColor = Color.Transparent
-        SettingPanel.BorderWidth = 1F
-        SettingPanel.Controls.Add(SettingImage3d)
-        SettingPanel.Controls.Add(Divider3)
-        SettingPanel.Controls.Add(SettingLabel)
-        SettingPanel.Cursor = Cursors.Hand
-        SettingPanel.Location = New Point(384, 37)
-        SettingPanel.Name = "SettingPanel"
-        SettingPanel.Shadow = 15
-        SettingPanel.ShadowOpacityAnimation = True
-        SettingPanel.Size = New Size(180, 180)
-        SettingPanel.TabIndex = 5
-        SettingPanel.Text = "Panel2"
+        MainSettingPanel.BackColor = Color.Transparent
+        MainSettingPanel.BorderWidth = 1F
+        MainSettingPanel.Controls.Add(SettingImage3d)
+        MainSettingPanel.Controls.Add(Divider3)
+        MainSettingPanel.Controls.Add(SettingLabel)
+        MainSettingPanel.Cursor = Cursors.Hand
+        MainSettingPanel.Location = New Point(570, 37)
+        MainSettingPanel.Name = "MainSettingPanel"
+        MainSettingPanel.Shadow = 15
+        MainSettingPanel.ShadowOpacityAnimation = True
+        MainSettingPanel.Size = New Size(180, 180)
+        MainSettingPanel.TabIndex = 5
+        MainSettingPanel.Text = "Panel2"
         ' 
         ' SettingImage3d
         ' 
@@ -204,11 +210,11 @@ Partial Class MainForm
         Panel1.Controls.Add(Divider4)
         Panel1.Controls.Add(Label1)
         Panel1.Cursor = Cursors.Hand
-        Panel1.Location = New Point(570, 37)
+        Panel1.Location = New Point(12, 223)
         Panel1.Name = "Panel1"
         Panel1.Shadow = 15
         Panel1.ShadowOpacityAnimation = True
-        Panel1.Size = New Size(180, 180)
+        Panel1.Size = New Size(366, 180)
         Panel1.TabIndex = 6
         Panel1.Text = "Panel2"
         ' 
@@ -216,7 +222,7 @@ Partial Class MainForm
         ' 
         Select1.Location = New Point(33, 66)
         Select1.Name = "Select1"
-        Select1.Size = New Size(115, 40)
+        Select1.Size = New Size(302, 40)
         Select1.TabIndex = 3
         Select1.Text = "选择版本以启动游戏"
         ' 
@@ -238,7 +244,60 @@ Partial Class MainForm
         Label1.Size = New Size(116, 33)
         Label1.TabIndex = 1
         Label1.Text = "选择版本"
-        Label1.TextAlign = ContentAlignment.MiddleCenter
+        ' 
+        ' Select2
+        ' 
+        Select2.Location = New Point(500, 392)
+        Select2.Name = "Select2"
+        Select2.Size = New Size(75, 23)
+        Select2.TabIndex = 7
+        Select2.Text = "Select2"
+        Select2.Visible = False
+        ' 
+        ' PanelTools
+        ' 
+        PanelTools.BackColor = Color.Transparent
+        PanelTools.BorderWidth = 1F
+        PanelTools.Controls.Add(ToolsImage3d)
+        PanelTools.Controls.Add(Divider5)
+        PanelTools.Controls.Add(LabelTools)
+        PanelTools.Cursor = Cursors.Hand
+        PanelTools.Location = New Point(384, 37)
+        PanelTools.Name = "PanelTools"
+        PanelTools.Shadow = 15
+        PanelTools.ShadowOpacityAnimation = True
+        PanelTools.Size = New Size(180, 180)
+        PanelTools.TabIndex = 6
+        PanelTools.Text = "Panel2"
+        ' 
+        ' ToolsImage3d
+        ' 
+        ToolsImage3d.Image = CType(resources.GetObject("ToolsImage3d.Image"), Image)
+        ToolsImage3d.Location = New Point(53, 66)
+        ToolsImage3d.Name = "ToolsImage3d"
+        ToolsImage3d.Size = New Size(75, 76)
+        ToolsImage3d.TabIndex = 3
+        ToolsImage3d.Text = "Image3d1"
+        ' 
+        ' Divider5
+        ' 
+        Divider5.Location = New Point(33, 44)
+        Divider5.Name = "Divider5"
+        Divider5.OrientationMargin = 0F
+        Divider5.Size = New Size(116, 16)
+        Divider5.TabIndex = 2
+        Divider5.Text = ""
+        ' 
+        ' LabelTools
+        ' 
+        LabelTools.BackColor = Color.Transparent
+        LabelTools.Font = New Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
+        LabelTools.Location = New Point(33, 20)
+        LabelTools.Name = "LabelTools"
+        LabelTools.Size = New Size(116, 33)
+        LabelTools.TabIndex = 1
+        LabelTools.Text = "工具"
+        LabelTools.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' MainForm
         ' 
@@ -246,9 +305,11 @@ Partial Class MainForm
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.White
         BackgroundImageLayout = ImageLayout.Stretch
-        ClientSize = New Size(817, 479)
+        ClientSize = New Size(751, 479)
+        Controls.Add(PanelTools)
+        Controls.Add(Select2)
         Controls.Add(Panel1)
-        Controls.Add(SettingPanel)
+        Controls.Add(MainSettingPanel)
         Controls.Add(ManageVersionPanel)
         Controls.Add(DownloadVersionPanel)
         Controls.Add(WindowBar1)
@@ -260,8 +321,9 @@ Partial Class MainForm
         Text = "Hello Vacko Launcher"
         DownloadVersionPanel.ResumeLayout(False)
         ManageVersionPanel.ResumeLayout(False)
-        SettingPanel.ResumeLayout(False)
+        MainSettingPanel.ResumeLayout(False)
         Panel1.ResumeLayout(False)
+        PanelTools.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
 
@@ -274,7 +336,7 @@ Partial Class MainForm
     Friend WithEvents ManageVersionImage3d As AntdUI.Image3D
     Friend WithEvents Divider2 As AntdUI.Divider
     Friend WithEvents ManageVersionLabel As AntdUI.Label
-    Friend WithEvents SettingPanel As AntdUI.Panel
+    Friend WithEvents MainSettingPanel As AntdUI.Panel
     Friend WithEvents SettingImage3d As AntdUI.Image3D
     Friend WithEvents Divider3 As AntdUI.Divider
     Friend WithEvents SettingLabel As AntdUI.Label
@@ -282,5 +344,10 @@ Partial Class MainForm
     Friend WithEvents Select1 As AntdUI.Select
     Friend WithEvents Divider4 As AntdUI.Divider
     Friend WithEvents Label1 As AntdUI.Label
+    Friend WithEvents Select2 As AntdUI.Select
+    Friend WithEvents PanelTools As AntdUI.Panel
+    Friend WithEvents ToolsImage3d As AntdUI.Image3D
+    Friend WithEvents Divider5 As AntdUI.Divider
+    Friend WithEvents LabelTools As AntdUI.Label
 
 End Class
