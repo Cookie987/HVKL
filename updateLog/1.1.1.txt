@@ -1,0 +1,3 @@
+1. 支持 Vacko 1.2.3
+
+**Full Changelog**: https://github.com/Cookie987/HVKL/compare/1.1.0...1.1.1

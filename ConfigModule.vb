@@ -88,6 +88,8 @@ Module ConfigModule
             Public Property UpdaterFilePath As String
             Public Property UpdaterFileContent As String
             Public Property SubDirectory As String
+            Public Property Args As String
+            Public Property MutexName As String
             Public Property ExeName As String
         End Class
         Public Property Custom As CustomOption
@@ -101,9 +103,11 @@ Module ConfigModule
     Public UpdaterFilePath
     Public UpdaterFileContent
     Public SubDirectory
+    Public Args
     Public ExeName
     Public CustomName
     Public LastStartTime
+    Public MutexName
 
     ' 写入配置到JSON文件的函数
     Public Sub WriteOption(ByVal VersionOption As VersionOption, ByVal optionPath As String)
@@ -129,6 +133,8 @@ Module ConfigModule
             UpdaterFilePath = optionRead.StartArgs.UpdaterFilePath
             UpdaterFileContent = optionRead.StartArgs.UpdaterFileContent
             SubDirectory = optionRead.StartArgs.SubDirectory
+            Args = optionRead.StartArgs.Args
+            MutexName = optionRead.StartArgs.MutexName
             ExeName = optionRead.StartArgs.ExeName
             LastStartTime = optionRead.LastStartTime
             CustomName = optionRead.Custom.Name
@@ -142,6 +148,8 @@ Module ConfigModule
         Dim optionToWrite As New VersionOption With {
                 .VackoVersion = VackoVersion,
                 .StartArgs = New VersionOption.StartArg With {
+                    .Args = Args,
+                    .MutexName = MutexName,
                     .ExeName = ExeName,
                     .SubDirectory = SubDirectory,
                     .UpdaterFileContent = UpdaterFileContent,

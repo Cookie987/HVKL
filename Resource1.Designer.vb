@@ -92,7 +92,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  查找类似 1.1.0 的本地化字符串。
+        '''  查找类似 1.1.1 的本地化字符串。
         '''</summary>
         Friend Shared ReadOnly Property Version() As String
             Get

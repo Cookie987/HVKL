@@ -3,3 +3,4 @@
 3. 新增替换版本功能
 4. 新增小工具功能
 5. 更准确的进度条
+**Full Changelog**: https://github.com/Cookie987/HVKL/compare/1.0.1...1.1.0

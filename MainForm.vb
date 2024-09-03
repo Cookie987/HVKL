@@ -1,11 +1,8 @@
 ﻿Imports System.IO
+Imports System.Threading
 
 Public Class MainForm
-    Private Function StartProcess()
-
-        Return 0
-    End Function
-
+    Dim mutex As Mutex
     Private Function StartGame(StartVer As String)
         ' 定义父目录路径
         If StartVer = "" Then
@@ -34,12 +31,16 @@ Public Class MainForm
 
         Dim appPath As String = Path.Combine(parentDirectory, SubDirectory, ExeName)
 
+        ' 创建互斥锁 （Vacko1.2.2）
+        mutex = New Mutex(False, MutexName)
+
         ' 创建 ProcessStartInfo 对象
         Dim startInfo As New ProcessStartInfo With {
             .FileName = appPath,
             .WorkingDirectory = parentDirectory,
             .RedirectStandardOutput = False,  ' 将工作目录设置为父目录
-            .UseShellExecute = False
+            .UseShellExecute = False,
+            .Arguments = Args
             }
 
         Dim process As New Process With {
@@ -121,6 +122,7 @@ Public Class MainForm
         }, Sub(btn)
                Select Case btn.Name
                    Case "StartGame"
+
                        StartGame(Select2.SelectedValue)
                    Case "Refresh"
                        RefreshButton_Click()
