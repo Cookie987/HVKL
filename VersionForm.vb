@@ -87,6 +87,15 @@ Public Class VersionForm
                                                         Catch ex As Exception
                                                             Progress1.State = AntdUI.TType.Error
                                                             Progress1.Loading = False
+                                                            Try
+                                                                ' 检查文件夹是否存在
+                                                                If Directory.Exists("version\" + ver) Then
+                                                                    ' 删除文件夹及其所有内容
+                                                                    Directory.Delete("version\" + ver, True)
+                                                                Else
+                                                                End If
+                                                            Catch exp As Exception
+                                                            End Try
                                                             Config.Error("安装版本失败：" + ex.Message)
                                                         End Try
                                                     Else
