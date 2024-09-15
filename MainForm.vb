@@ -6,7 +6,6 @@ Imports System.Threading
 Public Class MainForm
     Dim mutex As Mutex
     Private Async Function StartGame(StartVer As String) As Task(Of Integer)
-        Timer1.Enabled = False
         ' 定义父目录路径
         If StartVer = "" Then
             AntdUI.Notification.error(Me, "错误", "未选择启动版本",,, 5)
@@ -81,17 +80,14 @@ Public Class MainForm
                                     filePath = "version\" + StartVer + "\Game\Usdata\" + "User"
                                 Else
                                     AntdUI.Notification.error(Me, "登录失败", "下载文件失败",,, 0)
-                                    Timer1.Enabled = True
                                     Return 114
                                 End If
                             Else
                                 AntdUI.Notification.error(Me, "登录失败", "密码错误",,, 0)
-                                Timer1.Enabled = True
                                 Return 3
                             End If
                         Else
                             AntdUI.Notification.error(Me, "登录失败", "未找到密码字段",,, 0)
-                            Timer1.Enabled = True
                             Return 4
                         End If
                     End If
@@ -99,7 +95,6 @@ Public Class MainForm
             End If
         Catch ex As Exception
             AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
-            Timer1.Enabled = True
             Return 12
         End Try
 
@@ -111,7 +106,6 @@ Public Class MainForm
             End Using
         Catch ex As Exception
             AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
-            Timer1.Enabled = True
             Return 1
         End Try
 
@@ -147,11 +141,9 @@ Public Class MainForm
             End Try
             TotalStartTimes += 1
             SaveConfig(Me)
-            Timer1.Enabled = True
             Return 0
         Catch ex As Exception
             AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
-            Timer1.Enabled = True
             Return 1
         End Try
     End Function
