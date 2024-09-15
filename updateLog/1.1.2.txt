@@ -1,0 +1,4 @@
+1. 支持 Vacko 1.2.4
+2. 支持在HVKL内提前登录
+
+**Full Changelog**: https://github.com/Cookie987/HVKL/compare/1.1.1...1.1.2

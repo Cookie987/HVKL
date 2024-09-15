@@ -473,7 +473,7 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+    Private Sub LoginFrameUpdate()
         GetConfig(Me)
         If RadioHVKLLogin.Checked = True Then
             LastUsedLoginMethod = "HVKL"
@@ -484,5 +484,13 @@ Public Class MainForm
             Panel2.Visible = False
         End If
         SaveConfig(Me)
+    End Sub
+
+    Private Sub RadioVackoLogin_CheckedChanged(sender As Object, value As Boolean) Handles RadioVackoLogin.CheckedChanged
+        LoginFrameUpdate()
+    End Sub
+
+    Private Sub RadioHVKLLogin_CheckedChanged(sender As Object, value As Boolean) Handles RadioHVKLLogin.CheckedChanged
+        LoginFrameUpdate()
     End Sub
 End Class

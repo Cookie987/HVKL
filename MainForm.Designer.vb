@@ -22,7 +22,6 @@ Partial Class MainForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
         WindowBar1 = New AntdUI.WindowBar()
         DownloadVersionPanel = New AntdUI.Panel()
@@ -55,7 +54,6 @@ Partial Class MainForm
         InputUser = New AntdUI.Input()
         Divider8 = New AntdUI.Divider()
         Label2 = New AntdUI.Label()
-        Timer1 = New Timer(components)
         DownloadVersionPanel.SuspendLayout()
         ManageVersionPanel.SuspendLayout()
         MainSettingPanel.SuspendLayout()
@@ -411,11 +409,6 @@ Partial Class MainForm
         Label2.TabIndex = 1
         Label2.Text = "登录信息"
         ' 
-        ' Timer1
-        ' 
-        Timer1.Enabled = True
-        Timer1.Interval = 1000
-        ' 
         ' MainForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
@@ -477,6 +470,5 @@ Partial Class MainForm
     Friend WithEvents InputUser As AntdUI.Input
     Friend WithEvents Checkbox1 As AntdUI.Checkbox
     Friend WithEvents InputPwd As AntdUI.Input
-    Friend WithEvents Timer1 As Timer
 
 End Class
