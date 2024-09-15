@@ -1,9 +1,12 @@
 ﻿Imports System.IO
+Imports System.Net.Http
+Imports System.Text
 Imports System.Threading
 
 Public Class MainForm
     Dim mutex As Mutex
-    Private Function StartGame(StartVer As String)
+    Private Async Function StartGame(StartVer As String) As Task(Of Integer)
+        Timer1.Enabled = False
         ' 定义父目录路径
         If StartVer = "" Then
             AntdUI.Notification.error(Me, "错误", "未选择启动版本",,, 5)
@@ -21,11 +24,94 @@ Public Class MainForm
         End Try
 
         Try
+            ' 登录
+            If SupportHVKLLogin = True Then
+                If RadioHVKLLogin.Checked = True Then
+                    If InputUser.Text = "User" Or InputUser.Text = "user" Or InputUser.Text = "nonelivaccno" Then
+                        AntdUI.Notification.error(Me, "用户名不合法", "请更换用户名",,, 0)
+                        Return 1
+                    Else
+                        Dim remoteUrl As String = "http://vacko.cookie987.top:28987/VackoData/PlayerData/" + LastUsedUser + "/localdata.vak2"
+
+                        ' 获取远程文件中的键值对
+                        Dim credentials As Dictionary(Of String, String) = Await GetRemoteCredentials(remoteUrl)
+                        If credentials IsNot Nothing AndAlso credentials.ContainsKey("livpass") Then
+                            Dim storedPassword As String = credentials("livpass").Replace(Chr(0), "").Trim()
+
+                            If storedPassword = InputPwd.Text Then
+                                AntdUI.Message.success(Me, "登录成功",, 2)
+                                Dim fileContent As String = Await DownloadVak2File(remoteUrl)
+                                If fileContent IsNot Nothing Then
+                                    Dim newFilePath As String = "version\" + StartVer + "\Game\Usdata\" + InputUser.Text + "\localdata.vak2" ' 本地保存的新文件路径
+                                    Dim folderPath = "version\" + StartVer + "\Game\Usdata\" + InputUser.Text
+                                    Try
+                                        Directory.CreateDirectory(folderPath)
+                                        Directory.Delete("version\" + StartVer + "\Game\Usdata\User", True)
+                                    Catch ex As Exception
+
+                                    End Try
+                                    ' 将修改后的内容写入文件
+                                    File.WriteAllText(newFilePath, fileContent)
+
+                                    Dim rempasstimes = ReadVak2File("rempasstimes:", 4, fileContent)
+                                    If rempasstimes > 1 Then
+                                        rempasstimes += 1
+                                    ElseIf rempasstimes < 1 Then
+                                        rempasstimes = 1
+                                    End If
+                                    SaveVak2File("rempasstimes:", rempasstimes, 4, InputUser.Text, fileContent, StartVer)
+
+                                    Dim filePath = "version\" + StartVer + "\Game\Appdata\opi.vak2"
+
+                                    ' 读取文件内容
+                                    fileContent = File.ReadAllText(filePath)
+
+                                    ' 判断文件是否为空
+                                    If fileContent.Length > 0 Then
+                                        ' 将文件的第一位改为 '1'，其余保持不变
+                                        fileContent = String.Concat("1", fileContent.AsSpan(1))
+                                    Else
+                                        ' 如果文件是空的，添加 '1'
+                                        fileContent = "1"
+                                    End If
+
+                                    ' 写入修改后的内容
+                                    File.WriteAllText(filePath, fileContent)
+
+                                    filePath = "version\" + StartVer + "\Game\Usdata\" + "User"
+                                Else
+                                    AntdUI.Notification.error(Me, "登录失败", "下载文件失败",,, 0)
+                                    Timer1.Enabled = True
+                                    Return 114
+                                End If
+                            Else
+                                AntdUI.Notification.error(Me, "登录失败", "密码错误",,, 0)
+                                Timer1.Enabled = True
+                                Return 3
+                            End If
+                        Else
+                            AntdUI.Notification.error(Me, "登录失败", "未找到密码字段",,, 0)
+                            Timer1.Enabled = True
+                            Return 4
+                        End If
+                    End If
+                End If
+            End If
+        Catch ex As Exception
+            AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
+            Timer1.Enabled = True
+            Return 12
+        End Try
+
+
+        ' 写入 updater:hrd
+        Try
             Using writer As New StreamWriter(UpdaterFilePath, False)
                 writer.WriteLine(UpdaterFileContent)
             End Using
         Catch ex As Exception
             AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
+            Timer1.Enabled = True
             Return 1
         End Try
 
@@ -61,12 +147,107 @@ Public Class MainForm
             End Try
             TotalStartTimes += 1
             SaveConfig(Me)
+            Timer1.Enabled = True
             Return 0
         Catch ex As Exception
             AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
+            Timer1.Enabled = True
             Return 1
         End Try
     End Function
+
+    Private Async Function DownloadVak2File(remoteUrl As String) As Task(Of String)
+        Try
+            Using client As New HttpClient()
+                Dim response As HttpResponseMessage = Await client.GetAsync(remoteUrl)
+                response.EnsureSuccessStatusCode()
+
+                ' 读取文件内容为字符串
+                Dim fileContent As String = Await response.Content.ReadAsStringAsync()
+                Return fileContent
+            End Using
+        Catch ex As Exception
+            Return Nothing
+        End Try
+    End Function
+
+    Shared Function SaveVak2File(writestr As String, wdata As String, wlength As Integer, UserNameb As String, vak2FileContent As String, VackoVer As String)
+        Try
+            Dim WriteDatalengthstr As Integer = writestr.Length
+
+
+            Dim WriteDataFLO1 As Integer = vak2FileContent.IndexOf(writestr, 0)
+
+            Dim filePath As String = "version\" + VackoVer + "\Game\Usdata\" + UserNameb + "\localdata.vak2"
+
+            Using fs As New FileStream(filePath, FileMode.Open, FileAccess.Write)
+
+                fs.Seek(WriteDataFLO1 + WriteDatalengthstr, SeekOrigin.Begin)
+
+                ' 使用 System.Text.Encoding.Default.GetBytes 将字符串转换为字节数组
+                Dim wdataBytes As Byte() = System.Text.Encoding.Default.GetBytes(wdata)
+                If wlength > wdataBytes.Length Then
+                    wlength = wdataBytes.Length ' 避免越界
+                End If
+
+                fs.Write(wdataBytes, 0, wlength)
+
+            End Using
+        Catch ex As Exception
+            Return ex
+        End Try
+
+        Return 0
+        ' 写入内容
+
+        ' writestr： 从哪里开始
+
+        ' wdata：写什么
+
+        ' wlength：写入的长度
+    End Function
+
+
+    Shared Function ReadVak2File(optionName As String, readLength As Integer, vak2FileContent As String)
+        Dim LoadDatalengthstr As Integer = optionName.Length
+
+        Dim LoadDataFLO1 As Integer = vak2FileContent.IndexOf(optionName, 0)
+        Return vak2FileContent.Substring(LoadDataFLO1 + LoadDatalengthstr, readLength)
+
+        ' 读取内容
+
+        ' DataResult 为结果
+
+    End Function
+
+    Private Async Function GetRemoteCredentials(remoteUrl As String) As Task(Of Dictionary(Of String, String))
+        Try
+            Using client As New HttpClient()
+                Dim response As HttpResponseMessage = Await client.GetAsync(remoteUrl)
+
+                response.EnsureSuccessStatusCode()
+
+                Dim fileContent As String = Await response.Content.ReadAsStringAsync()
+
+                ' 解析键值对
+                Dim credentials As New Dictionary(Of String, String)
+                Dim keyValuePairs() As String = fileContent.Split(";"c)
+
+                For Each pair As String In keyValuePairs
+                    Dim keyValue() As String = pair.Split(":"c)
+                    If keyValue.Length = 2 Then
+                        credentials.Add(keyValue(0).Trim(), keyValue(1).Trim())
+                    End If
+                Next
+
+                Return credentials
+            End Using
+        Catch ex As Exception
+            AntdUI.Notification.error(Me, "登录失败", ex.Message,,, 0)
+            Return Nothing
+        End Try
+    End Function
+
     Public Function RefreshVersion()
         Select1.SelectedValue = ""
         Select2.SelectedValue = ""
@@ -119,11 +300,10 @@ Public Class MainForm
                 .Round = True,
                 .Type = AntdUI.TTypeMini.Primary
             }
-        }, Sub(btn)
+        }, Async Sub(btn)
                Select Case btn.Name
                    Case "StartGame"
-
-                       StartGame(Select2.SelectedValue)
+                       Await StartGame(Select2.SelectedValue)
                    Case "Refresh"
                        RefreshButton_Click()
                    Case "OpenVersionDir"
@@ -137,7 +317,12 @@ Public Class MainForm
 
         If FileExists = False Then
             HVKLVersion = My.Resources.Resource1.Version
+            DeveloperMode = False
+            UseCustomBackground = False
+            LastStartVersion = Nothing
+            LastUsedLoginMethod = Nothing
             CustomDownloadUrl = DefaultDownloadUrl
+            TotalStartTimes = 0
             SaveConfig(Me)
         Else
             Try
@@ -148,6 +333,7 @@ Public Class MainForm
                 DeveloperMode = False
                 UseCustomBackground = False
                 LastStartVersion = Nothing
+                LastUsedLoginMethod = Nothing
                 CustomDownloadUrl = DefaultDownloadUrl
                 TotalStartTimes = 0
                 SaveConfig(Me)
@@ -165,6 +351,19 @@ Public Class MainForm
             Catch ex As Exception
                 LastStartVersion = 0
             End Try
+
+            InputUser.Text = LastUsedUser
+            InputPwd.Text = LastUsedPassword
+            If InputPwd.Text IsNot "" Then
+                Checkbox1.Checked = True
+            End If
+            If LastUsedLoginMethod = "HVKL" Then
+                RadioHVKLLogin.Checked = True
+                RadioVackoLogin.Checked = False
+            ElseIf LastUsedLoginMethod = "Vacko" Then
+                RadioVackoLogin.Checked = True
+                RadioHVKLLogin.Checked = False
+            End If
 
             If DeveloperMode = True Then
                 If UseCustomBackground = True Then
@@ -246,5 +445,44 @@ Public Class MainForm
 
     Private Sub ToolsImage3d_Click(sender As Object, e As EventArgs) Handles ToolsImage3d.Click, LabelTools.Click, PanelTools.Click
         ToolForm.Show()
+    End Sub
+
+    Private Sub Input1_TextChanged(sender As Object, e As EventArgs) Handles InputUser.TextChanged
+        GetConfig(Me)
+        LastUsedUser = InputUser.Text
+        SaveConfig(Me)
+    End Sub
+
+    Private Sub Checkbox1_CheckedChanged(sender As Object, value As Boolean) Handles Checkbox1.CheckedChanged
+        GetConfig(Me)
+        If Checkbox1.Checked Then
+            LastUsedPassword = InputPwd.Text
+        Else
+            LastUsedPassword = ""
+        End If
+        SaveConfig(Me)
+    End Sub
+
+    Private Sub InputPwd_TextChanged(sender As Object, e As EventArgs) Handles InputPwd.TextChanged
+        GetConfig(Me)
+        If Checkbox1.Checked Then
+            LastUsedPassword = InputPwd.Text
+            SaveConfig(Me)
+        Else
+            LastUsedPassword = ""
+        End If
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        GetConfig(Me)
+        If RadioHVKLLogin.Checked = True Then
+            LastUsedLoginMethod = "HVKL"
+            Panel2.Visible = True
+        End If
+        If RadioVackoLogin.Checked = True Then
+            LastUsedLoginMethod = "Vacko"
+            Panel2.Visible = False
+        End If
+        SaveConfig(Me)
     End Sub
 End Class

@@ -22,6 +22,7 @@ Partial Class MainForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
         WindowBar1 = New AntdUI.WindowBar()
         DownloadVersionPanel = New AntdUI.Panel()
@@ -37,6 +38,9 @@ Partial Class MainForm
         Divider3 = New AntdUI.Divider()
         SettingLabel = New AntdUI.Label()
         Panel1 = New AntdUI.Panel()
+        RadioHVKLLogin = New AntdUI.Radio()
+        RadioVackoLogin = New AntdUI.Radio()
+        Divider7 = New AntdUI.Divider()
         Select1 = New AntdUI.Select()
         Divider4 = New AntdUI.Divider()
         Label1 = New AntdUI.Label()
@@ -45,11 +49,19 @@ Partial Class MainForm
         ToolsImage3d = New AntdUI.Image3D()
         Divider5 = New AntdUI.Divider()
         LabelTools = New AntdUI.Label()
+        Panel2 = New AntdUI.Panel()
+        Checkbox1 = New AntdUI.Checkbox()
+        InputPwd = New AntdUI.Input()
+        InputUser = New AntdUI.Input()
+        Divider8 = New AntdUI.Divider()
+        Label2 = New AntdUI.Label()
+        Timer1 = New Timer(components)
         DownloadVersionPanel.SuspendLayout()
         ManageVersionPanel.SuspendLayout()
         MainSettingPanel.SuspendLayout()
         Panel1.SuspendLayout()
         PanelTools.SuspendLayout()
+        Panel2.SuspendLayout()
         SuspendLayout()
         ' 
         ' WindowBar1
@@ -206,6 +218,9 @@ Partial Class MainForm
         ' 
         Panel1.BackColor = Color.Transparent
         Panel1.BorderWidth = 1F
+        Panel1.Controls.Add(RadioHVKLLogin)
+        Panel1.Controls.Add(RadioVackoLogin)
+        Panel1.Controls.Add(Divider7)
         Panel1.Controls.Add(Select1)
         Panel1.Controls.Add(Divider4)
         Panel1.Controls.Add(Label1)
@@ -214,15 +229,43 @@ Partial Class MainForm
         Panel1.Name = "Panel1"
         Panel1.Shadow = 15
         Panel1.ShadowOpacityAnimation = True
-        Panel1.Size = New Size(366, 180)
+        Panel1.Size = New Size(311, 180)
         Panel1.TabIndex = 6
         Panel1.Text = "Panel2"
         ' 
+        ' RadioHVKLLogin
+        ' 
+        RadioHVKLLogin.AutoCheck = True
+        RadioHVKLLogin.Location = New Point(174, 124)
+        RadioHVKLLogin.Name = "RadioHVKLLogin"
+        RadioHVKLLogin.Size = New Size(104, 21)
+        RadioHVKLLogin.TabIndex = 7
+        RadioHVKLLogin.Text = "HVKL内登录"
+        ' 
+        ' RadioVackoLogin
+        ' 
+        RadioVackoLogin.AutoCheck = True
+        RadioVackoLogin.Checked = True
+        RadioVackoLogin.Location = New Point(36, 124)
+        RadioVackoLogin.Name = "RadioVackoLogin"
+        RadioVackoLogin.Size = New Size(114, 21)
+        RadioVackoLogin.TabIndex = 4
+        RadioVackoLogin.Text = "Vacko内登录"
+        ' 
+        ' Divider7
+        ' 
+        Divider7.Location = New Point(33, 106)
+        Divider7.Name = "Divider7"
+        Divider7.OrientationMargin = 0F
+        Divider7.Size = New Size(116, 16)
+        Divider7.TabIndex = 6
+        Divider7.Text = ""
+        ' 
         ' Select1
         ' 
-        Select1.Location = New Point(33, 66)
+        Select1.Location = New Point(33, 62)
         Select1.Name = "Select1"
-        Select1.Size = New Size(302, 40)
+        Select1.Size = New Size(245, 40)
         Select1.TabIndex = 3
         Select1.Text = "选择版本以启动游戏"
         ' 
@@ -247,7 +290,7 @@ Partial Class MainForm
         ' 
         ' Select2
         ' 
-        Select2.Location = New Point(500, 392)
+        Select2.Location = New Point(366, 424)
         Select2.Name = "Select2"
         Select2.Size = New Size(75, 23)
         Select2.TabIndex = 7
@@ -299,6 +342,80 @@ Partial Class MainForm
         LabelTools.Text = "工具"
         LabelTools.TextAlign = ContentAlignment.MiddleCenter
         ' 
+        ' Panel2
+        ' 
+        Panel2.BackColor = Color.Transparent
+        Panel2.BorderWidth = 1F
+        Panel2.Controls.Add(Checkbox1)
+        Panel2.Controls.Add(InputPwd)
+        Panel2.Controls.Add(InputUser)
+        Panel2.Controls.Add(Divider8)
+        Panel2.Controls.Add(Label2)
+        Panel2.Cursor = Cursors.Hand
+        Panel2.Location = New Point(329, 223)
+        Panel2.Name = "Panel2"
+        Panel2.Shadow = 15
+        Panel2.ShadowOpacityAnimation = True
+        Panel2.Size = New Size(235, 180)
+        Panel2.TabIndex = 8
+        Panel2.Text = "Panel2"
+        ' 
+        ' Checkbox1
+        ' 
+        Checkbox1.AutoCheck = True
+        Checkbox1.Location = New Point(115, 132)
+        Checkbox1.Name = "Checkbox1"
+        Checkbox1.Size = New Size(77, 23)
+        Checkbox1.TabIndex = 5
+        Checkbox1.Text = "记住密码"
+        ' 
+        ' InputPwd
+        ' 
+        InputPwd.Location = New Point(35, 97)
+        InputPwd.MaxLength = 12
+        InputPwd.Name = "InputPwd"
+        InputPwd.PlaceholderText = "密码"
+        InputPwd.PrefixSvg = ""
+        InputPwd.PrefixText = ""
+        InputPwd.Size = New Size(163, 33)
+        InputPwd.TabIndex = 4
+        InputPwd.UseSystemPasswordChar = True
+        ' 
+        ' InputUser
+        ' 
+        InputUser.Location = New Point(35, 62)
+        InputUser.MaxLength = 12
+        InputUser.Name = "InputUser"
+        InputUser.PlaceholderText = "用户名"
+        InputUser.PrefixSvg = ""
+        InputUser.PrefixText = ""
+        InputUser.Size = New Size(163, 33)
+        InputUser.TabIndex = 3
+        ' 
+        ' Divider8
+        ' 
+        Divider8.Location = New Point(33, 44)
+        Divider8.Name = "Divider8"
+        Divider8.OrientationMargin = 0F
+        Divider8.Size = New Size(116, 16)
+        Divider8.TabIndex = 2
+        Divider8.Text = ""
+        ' 
+        ' Label2
+        ' 
+        Label2.BackColor = Color.Transparent
+        Label2.Font = New Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
+        Label2.Location = New Point(33, 20)
+        Label2.Name = "Label2"
+        Label2.Size = New Size(116, 33)
+        Label2.TabIndex = 1
+        Label2.Text = "登录信息"
+        ' 
+        ' Timer1
+        ' 
+        Timer1.Enabled = True
+        Timer1.Interval = 1000
+        ' 
         ' MainForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
@@ -306,6 +423,7 @@ Partial Class MainForm
         BackColor = Color.White
         BackgroundImageLayout = ImageLayout.Stretch
         ClientSize = New Size(751, 479)
+        Controls.Add(Panel2)
         Controls.Add(PanelTools)
         Controls.Add(Select2)
         Controls.Add(Panel1)
@@ -324,6 +442,7 @@ Partial Class MainForm
         MainSettingPanel.ResumeLayout(False)
         Panel1.ResumeLayout(False)
         PanelTools.ResumeLayout(False)
+        Panel2.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
 
@@ -349,5 +468,15 @@ Partial Class MainForm
     Friend WithEvents ToolsImage3d As AntdUI.Image3D
     Friend WithEvents Divider5 As AntdUI.Divider
     Friend WithEvents LabelTools As AntdUI.Label
+    Friend WithEvents RadioHVKLLogin As AntdUI.Radio
+    Friend WithEvents RadioVackoLogin As AntdUI.Radio
+    Friend WithEvents Divider7 As AntdUI.Divider
+    Friend WithEvents Panel2 As AntdUI.Panel
+    Friend WithEvents Divider8 As AntdUI.Divider
+    Friend WithEvents Label2 As AntdUI.Label
+    Friend WithEvents InputUser As AntdUI.Input
+    Friend WithEvents Checkbox1 As AntdUI.Checkbox
+    Friend WithEvents InputPwd As AntdUI.Input
+    Friend WithEvents Timer1 As Timer
 
 End Class

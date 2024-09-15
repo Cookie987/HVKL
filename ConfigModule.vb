@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Net
 Imports System.Net.Http
 Imports Newtonsoft.Json
 
@@ -11,6 +12,9 @@ Module ConfigModule
     Public DeveloperMode
     Public UseCustomBackground
     Public LastStartVersion
+    Public LastUsedLoginMethod
+    Public LastUsedUser
+    Public LastUsedPassword
     Public TotalStartTimes
     Public CustomDownloadUrl
     Public ConfigFilePath = "config.json"
@@ -24,12 +28,18 @@ Module ConfigModule
         Public Class DevelopOption
             Public Property UseCustomBackground As Boolean
         End Class
+        Public Property HVKLLoginOptions As HVKLLogin
+        Public Class HVKLLogin
+            Public Property LastUsedLoginMethod As String
+            Public Property LastUsedUser As String
+            Public Property LastUsedPassword As String
+        End Class
         Public Property LastStartVersion As String
         Public Property TotalStartTimes As Long
     End Class
 
-    ' 写入配置到JSON文件的函数
-    Public Sub WriteConfig(ByVal config As Config, ByVal filePath As String)
+        ' 写入配置到JSON文件的函数
+        Public Sub WriteConfig(ByVal config As Config, ByVal filePath As String)
         Dim json As String = JsonConvert.SerializeObject(config, Formatting.Indented)
         File.WriteAllText(filePath, json)
         Console.WriteLine("配置已保存到 " & filePath)
@@ -52,10 +62,14 @@ Module ConfigModule
             DeveloperMode = configRead.DeveloperMode
             UseCustomBackground = configRead.DeveloperOptions.UseCustomBackground
             LastStartVersion = configRead.LastStartVersion
+            LastUsedLoginMethod = configRead.HVKLLoginOptions.LastUsedLoginMethod
+            LastUsedUser = configRead.HVKLLoginOptions.LastUsedUser
+            LastUsedPassword = configRead.HVKLLoginOptions.LastUsedPassword
             TotalStartTimes = configRead.TotalStartTimes
             CustomDownloadUrl = configRead.CustomDownloadUrl
         Catch ex As Exception
             AntdUI.Notification.error(form, "读取配置文件错误", ex.Message,,, 0)
+            Return 1
         End Try
         Return 0
     End Function
@@ -69,6 +83,11 @@ Module ConfigModule
                     .UseCustomBackground = UseCustomBackground
                 },
                 .LastStartVersion = LastStartVersion,
+                .HVKLLoginOptions = New Config.HVKLLogin With {
+                    .LastUsedLoginMethod = LastUsedLoginMethod,
+                    .LastUsedUser = LastUsedUser,
+                    .LastUsedPassword = LastUsedPassword
+                },
                 .TotalStartTimes = TotalStartTimes
                 }
         Try
@@ -83,6 +102,7 @@ Module ConfigModule
 
     Public Class VersionOption
         Public Property VackoVersion As String
+        Public Property SupportHVKLLogin As Boolean
         Public Property StartArgs As StartArg
         Public Class StartArg
             Public Property UpdaterFilePath As String
@@ -100,6 +120,7 @@ Module ConfigModule
     End Class
 
     Public VackoVersion
+    Public SupportHVKLLogin
     Public UpdaterFilePath
     Public UpdaterFileContent
     Public SubDirectory
@@ -130,6 +151,7 @@ Module ConfigModule
         Try
             Dim optionRead As VersionOption = ReadOption("version\" + folderName + "\option.json")
             VackoVersion = optionRead.VackoVersion
+            SupportHVKLLogin = optionRead.SupportHVKLLogin
             UpdaterFilePath = optionRead.StartArgs.UpdaterFilePath
             UpdaterFileContent = optionRead.StartArgs.UpdaterFileContent
             SubDirectory = optionRead.StartArgs.SubDirectory
@@ -147,6 +169,7 @@ Module ConfigModule
     Public Function SaveOption(form, folderName)
         Dim optionToWrite As New VersionOption With {
                 .VackoVersion = VackoVersion,
+                .SupportHVKLLogin = SupportHVKLLogin,
                 .StartArgs = New VersionOption.StartArg With {
                     .Args = Args,
                     .MutexName = MutexName,
