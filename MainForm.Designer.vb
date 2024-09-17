@@ -54,6 +54,7 @@ Partial Class MainForm
         InputUser = New AntdUI.Input()
         Divider8 = New AntdUI.Divider()
         Label2 = New AntdUI.Label()
+        Label3 = New AntdUI.Label()
         DownloadVersionPanel.SuspendLayout()
         ManageVersionPanel.SuspendLayout()
         MainSettingPanel.SuspendLayout()
@@ -344,6 +345,7 @@ Partial Class MainForm
         ' 
         Panel2.BackColor = Color.Transparent
         Panel2.BorderWidth = 1F
+        Panel2.Controls.Add(Label3)
         Panel2.Controls.Add(Checkbox1)
         Panel2.Controls.Add(InputPwd)
         Panel2.Controls.Add(InputUser)
@@ -361,7 +363,7 @@ Partial Class MainForm
         ' Checkbox1
         ' 
         Checkbox1.AutoCheck = True
-        Checkbox1.Location = New Point(115, 132)
+        Checkbox1.Location = New Point(118, 132)
         Checkbox1.Name = "Checkbox1"
         Checkbox1.Size = New Size(77, 23)
         Checkbox1.TabIndex = 5
@@ -408,6 +410,16 @@ Partial Class MainForm
         Label2.Size = New Size(116, 33)
         Label2.TabIndex = 1
         Label2.Text = "登录信息"
+        ' 
+        ' Label3
+        ' 
+        Label3.Font = New Font("Microsoft YaHei UI", 9F, FontStyle.Underline, GraphicsUnit.Point)
+        Label3.ForeColor = Color.SteelBlue
+        Label3.Location = New Point(37, 133)
+        Label3.Name = "Label3"
+        Label3.Size = New Size(75, 23)
+        Label3.TabIndex = 6
+        Label3.Text = "注册账号"
         ' 
         ' MainForm
         ' 
@@ -470,5 +482,6 @@ Partial Class MainForm
     Friend WithEvents InputUser As AntdUI.Input
     Friend WithEvents Checkbox1 As AntdUI.Checkbox
     Friend WithEvents InputPwd As AntdUI.Input
+    Friend WithEvents Label3 As AntdUI.Label
 
 End Class

@@ -71,7 +71,7 @@ Public Class ManageForm
         SettingPanel.Visible = False
     End Sub
 
-    Private Sub Select1_SelectedIndexChanged(sender As Object, value As Integer) Handles Select1.SelectedIndexChanged
+    Private Sub Select1_SelectedIndexChanged() Handles Select1.SelectedIndexChanged
         Select2.SelectedIndex = Select1.SelectedIndex
         Dim parentDirectory As String = "version\" + Select2.SelectedValue
         Dim optionFilePath = "version\" + Select2.SelectedValue + "\option.json"

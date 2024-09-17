@@ -87,11 +87,13 @@ Public Class MainForm
                                 Return 3
                             End If
                         Else
-                            AntdUI.Notification.error(Me, "登录失败", "未找到密码字段",,, 0)
+                            AntdUI.Notification.error(Me, "警告", "未找到密码字段",,, 0)
                             Return 4
                         End If
                     End If
                 End If
+            Else
+                AntdUI.Notification.warn(Me, "登录失败", "当前版本暂不支持HVKL内登录，已回退至Vacko内登录",,, 5)
             End If
         Catch ex As Exception
             AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
@@ -146,70 +148,6 @@ Public Class MainForm
             AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
             Return 1
         End Try
-    End Function
-
-    Private Async Function DownloadVak2File(remoteUrl As String) As Task(Of String)
-        Try
-            Using client As New HttpClient()
-                Dim response As HttpResponseMessage = Await client.GetAsync(remoteUrl)
-                response.EnsureSuccessStatusCode()
-
-                ' 读取文件内容为字符串
-                Dim fileContent As String = Await response.Content.ReadAsStringAsync()
-                Return fileContent
-            End Using
-        Catch ex As Exception
-            Return Nothing
-        End Try
-    End Function
-
-    Shared Function SaveVak2File(writestr As String, wdata As String, wlength As Integer, UserNameb As String, vak2FileContent As String, VackoVer As String)
-        Try
-            Dim WriteDatalengthstr As Integer = writestr.Length
-
-
-            Dim WriteDataFLO1 As Integer = vak2FileContent.IndexOf(writestr, 0)
-
-            Dim filePath As String = "version\" + VackoVer + "\Game\Usdata\" + UserNameb + "\localdata.vak2"
-
-            Using fs As New FileStream(filePath, FileMode.Open, FileAccess.Write)
-
-                fs.Seek(WriteDataFLO1 + WriteDatalengthstr, SeekOrigin.Begin)
-
-                ' 使用 System.Text.Encoding.Default.GetBytes 将字符串转换为字节数组
-                Dim wdataBytes As Byte() = System.Text.Encoding.Default.GetBytes(wdata)
-                If wlength > wdataBytes.Length Then
-                    wlength = wdataBytes.Length ' 避免越界
-                End If
-
-                fs.Write(wdataBytes, 0, wlength)
-
-            End Using
-        Catch ex As Exception
-            Return ex
-        End Try
-
-        Return 0
-        ' 写入内容
-
-        ' writestr： 从哪里开始
-
-        ' wdata：写什么
-
-        ' wlength：写入的长度
-    End Function
-
-
-    Shared Function ReadVak2File(optionName As String, readLength As Integer, vak2FileContent As String)
-        Dim LoadDatalengthstr As Integer = optionName.Length
-
-        Dim LoadDataFLO1 As Integer = vak2FileContent.IndexOf(optionName, 0)
-        Return vak2FileContent.Substring(LoadDataFLO1 + LoadDatalengthstr, readLength)
-
-        ' 读取内容
-
-        ' DataResult 为结果
-
     End Function
 
     Private Async Function GetRemoteCredentials(remoteUrl As String) As Task(Of Dictionary(Of String, String))
@@ -431,7 +369,7 @@ Public Class MainForm
                                             End Sub,, 2)
     End Sub
 
-    Private Sub Select1_SelectedIndexChanged(sender As Object, value As Integer) Handles Select1.SelectedIndexChanged
+    Private Sub Select1_SelectedIndexChanged() Handles Select1.SelectedIndexChanged
         Select2.SelectedIndex = Select1.SelectedIndex
     End Sub
 
@@ -445,7 +383,7 @@ Public Class MainForm
         SaveConfig(Me)
     End Sub
 
-    Private Sub Checkbox1_CheckedChanged(sender As Object, value As Boolean) Handles Checkbox1.CheckedChanged
+    Private Sub Checkbox1_CheckedChanged() Handles Checkbox1.CheckedChanged
         GetConfig(Me)
         If Checkbox1.Checked Then
             LastUsedPassword = InputPwd.Text
@@ -478,11 +416,15 @@ Public Class MainForm
         SaveConfig(Me)
     End Sub
 
-    Private Sub RadioVackoLogin_CheckedChanged(sender As Object, value As Boolean) Handles RadioVackoLogin.CheckedChanged
+    Private Sub RadioVackoLogin_CheckedChanged() Handles RadioVackoLogin.CheckedChanged
         LoginFrameUpdate()
     End Sub
 
-    Private Sub RadioHVKLLogin_CheckedChanged(sender As Object, value As Boolean) Handles RadioHVKLLogin.CheckedChanged
+    Private Sub RadioHVKLLogin_CheckedChanged() Handles RadioHVKLLogin.CheckedChanged
         LoginFrameUpdate()
+    End Sub
+
+    Private Sub Label3_Click(sender As Object, e As EventArgs) Handles Label3.Click
+        RegisterForm.Show()
     End Sub
 End Class

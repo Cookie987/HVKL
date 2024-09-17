@@ -16,13 +16,13 @@ Public Class SettingForm
 
     Private Sub Label2_Click(sender As Object, e As EventArgs) Handles Label2.Click
         ClickTimes += 1
-        If ClickTimes = 8 Then
+        If ClickTimes = 7 Then
             DeveloperMode = True
             SaveConfig(Me)
         End If
     End Sub
 
-    Private Sub Switch1_CheckedChanged(sender As Object, value As Boolean) Handles Switch1.CheckedChanged
+    Private Sub Switch1_CheckedChanged() Handles Switch1.CheckedChanged
         UseCustomBackground = Switch1.Checked
         SaveConfig(Me)
     End Sub
