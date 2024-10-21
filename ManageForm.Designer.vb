@@ -56,6 +56,7 @@ Partial Class ManageForm
         ' 
         ' WindowBar1
         ' 
+        WindowBar1.IsMax = False
         WindowBar1.Location = New Point(0, 1)
         WindowBar1.MaximizeBox = False
         WindowBar1.MinimizeBox = False
@@ -68,6 +69,7 @@ Partial Class ManageForm
         ' 
         SettingPanel.BackColor = Color.Transparent
         SettingPanel.BorderWidth = 1F
+        SettingPanel.Controls.Add(Select2)
         SettingPanel.Controls.Add(InputDirName)
         SettingPanel.Controls.Add(Label4)
         SettingPanel.Controls.Add(Button3)
@@ -152,7 +154,7 @@ Partial Class ManageForm
         ' 
         ' Select2
         ' 
-        Select2.Location = New Point(10, 45)
+        Select2.Location = New Point(97, 0)
         Select2.Name = "Select2"
         Select2.Size = New Size(75, 23)
         Select2.TabIndex = 10
@@ -163,8 +165,7 @@ Partial Class ManageForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(492, 185)
-        Controls.Add(Select2)
+        ClientSize = New Size(511, 223)
         Controls.Add(Select1)
         Controls.Add(SettingPanel)
         Controls.Add(WindowBar1)

@@ -33,6 +33,7 @@ Partial Class ReplaceVersionForm
         ' 
         ' WindowBar1
         ' 
+        WindowBar1.IsMax = False
         WindowBar1.Location = New Point(1, 0)
         WindowBar1.MaximizeBox = False
         WindowBar1.MinimizeBox = False
@@ -82,7 +83,6 @@ Partial Class ReplaceVersionForm
         Progress1.Location = New Point(33, 91)
         Progress1.Name = "Progress1"
         Progress1.ShowInTaskbar = True
-        Progress1.ShowText = True
         Progress1.Size = New Size(326, 24)
         Progress1.TabIndex = 12
         Progress1.Text = ""
@@ -91,7 +91,7 @@ Partial Class ReplaceVersionForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(375, 148)
+        ClientSize = New Size(391, 169)
         Controls.Add(Progress1)
         Controls.Add(Button2)
         Controls.Add(Select1)

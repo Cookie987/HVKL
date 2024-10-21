@@ -39,6 +39,7 @@ Partial Class ToolForm
         ' 
         ' WindowBar1
         ' 
+        WindowBar1.IsMax = False
         WindowBar1.Location = New Point(1, -1)
         WindowBar1.MaximizeBox = False
         WindowBar1.MinimizeBox = False
@@ -155,7 +156,7 @@ Partial Class ToolForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(425, 277)
+        ClientSize = New Size(439, 302)
         Controls.Add(Panel2)
         Controls.Add(WindowBar1)
         Controls.Add(Panel1)

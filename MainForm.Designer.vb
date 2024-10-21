@@ -22,6 +22,7 @@ Partial Class MainForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
         WindowBar1 = New AntdUI.WindowBar()
         DownloadVersionPanel = New AntdUI.Panel()
@@ -49,12 +50,13 @@ Partial Class MainForm
         Divider5 = New AntdUI.Divider()
         LabelTools = New AntdUI.Label()
         Panel2 = New AntdUI.Panel()
+        Label3 = New AntdUI.Label()
         Checkbox1 = New AntdUI.Checkbox()
         InputPwd = New AntdUI.Input()
         InputUser = New AntdUI.Input()
         Divider8 = New AntdUI.Divider()
         Label2 = New AntdUI.Label()
-        Label3 = New AntdUI.Label()
+        Timer1 = New Timer(components)
         DownloadVersionPanel.SuspendLayout()
         ManageVersionPanel.SuspendLayout()
         MainSettingPanel.SuspendLayout()
@@ -70,6 +72,7 @@ Partial Class MainForm
         WindowBar1.DividerThickness = 2F
         WindowBar1.Font = New Font("Segoe UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
         WindowBar1.IconSvg = ""
+        WindowBar1.IsMax = False
         WindowBar1.Location = New Point(-1, -1)
         WindowBar1.MaximizeBox = False
         WindowBar1.Name = "WindowBar1"
@@ -360,6 +363,16 @@ Partial Class MainForm
         Panel2.TabIndex = 8
         Panel2.Text = "Panel2"
         ' 
+        ' Label3
+        ' 
+        Label3.Font = New Font("Microsoft YaHei UI", 9F, FontStyle.Underline, GraphicsUnit.Point)
+        Label3.ForeColor = Color.SteelBlue
+        Label3.Location = New Point(37, 133)
+        Label3.Name = "Label3"
+        Label3.Size = New Size(75, 23)
+        Label3.TabIndex = 6
+        Label3.Text = "注册账号"
+        ' 
         ' Checkbox1
         ' 
         Checkbox1.AutoCheck = True
@@ -411,15 +424,10 @@ Partial Class MainForm
         Label2.TabIndex = 1
         Label2.Text = "登录信息"
         ' 
-        ' Label3
+        ' Timer1
         ' 
-        Label3.Font = New Font("Microsoft YaHei UI", 9F, FontStyle.Underline, GraphicsUnit.Point)
-        Label3.ForeColor = Color.SteelBlue
-        Label3.Location = New Point(37, 133)
-        Label3.Name = "Label3"
-        Label3.Size = New Size(75, 23)
-        Label3.TabIndex = 6
-        Label3.Text = "注册账号"
+        Timer1.Enabled = True
+        Timer1.Interval = 1
         ' 
         ' MainForm
         ' 
@@ -427,7 +435,7 @@ Partial Class MainForm
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.White
         BackgroundImageLayout = ImageLayout.Stretch
-        ClientSize = New Size(751, 479)
+        ClientSize = New Size(767, 479)
         Controls.Add(Panel2)
         Controls.Add(PanelTools)
         Controls.Add(Select2)
@@ -439,6 +447,7 @@ Partial Class MainForm
         FormBorderStyle = FormBorderStyle.FixedSingle
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
         MaximizeBox = False
+        Mode = AntdUI.TAMode.Light
         Name = "MainForm"
         Resizable = False
         Text = "Hello Vacko Launcher"
@@ -483,5 +492,6 @@ Partial Class MainForm
     Friend WithEvents Checkbox1 As AntdUI.Checkbox
     Friend WithEvents InputPwd As AntdUI.Input
     Friend WithEvents Label3 As AntdUI.Label
+    Friend WithEvents Timer1 As Timer
 
 End Class

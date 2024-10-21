@@ -30,6 +30,7 @@ Partial Class VersionForm
         ' 
         ' WindowBar1
         ' 
+        WindowBar1.IsMax = False
         WindowBar1.Location = New Point(0, 0)
         WindowBar1.MaximizeBox = False
         WindowBar1.MinimizeBox = False
@@ -61,7 +62,6 @@ Partial Class VersionForm
         Progress1.Location = New Point(38, 69)
         Progress1.Name = "Progress1"
         Progress1.ShowInTaskbar = True
-        Progress1.ShowText = True
         Progress1.Size = New Size(444, 24)
         Progress1.TabIndex = 1
         Progress1.Text = ""
@@ -70,7 +70,7 @@ Partial Class VersionForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(492, 80)
+        ClientSize = New Size(509, 102)
         Controls.Add(Select1)
         Controls.Add(Button1)
         Controls.Add(Progress1)

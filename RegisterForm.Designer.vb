@@ -121,7 +121,7 @@ Partial Class RegisterForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(306, 175)
+        ClientSize = New Size(321, 208)
         Controls.Add(ButtonReg)
         Controls.Add(InputCode)
         Controls.Add(Button1)

@@ -41,6 +41,7 @@ Partial Class SettingForm
         ' 
         ' WindowBar1
         ' 
+        WindowBar1.IsMax = False
         WindowBar1.Location = New Point(0, -1)
         WindowBar1.MaximizeBox = False
         WindowBar1.MinimizeBox = False
@@ -184,7 +185,7 @@ Partial Class SettingForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(609, 368)
+        ClientSize = New Size(624, 393)
         Controls.Add(ButtonCheckUpdate)
         Controls.Add(Panel1)
         Controls.Add(SettingPanel)

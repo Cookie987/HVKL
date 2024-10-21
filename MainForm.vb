@@ -2,6 +2,7 @@
 Imports System.Net.Http
 Imports System.Text
 Imports System.Threading
+Imports AntdUI
 
 Public Class MainForm
     Dim mutex As Mutex
@@ -26,8 +27,8 @@ Public Class MainForm
             ' 登录
             If SupportHVKLLogin = True Then
                 If RadioHVKLLogin.Checked = True Then
-                    If InputUser.Text = "User" Or InputUser.Text = "user" Or InputUser.Text = "nonelivaccno" Then
-                        AntdUI.Notification.error(Me, "用户名不合法", "请更换用户名",,, 0)
+                    If InputUser.Text = "User" Or InputUser.Text = "nonelivaccno" Or InputPwd.Text = "nonelivpas" Then
+                        AntdUI.Notification.error(Me, "用户名或密码不合法", "请更换",,, 0)
                         Return 1
                     Else
                         Dim remoteUrl As String = "http://vacko.cookie987.top:28987/VackoData/PlayerData/" + LastUsedUser + "/localdata.vak2"
@@ -38,6 +39,12 @@ Public Class MainForm
                             Dim storedPassword As String = credentials("livpass").Replace(Chr(0), "").Trim()
 
                             If storedPassword = InputPwd.Text Then
+                                Dim banlistUrl As String = "http://vacko.cookie987.top:28987/VackoData/PlayerData/BanList.txt"
+                                ' 获取远程文件中
+                                Dim banlistFile As String = Await DownloadVak2File(banlistUrl)
+                                If InStr(banlistFile, InputUser.Text) Then
+                                    Return 8
+                                End If
                                 AntdUI.Message.success(Me, "登录成功",, 2)
                                 Dim fileContent As String = Await DownloadVak2File(remoteUrl)
                                 If fileContent IsNot Nothing Then
@@ -53,11 +60,17 @@ Public Class MainForm
                                     File.WriteAllText(newFilePath, fileContent)
 
                                     Dim rempasstimes = ReadVak2File("rempasstimes:", 4, fileContent)
-                                    If rempasstimes > 1 Then
-                                        rempasstimes += 1
-                                    ElseIf rempasstimes < 1 Then
+                                    If rempasstimes = "none" Then
                                         rempasstimes = 1
+                                    Else
+                                        If rempasstimes > 1 Then
+                                            rempasstimes += 1
+                                        ElseIf rempasstimes < 1 Then
+                                            rempasstimes = 1
+                                        End If
                                     End If
+
+
                                     SaveVak2File("rempasstimes:", rempasstimes, 4, InputUser.Text, fileContent, StartVer)
 
                                     Dim filePath = "version\" + StartVer + "\Game\Appdata\opi.vak2"
@@ -132,7 +145,7 @@ Public Class MainForm
         Try
             process.Start()
             LastStartVersion = Select1.SelectedIndex
-            AntdUI.Notification.success(Me, "启动成功", "" + CustomName,,, 5)
+            'AntdUI.Notification.success(Me, "启动成功", "" + CustomName,,, 5)
             Try
                 Dim optionRead As VersionOption = ReadOption(optionFilePath)
                 GetOption(Me, Select2.SelectedValue)
@@ -211,37 +224,7 @@ Public Class MainForm
         AntdUI.Config.ShowInWindow = True
         RefreshVersion()
         WindowBar1.SubText += "v" + My.Resources.Resource1.Version
-        Dim floatButton = AntdUI.FloatButton.open(New AntdUI.FloatButton.Config(Me, New AntdUI.FloatButton.ConfigBtn() {
-            New AntdUI.FloatButton.ConfigBtn("OpenVersionDir", My.Resources.Resource1.FolderSVG, True) With {
-                .Badge = "",
-                .Tooltip = "打开version文件夹",
-                .Round = True,
-                .Type = AntdUI.TTypeMini.Default
-            },
-            New AntdUI.FloatButton.ConfigBtn("Refresh", My.Resources.Resource1.RefreshSVG, True) With {
-                .Badge = "",
-                .Tooltip = "刷新",
-                .Round = True,
-                .Type = AntdUI.TTypeMini.Default
-            },
-            New AntdUI.FloatButton.ConfigBtn("StartGame", My.Resources.Resource1.RocketSVG, True) With {
-                .Badge = "",
-                .Tooltip = "启动选择的Vacko2版本",
-                .Round = True,
-                .Type = AntdUI.TTypeMini.Primary
-            }
-        }, Async Sub(btn)
-               Select Case btn.Name
-                   Case "StartGame"
-                       Await StartGame(Select2.SelectedValue)
-                   Case "Refresh"
-                       RefreshButton_Click()
-                   Case "OpenVersionDir"
-                       Dim relativePath As String = ".\version"
-                       Dim folderPath As String = Path.GetFullPath(relativePath)
-                       Process.Start("explorer.exe", folderPath)
-               End Select
-           End Sub))
+
         Dim FileExists As Boolean
         FileExists = My.Computer.FileSystem.FileExists(ConfigFilePath)
 
@@ -426,5 +409,54 @@ Public Class MainForm
 
     Private Sub Label3_Click(sender As Object, e As EventArgs) Handles Label3.Click
         RegisterForm.Show()
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Dim buttons = New AntdUI.FloatButton.Config(Me, New AntdUI.FloatButton.ConfigBtn() {
+            New AntdUI.FloatButton.ConfigBtn("OpenVersionDir", My.Resources.Resource1.FolderSVG, True) With {
+                .Badge = "",
+                .Tooltip = "打开version文件夹",
+                .Round = True,
+                .Type = AntdUI.TTypeMini.Default
+            },
+            New AntdUI.FloatButton.ConfigBtn("Refresh", My.Resources.Resource1.RefreshSVG, True) With {
+                .Badge = "",
+                .Tooltip = "刷新",
+                .Round = True,
+                .Type = AntdUI.TTypeMini.Default
+            },
+            New AntdUI.FloatButton.ConfigBtn("StartGame", My.Resources.Resource1.RocketSVG, True) With {
+                .Badge = "",
+                .Tooltip = "启动选择的Vacko2版本",
+                .Round = True,
+                .Type = AntdUI.TTypeMini.Primary
+            }
+        }, Sub(btn)
+               Select Case btn.Name
+                   Case "StartGame"
+                       AntdUI.Message.loading(Me, "启动中", Async Sub(config)
+                                                             Dim returnVal
+                                                             returnVal = Await StartGame(Select2.SelectedValue)
+                                                             If returnVal = 0 Then
+                                                                 config.OK("启动成功")
+                                                             ElseIf returnVal = 8 Then
+                                                                 config.Error("登录失败")
+                                                                 AntdUI.Modal.open(New AntdUI.Modal.Config(Me, "错误", "您的账户已被 LeBan 封禁" + vbCrLf +
+                                                                    "联系 Lemon Studio 以获得更多信息.", AntdUI.TType.Error))
+                                                             Else
+                                                                 config.Error("启动失败")
+
+                                                             End If
+                                                         End Sub)
+                   Case "Refresh"
+                       RefreshButton_Click()
+                   Case "OpenVersionDir"
+                       Dim relativePath As String = ".\version"
+                       Dim folderPath As String = Path.GetFullPath(relativePath)
+                       Process.Start("explorer.exe", folderPath)
+               End Select
+           End Sub)
+        FloatButton.open(buttons)
+        Timer1.Enabled = False
     End Sub
 End Class

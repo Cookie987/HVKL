@@ -76,7 +76,7 @@ Partial Class SplashForm
         ' Image3d2
         ' 
         Image3d2.Image = CType(resources.GetObject("Image3d2.Image"), Image)
-        Image3d2.Location = New Point(-8, 331)
+        Image3d2.Location = New Point(-8, 334)
         Image3d2.Name = "Image3d2"
         Image3d2.Size = New Size(177, 94)
         Image3d2.TabIndex = 4
@@ -95,10 +95,10 @@ Partial Class SplashForm
         ' Image3d3
         ' 
         Image3d3.Image = CType(resources.GetObject("Image3d3.Image"), Image)
-        Image3d3.Location = New Point(340, 36)
+        Image3d3.Location = New Point(340, 31)
         Image3d3.Name = "Image3d3"
         Image3d3.Radius = 10
-        Image3d3.Size = New Size(347, 389)
+        Image3d3.Size = New Size(347, 394)
         Image3d3.TabIndex = 6
         Image3d3.Text = "Image3d3"
         ' 
@@ -107,7 +107,7 @@ Partial Class SplashForm
         AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.White
-        ClientSize = New Size(693, 421)
+        ClientSize = New Size(705, 443)
         Controls.Add(Image3d3)
         Controls.Add(Label3)
         Controls.Add(Image3d2)

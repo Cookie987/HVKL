@@ -118,14 +118,13 @@ Public Class RegisterForm
     End Sub
 
     Private Sub ButtonReg_Click(sender As Object, e As EventArgs) Handles ButtonReg.Click
-        ButtonReg.Enabled = False
         If success = 1 Then
             Me.Close()
         Else
             AntdUI.Message.loading(Me, "注册中", Async Sub(config)
                                                   Try
                                                       If InputCode.Text = verifyCode Then
-                                                          If Not (InputPwd.Text = "" Or InputUser.Text = "") Then
+                                                          If Not (InputPwd.Text = "" Or InputUser.Text = "" Or InputUser.Text = "User" Or InputUser.Text = "nonelivaccno" Or InputPwd.Text = "nonelivpas") Then
                                                               Dim websiteUrl = "http://vacko.cookie987.top:28987/VackoData/PlayerData/"
                                                               Dim directoryNameToCheck = InputUser.Text.Trim
                                                               ' 创建 HttpClient 进行 HTTP 请求
@@ -209,7 +208,7 @@ Public Class RegisterForm
                                                                   End Try
                                                               End Using
                                                           Else
-                                                              config.Error("用户名或密码不能为空")
+                                                              config.Error("用户名或密码不合法")
                                                           End If
                                                       Else
                                                           config.Error("验证码错误")
@@ -271,8 +270,6 @@ Public Class RegisterForm
         If success = 1 Then
             ButtonReg.Text = "关闭"
             ButtonReg.Type = AntdUI.TTypeMini.Success
-        Else
-            ButtonReg.Enabled = True
         End If
     End Sub
 End Class
