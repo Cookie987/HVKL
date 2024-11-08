@@ -35,6 +35,8 @@ Partial Class SettingForm
         Divider1 = New AntdUI.Divider()
         Label5 = New AntdUI.Label()
         ButtonCheckUpdate = New AntdUI.Button()
+        Label4 = New AntdUI.Label()
+        SwitchHorribleBanUI = New AntdUI.Switch()
         SettingPanel.SuspendLayout()
         Panel1.SuspendLayout()
         SuspendLayout()
@@ -121,6 +123,8 @@ Partial Class SettingForm
         ' 
         Panel1.BackColor = Color.Transparent
         Panel1.BorderWidth = 1F
+        Panel1.Controls.Add(SwitchHorribleBanUI)
+        Panel1.Controls.Add(Label4)
         Panel1.Controls.Add(Label3)
         Panel1.Controls.Add(Switch1)
         Panel1.Controls.Add(Divider1)
@@ -181,6 +185,25 @@ Partial Class SettingForm
         ButtonCheckUpdate.Text = "检查更新"
         ButtonCheckUpdate.Type = AntdUI.TTypeMini.Primary
         ' 
+        ' Label4
+        ' 
+        Label4.BackColor = Color.Transparent
+        Label4.Font = New Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
+        Label4.Location = New Point(103, 98)
+        Label4.Name = "Label4"
+        Label4.Size = New Size(171, 33)
+        Label4.TabIndex = 5
+        Label4.Text = "有压迫感的封禁界面"
+        ' 
+        ' SwitchHorribleBanUI
+        ' 
+        SwitchHorribleBanUI.AutoCheck = True
+        SwitchHorribleBanUI.Location = New Point(53, 102)
+        SwitchHorribleBanUI.Name = "SwitchHorribleBanUI"
+        SwitchHorribleBanUI.Size = New Size(44, 25)
+        SwitchHorribleBanUI.TabIndex = 6
+        SwitchHorribleBanUI.Text = "12"
+        ' 
         ' SettingForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
@@ -212,4 +235,6 @@ Partial Class SettingForm
     Friend WithEvents Label5 As AntdUI.Label
     Friend WithEvents ButtonCheckUpdate As AntdUI.Button
     Friend WithEvents StartTimesLabel As AntdUI.Label
+    Friend WithEvents SwitchHorribleBanUI As AntdUI.Switch
+    Friend WithEvents Label4 As AntdUI.Label
 End Class

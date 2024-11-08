@@ -124,7 +124,7 @@ Public Class RegisterForm
             AntdUI.Message.loading(Me, "注册中", Async Sub(config)
                                                   Try
                                                       If InputCode.Text = verifyCode Then
-                                                          If Not (InputPwd.Text = "" Or InputUser.Text = "" Or InputUser.Text = "User" Or InputUser.Text = "nonelivaccno" Or InputPwd.Text = "nonelivpas") Then
+                                                          If Not (InputPwd.Text = "" Or ContainsSymbol(InputPwd.Text) Or InputUser.Text = "" Or InputUser.Text = "User" Or InputUser.Text = "nonelivaccno" Or InputPwd.Text = "nonelivpas") Then
                                                               Dim websiteUrl = "http://vacko.cookie987.top:28987/VackoData/PlayerData/"
                                                               Dim directoryNameToCheck = InputUser.Text.Trim
                                                               ' 创建 HttpClient 进行 HTTP 请求
@@ -141,7 +141,7 @@ Public Class RegisterForm
                                                                           Dim playerUid = "987987987"
                                                                           Dim LatestUid = Await GetFileContentAsync(websiteUrl + "CreUid.txt")
                                                                           Dim PlayerEmi = Await GetFileContentAsync(websiteUrl + "PlayerEmi.txt")
-                                                                          Dim PlayerFriends = Await GetFileContentAsync(websiteUrl + "PlayerFriends.txt")
+                                                                          Dim NameList = Await GetFileContentAsync(websiteUrl + "NameList.txt")
                                                                           playerUid = LatestUid
                                                                           Dim vak2File = "livacc:" + PadWithNull(InputUser.Text, 12) + ";" +
                                                                           "livpass:" + PadWithNull(InputPwd.Text, 10) + ";" +
@@ -150,15 +150,17 @@ Public Class RegisterForm
                                                                           "rempasstimes:" + PadWithNull("none", 4) + ";" +
                                                                           "playeruid:" + PadWithNull(playerUid.Trim, 9) + ";" + vbLf + "Created by HVKL" + HVKLVersion
                                                                           PlayerEmi += InputEmail.Text + vbLf
-                                                                          PlayerFriends += InputUser.Text + ":none;" + vbLf
+                                                                          NameList += InputUser.Text + ";" + vbLf
                                                                           Dim tempFilePath As String = Path.GetTempFileName()
                                                                           Dim tempFilePath2 As String = Path.GetTempFileName()
                                                                           Dim tempFilePath3 As String = Path.GetTempFileName()
                                                                           Dim tempFilePath4 As String = Path.GetTempFileName()
+                                                                          Dim tempFilePath5 As String = Path.GetTempFileName()
                                                                           File.WriteAllText(tempFilePath, vak2File)
                                                                           File.WriteAllText(tempFilePath2, Str(LatestUid + 1).Trim)
                                                                           File.WriteAllText(tempFilePath3, PlayerEmi)
-                                                                          File.WriteAllText(tempFilePath4, PlayerFriends)
+                                                                          File.WriteAllText(tempFilePath4, NameList)
+                                                                          File.WriteAllText(tempFilePath5, "")
                                                                           ' 使用 SFTP 上传文件
                                                                           Using sftp As New SftpClient(remoteHost, remotePort, sftpUser, sftpPassword)
                                                                               Try
@@ -178,7 +180,10 @@ Public Class RegisterForm
                                                                                       sftp.UploadFile(fileStream, remoteFilePath + "PlayerEmi.txt")
                                                                                   End Using
                                                                                   Using fileStream As New FileStream(tempFilePath4, FileMode.Open)
-                                                                                      sftp.UploadFile(fileStream, remoteFilePath + "PlayerFriends.txt")
+                                                                                      sftp.UploadFile(fileStream, remoteFilePath + "NameList.txt")
+                                                                                  End Using
+                                                                                  Using fileStream As New FileStream(tempFilePath5, FileMode.Open)
+                                                                                      sftp.UploadFile(fileStream, remoteFilePath + "PlayerFriends/" + InputUser.Text + ".txt")
                                                                                   End Using
                                                                                   ' 确保连接断开
                                                                                   If sftp.IsConnected Then
@@ -199,6 +204,7 @@ Public Class RegisterForm
                                                                               File.Delete(tempFilePath2)
                                                                               File.Delete(tempFilePath3)
                                                                               File.Delete(tempFilePath4)
+                                                                              File.Delete(tempFilePath5)
                                                                           End If
                                                                           success = 1
                                                                           config.OK("注册成功")
@@ -272,4 +278,10 @@ Public Class RegisterForm
             ButtonReg.Type = AntdUI.TTypeMini.Success
         End If
     End Sub
+
+    Private Function ContainsSymbol(input As String) As Boolean
+        ' 定义一个正则表达式，匹配非字母和数字的字符
+        Dim pattern As String = "[^\w]"
+        Return Regex.IsMatch(input, pattern)
+    End Function
 End Class

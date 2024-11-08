@@ -11,6 +11,7 @@ Module ConfigModule
     Public HVKLVersion
     Public DeveloperMode
     Public UseCustomBackground
+    Public HorribleBanUI
     Public LastStartVersion
     Public LastUsedLoginMethod
     Public LastUsedUser
@@ -27,6 +28,7 @@ Module ConfigModule
         Public Property DeveloperOptions As DevelopOption
         Public Class DevelopOption
             Public Property UseCustomBackground As Boolean
+            Public Property HorribleBanUI As Boolean
         End Class
         Public Property HVKLLoginOptions As HVKLLogin
         Public Class HVKLLogin
@@ -61,6 +63,7 @@ Module ConfigModule
             HVKLVersion = configRead.HVKLVersion
             DeveloperMode = configRead.DeveloperMode
             UseCustomBackground = configRead.DeveloperOptions.UseCustomBackground
+            HorribleBanUI = configRead.DeveloperOptions.HorribleBanUI
             LastStartVersion = configRead.LastStartVersion
             LastUsedLoginMethod = configRead.HVKLLoginOptions.LastUsedLoginMethod
             LastUsedUser = configRead.HVKLLoginOptions.LastUsedUser
@@ -80,7 +83,8 @@ Module ConfigModule
                 .CustomDownloadUrl = CustomDownloadUrl,
                 .DeveloperMode = DeveloperMode,
                 .DeveloperOptions = New Config.DevelopOption With {
-                    .UseCustomBackground = UseCustomBackground
+                    .UseCustomBackground = UseCustomBackground,
+                    .HorribleBanUI = HorribleBanUI
                 },
                 .LastStartVersion = LastStartVersion,
                 .HVKLLoginOptions = New Config.HVKLLogin With {

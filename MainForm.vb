@@ -440,9 +440,14 @@ Public Class MainForm
                                                              If returnVal = 0 Then
                                                                  config.OK("启动成功")
                                                              ElseIf returnVal = 8 Then
-                                                                 config.Error("登录失败")
-                                                                 AntdUI.Modal.open(New AntdUI.Modal.Config(Me, "错误", "您的账户已被 LeBan 封禁" + vbCrLf +
-                                                                    "联系 Lemon Studio 以获得更多信息.", AntdUI.TType.Error))
+                                                                 If HorribleBanUI = True Then
+                                                                     BanForm.ShowDialog()
+                                                                 Else
+                                                                     config.Error("登录失败")
+                                                                     AntdUI.Modal.open(New AntdUI.Modal.Config(Me, "错误", "您的账户已被 LeBan 封禁" + vbCrLf +
+                                                                        "联系 Lemon Studio 以获得更多信息.", AntdUI.TType.Error))
+                                                                 End If
+
                                                              Else
                                                                  config.Error("启动失败")
 

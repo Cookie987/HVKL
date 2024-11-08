@@ -11,6 +11,9 @@ Public Class SettingForm
             If UseCustomBackground = True Then
                 Switch1.Checked = True
             End If
+            If HorribleBanUI = True Then
+                SwitchHorribleBanUI.Checked = True
+            End If
         End If
     End Sub
 
@@ -57,5 +60,10 @@ Public Class SettingForm
             AntdUI.Message.error(Me, "检查更新错误：" + ex.Message)
             ButtonCheckUpdate.Type = AntdUI.TTypeMini.Error
         End Try
+    End Sub
+
+    Private Sub SwitchHorribleBanUI_CheckedChanged(sender As Object, e As AntdUI.BoolEventArgs) Handles SwitchHorribleBanUI.CheckedChanged
+        HorribleBanUI = SwitchHorribleBanUI.Checked
+        SaveConfig(Me)
     End Sub
 End Class
