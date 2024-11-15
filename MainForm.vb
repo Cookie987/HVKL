@@ -25,8 +25,8 @@ Public Class MainForm
 
         Try
             ' 登录
-            If RadioHVKLLogin.Checked = True Then
-                If SupportHVKLLogin = True Then
+            If SupportHVKLLogin = True Then
+                If RadioHVKLLogin.Checked = True Then
                     If InputUser.Text = "User" Or InputUser.Text = "nonelivaccno" Or InputPwd.Text = "nonelivpas" Then
                         AntdUI.Notification.error(Me, "用户名或密码不合法", "请更换",,, 0)
                         Return 1
@@ -104,9 +104,9 @@ Public Class MainForm
                             Return 4
                         End If
                     End If
-                Else
-                    AntdUI.Notification.warn(Me, "登录失败", "当前版本暂不支持HVKL内登录，已回退至Vacko内登录",,, 5)
                 End If
+            Else
+                AntdUI.Notification.warn(Me, "登录失败", "当前版本暂不支持HVKL内登录，已回退至Vacko内登录",,, 5)
             End If
         Catch ex As Exception
             AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
