@@ -1,0 +1,5 @@
+1. 支持 Vacko 1.2.6
+2. 接入 LeBan
+3. 优化了一些bug
+
+**Full Changelog**: https://github.com/Cookie987/HVKL/compare/1.1.2...1.1.3
