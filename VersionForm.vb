@@ -8,6 +8,11 @@ Imports AntdUI
 Public Class VersionForm
     Private Sub InstallVersion(ver As String, instMessage As String)
         AntdUI.Message.loading(Me, instMessage, Async Sub(Config)
+                                                    If Button1.InvokeRequired Then
+                                                        Button1.Invoke(Sub() Button1.Enabled = False)
+                                                    Else
+                                                        Button1.Enabled = False
+                                                    End If
                                                     GetConfig(Me)
                                                     If CustomDownloadUrl = "" Then
                                                         CustomDownloadUrl = DefaultDownloadUrl
@@ -102,6 +107,11 @@ Public Class VersionForm
                                                         Progress1.State = AntdUI.TType.Error
                                                         Progress1.Loading = False
                                                         Config.Error("指定的版本已存在，请先改变目录名称")
+                                                    End If
+                                                    If Button1.InvokeRequired Then
+                                                        Button1.Invoke(Sub() Button1.Enabled = True)
+                                                    Else
+                                                        Button1.Enabled = True
                                                     End If
                                                 End Sub,, 2)
         MainForm.RefreshButton_Click()

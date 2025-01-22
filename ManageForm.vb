@@ -61,7 +61,7 @@ Public Class ManageForm
             .OkType = TTypeMini.Error,
             .OnOk = Function(config)
                         DeleteFolder("version\" + Select2.SelectedValue)
-                        System.Threading.Thread.Sleep(500)
+                        System.Threading.Thread.Sleep(1000)
                         MainForm.RefreshVersion()
                         SetRefreshVersion()
                         Return True
@@ -80,7 +80,7 @@ Public Class ManageForm
                 SettingPanel.Visible = True
                 InputVersionName.Text = CustomName
                 InputDirName.Text = Select2.SelectedValue
-                Label2.Text = "Vacko版本：" + VackoVersion
+                Label2.Text = "Vacko版本：" + VackoVersion + "（架构：" + Family + "）"
                 Label3.Text = "上次启动：" + LastStartTime
             Catch ex As Exception
                 AntdUI.Notification.error(Me, "读取版本配置文件错误", ex.Message,,, 0)
@@ -109,7 +109,8 @@ Public Class ManageForm
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        AntdUI.Modal.open(New AntdUI.Modal.Config(Me, "警告", "Vacko不同版本之间的兼容性极差，HVKL将不会检查版本之间的兼容性。可能会出现无法正常运行Vacko的情况！", AntdUI.TType.Warn) With {
+        Try
+            AntdUI.Modal.open(New AntdUI.Modal.Config(Me, "警告", "Vacko不同版本之间的兼容性极差，HVKL将不会检查版本之间的兼容性。可能会出现无法正常运行Vacko的情况！", AntdUI.TType.Warn) With {
             .OkText = "更换",
             .OkType = TTypeMini.Warn,
             .OnOk = Function(config)
@@ -119,14 +120,19 @@ Public Class ManageForm
                             OriginalVersion = VackoVersion
                             OriginalDir = Select2.SelectedValue
                             ReplaceVersionForm.ShowDialog()
+                            ReplaceVersionForm.Dispose()
                         Catch ex As Exception
                             AntdUI.Notification.error(Me, "读取版本配置文件错误", ex.Message,,, 0)
                         End Try
                         Return True
                     End Function
         })
-        MainForm.RefreshVersion()
-        SetRefreshVersion()
-        SettingPanel.Visible = False
+            MainForm.RefreshVersion()
+            SetRefreshVersion()
+            SettingPanel.Visible = False
+        Catch ex As Exception
+
+        End Try
+
     End Sub
 End Class

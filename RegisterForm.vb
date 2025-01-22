@@ -14,7 +14,7 @@ Public Class RegisterForm
         If IsValidEmail(email) Then
             Timer1.Enabled = True
             AntdUI.Message.loading(Me, "检查中", Async Sub(config)
-                                                  Dim url As String = "http://vacko.cookie987.top:28987/VackoData/PlayerData/PlayerEmi.txt"
+                                                  Dim url As String = "http://vacko.cookie987.top:28987/VackoData/v1.2.7/PlayerData/PlayerEmi.txt"
                                                   Dim searchString As String = email
                                                   Try
                                                       Dim fileContent As String = Await GetFileContentAsync(url)
@@ -125,7 +125,7 @@ Public Class RegisterForm
                                                   Try
                                                       If InputCode.Text = verifyCode Then
                                                           If Not (InputPwd.Text = "" Or ContainsSymbol(InputPwd.Text) Or InputUser.Text = "" Or InputUser.Text = "User" Or InputUser.Text = "nonelivaccno" Or InputPwd.Text = "nonelivpas") Then
-                                                              Dim websiteUrl = "http://vacko.cookie987.top:28987/VackoData/PlayerData/"
+                                                              Dim websiteUrl = "http://vacko.cookie987.top:28987/VackoData/v1.2.7/PlayerData/"
                                                               Dim directoryNameToCheck = InputUser.Text.Trim
                                                               ' 创建 HttpClient 进行 HTTP 请求
                                                               Using httpClient As New HttpClient

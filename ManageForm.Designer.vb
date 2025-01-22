@@ -26,6 +26,7 @@ Partial Class ManageForm
         Button1 = New AntdUI.Button()
         WindowBar1 = New AntdUI.WindowBar()
         SettingPanel = New AntdUI.Panel()
+        Select2 = New AntdUI.Select()
         InputDirName = New AntdUI.Input()
         Label4 = New AntdUI.Label()
         Button3 = New AntdUI.Button()
@@ -34,7 +35,6 @@ Partial Class ManageForm
         Button2 = New AntdUI.Button()
         InputVersionName = New AntdUI.Input()
         Label1 = New AntdUI.Label()
-        Select2 = New AntdUI.Select()
         SettingPanel.SuspendLayout()
         SuspendLayout()
         ' 
@@ -88,6 +88,15 @@ Partial Class ManageForm
         SettingPanel.Text = "Panel2"
         SettingPanel.Visible = False
         ' 
+        ' Select2
+        ' 
+        Select2.Location = New Point(97, 0)
+        Select2.Name = "Select2"
+        Select2.Size = New Size(75, 23)
+        Select2.TabIndex = 10
+        Select2.Text = "Select2"
+        Select2.Visible = False
+        ' 
         ' InputDirName
         ' 
         InputDirName.Location = New Point(87, 108)
@@ -124,7 +133,7 @@ Partial Class ManageForm
         ' 
         Label2.Location = New Point(29, 59)
         Label2.Name = "Label2"
-        Label2.Size = New Size(221, 23)
+        Label2.Size = New Size(300, 23)
         Label2.TabIndex = 8
         Label2.Text = "Vacko版本："
         ' 
@@ -151,15 +160,6 @@ Partial Class ManageForm
         Label1.Size = New Size(43, 23)
         Label1.TabIndex = 3
         Label1.Text = "名称："
-        ' 
-        ' Select2
-        ' 
-        Select2.Location = New Point(97, 0)
-        Select2.Name = "Select2"
-        Select2.Size = New Size(75, 23)
-        Select2.TabIndex = 10
-        Select2.Text = "Select2"
-        Select2.Visible = False
         ' 
         ' ManageForm
         ' 

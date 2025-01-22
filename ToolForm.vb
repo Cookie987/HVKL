@@ -6,7 +6,7 @@ Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Public Class ToolForm
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         AntdUI.Message.loading(Me, "检查中", Async Sub(config)
-                                              Dim websiteUrl = "http://vacko.cookie987.top:28987/VackoData/PlayerData/"
+                                              Dim websiteUrl = "http://vacko.cookie987.top:28987/VackoData/v1.2.7/PlayerData/"
                                               Dim directoryNameToCheck = Input1.Text.Trim
                                               ' 创建 HttpClient 进行 HTTP 请求
                                               Using httpClient As New HttpClient
@@ -57,7 +57,7 @@ Public Class ToolForm
         Dim email As String = Input2.Text
         If IsValidEmail(email) Then
             AntdUI.Message.loading(Me, "检查中", Async Sub(config)
-                                                  Dim url As String = "http://vacko.cookie987.top:28987/VackoData/PlayerData/PlayerEmi.txt"
+                                                  Dim url As String = "http://vacko.cookie987.top:28987/VackoData/v1.2.7/PlayerData/PlayerEmi.txt"
                                                   Dim searchString As String = Input2.Text
                                                   Try
                                                       Dim fileContent As String = Await GetFileContentAsync(url)

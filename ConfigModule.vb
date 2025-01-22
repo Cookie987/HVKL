@@ -107,6 +107,7 @@ Module ConfigModule
     Public Class VersionOption
         Public Property VackoVersion As String
         Public Property SupportHVKLLogin As Boolean
+        Public Property Family As String
         Public Property StartArgs As StartArg
         Public Class StartArg
             Public Property UpdaterFilePath As String
@@ -125,6 +126,7 @@ Module ConfigModule
 
     Public VackoVersion
     Public SupportHVKLLogin
+    Public Family
     Public UpdaterFilePath
     Public UpdaterFileContent
     Public SubDirectory
@@ -156,6 +158,7 @@ Module ConfigModule
             Dim optionRead As VersionOption = ReadOption("version\" + folderName + "\option.json")
             VackoVersion = optionRead.VackoVersion
             SupportHVKLLogin = optionRead.SupportHVKLLogin
+            Family = optionRead.Family
             UpdaterFilePath = optionRead.StartArgs.UpdaterFilePath
             UpdaterFileContent = optionRead.StartArgs.UpdaterFileContent
             SubDirectory = optionRead.StartArgs.SubDirectory
@@ -174,6 +177,7 @@ Module ConfigModule
         Dim optionToWrite As New VersionOption With {
                 .VackoVersion = VackoVersion,
                 .SupportHVKLLogin = SupportHVKLLogin,
+                .Family = Family,
                 .StartArgs = New VersionOption.StartArg With {
                     .Args = Args,
                     .MutexName = MutexName,

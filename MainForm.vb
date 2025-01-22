@@ -1,6 +1,5 @@
 ﻿Imports System.IO
 Imports System.Net.Http
-Imports System.Text
 Imports System.Threading
 Imports AntdUI
 
@@ -23,95 +22,196 @@ Public Class MainForm
             Return 1
         End Try
 
-        Try
-            ' 登录
-            If RadioHVKLLogin.Checked = True Then
-                If SupportHVKLLogin = True Then
-                    If InputUser.Text = "User" Or InputUser.Text = "nonelivaccno" Or InputPwd.Text = "nonelivpas" Then
-                        AntdUI.Notification.error(Me, "用户名或密码不合法", "请更换",,, 0)
-                        Return 1
-                    Else
-                        Dim remoteUrl As String = "http://vacko.cookie987.top:28987/VackoData/PlayerData/" + LastUsedUser + "/localdata.vak2"
+        If Family = "StarLake" Then
+            ' StarLake架构
+            Try
+                ' 登录
+                If RadioHVKLLogin.Checked = True Then
+                    If SupportHVKLLogin = True Then
+                        If InputUser.Text = "User" Or InputUser.Text = "nonelivaccno" Or InputPwd.Text = "nonelivpas" Then
+                            AntdUI.Notification.error(Me, "用户名或密码不合法", "请更换",,, 0)
+                            Return 1
+                        Else
+                            Dim remoteUrl As String = "http://vacko.cookie987.top:28987/VackoData/v1.2.7/PlayerData/" + LastUsedUser + "/localdata.vak2"
 
-                        ' 获取远程文件中的键值对
-                        Dim credentials As Dictionary(Of String, String) = Await GetRemoteCredentials(remoteUrl)
-                        If credentials IsNot Nothing AndAlso credentials.ContainsKey("livpass") Then
-                            Dim storedPassword As String = credentials("livpass").Replace(Chr(0), "").Trim()
+                            ' 获取远程文件中的键值对
+                            Dim credentials As Dictionary(Of String, String) = Await GetRemoteCredentials(remoteUrl)
+                            If credentials IsNot Nothing AndAlso credentials.ContainsKey("livpass") Then
+                                Dim storedPassword As String = credentials("livpass").Replace(Chr(0), "").Trim()
 
-                            If storedPassword = InputPwd.Text Then
-                                Dim banlistUrl As String = "http://vacko.cookie987.top:28987/VackoData/PlayerData/BanList.txt"
-                                ' 获取远程文件中
-                                Dim banlistFile As String = Await DownloadVak2File(banlistUrl)
-                                If InStr(banlistFile, InputUser.Text) Then
-                                    Return 8
-                                End If
-                                AntdUI.Message.success(Me, "登录成功",, 2)
-                                Dim fileContent As String = Await DownloadVak2File(remoteUrl)
-                                If fileContent IsNot Nothing Then
-                                    Dim newFilePath As String = "version\" + StartVer + "\Game\Usdata\" + InputUser.Text + "\localdata.vak2" ' 本地保存的新文件路径
-                                    Dim folderPath = "version\" + StartVer + "\Game\Usdata\" + InputUser.Text
-                                    Try
-                                        Directory.CreateDirectory(folderPath)
-                                        Directory.Delete("version\" + StartVer + "\Game\Usdata\User", True)
-                                    Catch ex As Exception
+                                If storedPassword = InputPwd.Text Then
+                                    Dim banlistUrl As String = "http://vacko.cookie987.top:28987/VackoData/v1.2.7/PlayerData/BanList.txt"
+                                    ' 获取远程文件中
+                                    Dim banlistFile As String = Await DownloadVak2File(banlistUrl)
+                                    If InStr(banlistFile, InputUser.Text) Then
+                                        Return 8
+                                    End If
+                                    AntdUI.Message.success(Me, "登录成功",, 2)
+                                    Dim fileContent As String = Await DownloadVak2File(remoteUrl)
+                                    If fileContent IsNot Nothing Then
+                                        Dim newFilePath As String = "version\" + StartVer + "\Game\Data\User\" + InputUser.Text + "\localdata.vak2" ' 本地保存的新文件路径
+                                        Dim folderPath = "version\" + StartVer + "\Game\Data\User\" + InputUser.Text
+                                        Try
+                                            Directory.CreateDirectory(folderPath)
+                                            Directory.Delete("version\" + StartVer + "\Game\Data\User\User", True)
+                                        Catch ex As Exception
 
-                                    End Try
-                                    ' 将修改后的内容写入文件
-                                    File.WriteAllText(newFilePath, fileContent)
+                                        End Try
+                                        ' 将修改后的内容写入文件
+                                        File.WriteAllText(newFilePath, fileContent)
 
-                                    Dim rempasstimes = ReadVak2File("rempasstimes:", 4, fileContent)
-                                    If rempasstimes = "none" Then
-                                        rempasstimes = 1
-                                    Else
-                                        If rempasstimes > 1 Then
-                                            rempasstimes += 1
-                                        ElseIf rempasstimes < 1 Then
+                                        Dim rempasstimes = ReadVak2File("rempasstimes:", 4, fileContent)
+                                        If rempasstimes = "none" Then
                                             rempasstimes = 1
+                                        Else
+                                            If rempasstimes > 1 Then
+                                                rempasstimes += 1
+                                            ElseIf rempasstimes < 1 Then
+                                                rempasstimes = 1
+                                            End If
                                         End If
-                                    End If
 
 
-                                    SaveVak2File("rempasstimes:", rempasstimes, 4, InputUser.Text, fileContent, StartVer)
+                                        SaveVak2File("rempasstimes:", rempasstimes, 4, InputUser.Text, fileContent, StartVer)
 
-                                    Dim filePath = "version\" + StartVer + "\Game\Appdata\opi.vak2"
+                                        Dim filePath = "version\" + StartVer + "\Game\Data\App\opi.vak2"
 
-                                    ' 读取文件内容
-                                    fileContent = File.ReadAllText(filePath)
+                                        ' 读取文件内容
+                                        fileContent = File.ReadAllText(filePath)
 
-                                    ' 判断文件是否为空
-                                    If fileContent.Length > 0 Then
-                                        ' 将文件的第一位改为 '1'，其余保持不变
-                                        fileContent = String.Concat("1", fileContent.AsSpan(1))
+                                        ' 判断文件是否为空
+                                        If fileContent.Length > 0 Then
+                                            ' 将文件的第一位改为 '1'，其余保持不变
+                                            fileContent = String.Concat("1", fileContent.AsSpan(1))
+                                        Else
+                                            ' 如果文件是空的，添加 '1'
+                                            fileContent = "1"
+                                        End If
+
+                                        ' 写入修改后的内容
+                                        File.WriteAllText(filePath, fileContent)
+
+                                        filePath = "version\" + StartVer + "\Game\Data\User\" + "User"
                                     Else
-                                        ' 如果文件是空的，添加 '1'
-                                        fileContent = "1"
+                                        AntdUI.Notification.error(Me, "登录失败", "下载文件失败",,, 0)
+                                        Return 114
                                     End If
-
-                                    ' 写入修改后的内容
-                                    File.WriteAllText(filePath, fileContent)
-
-                                    filePath = "version\" + StartVer + "\Game\Usdata\" + "User"
                                 Else
-                                    AntdUI.Notification.error(Me, "登录失败", "下载文件失败",,, 0)
-                                    Return 114
+                                    AntdUI.Notification.error(Me, "登录失败", "密码错误",,, 0)
+                                    Return 3
                                 End If
                             Else
-                                AntdUI.Notification.error(Me, "登录失败", "密码错误",,, 0)
-                                Return 3
+                                AntdUI.Notification.error(Me, "警告", "未找到密码字段",,, 0)
+                                Return 4
                             End If
-                        Else
-                            AntdUI.Notification.error(Me, "警告", "未找到密码字段",,, 0)
-                            Return 4
                         End If
+                    Else
+                        AntdUI.Notification.warn(Me, "登录失败", "当前版本暂不支持HVKL内登录，已回退至Vacko内登录",,, 5)
                     End If
-                Else
-                    AntdUI.Notification.warn(Me, "登录失败", "当前版本暂不支持HVKL内登录，已回退至Vacko内登录",,, 5)
                 End If
-            End If
-        Catch ex As Exception
-            AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
-            Return 12
-        End Try
+            Catch ex As Exception
+                AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
+                Return 12
+            End Try
+        ElseIf Family = "MoonBridge" Then
+            ' MoonBridge架构
+            Try
+                ' 登录
+                If RadioHVKLLogin.Checked = True Then
+                    If SupportHVKLLogin = True Then
+                        If InputUser.Text = "User" Or InputUser.Text = "nonelivaccno" Or InputPwd.Text = "nonelivpas" Then
+                            AntdUI.Notification.error(Me, "用户名或密码不合法", "请更换",,, 0)
+                            Return 1
+                        Else
+                            Dim remoteUrl As String = "http://vacko.cookie987.top:28987/VackoData/v1.2.7/PlayerData/" + LastUsedUser + "/localdata.vak2"
+
+                            ' 获取远程文件中的键值对
+                            Dim credentials As Dictionary(Of String, String) = Await GetRemoteCredentials(remoteUrl)
+                            If credentials IsNot Nothing AndAlso credentials.ContainsKey("livpass") Then
+                                Dim storedPassword As String = credentials("livpass").Replace(Chr(0), "").Trim()
+
+                                If storedPassword = InputPwd.Text Then
+                                    Dim banlistUrl As String = "http://vacko.cookie987.top:28987/VackoData/v1.2.7/PlayerData/BanList.txt"
+                                    ' 获取远程文件中
+                                    Dim banlistFile As String = Await DownloadVak2File(banlistUrl)
+                                    If InStr(banlistFile, InputUser.Text) Then
+                                        Return 8
+                                    End If
+                                    AntdUI.Message.success(Me, "登录成功",, 2)
+                                    Dim fileContent As String = Await DownloadVak2File(remoteUrl)
+                                    If fileContent IsNot Nothing Then
+                                        Dim newFilePath As String = "version\" + StartVer + "\Game\Usdata\" + InputUser.Text + "\localdata.vak2" ' 本地保存的新文件路径
+                                        Dim folderPath = "version\" + StartVer + "\Game\Usdata\" + InputUser.Text
+                                        Try
+                                            Directory.CreateDirectory(folderPath)
+                                            Directory.Delete("version\" + StartVer + "\Game\Usdata\User", True)
+                                        Catch ex As Exception
+
+                                        End Try
+                                        ' 将修改后的内容写入文件
+                                        File.WriteAllText(newFilePath, fileContent)
+
+                                        Dim rempasstimes = ReadVak2File("rempasstimes:", 4, fileContent)
+                                        If rempasstimes = "none" Then
+                                            rempasstimes = 1
+                                        Else
+                                            If rempasstimes > 1 Then
+                                                rempasstimes += 1
+                                            ElseIf rempasstimes < 1 Then
+                                                rempasstimes = 1
+                                            End If
+                                        End If
+
+
+                                        SaveVak2File("rempasstimes:", rempasstimes, 4, InputUser.Text, fileContent, StartVer)
+
+                                        Dim filePath = "version\" + StartVer + "\Game\Appdata\opi.vak2"
+
+                                        ' 读取文件内容
+                                        fileContent = File.ReadAllText(filePath)
+
+                                        ' 判断文件是否为空
+                                        If fileContent.Length > 0 Then
+                                            ' 将文件的第一位改为 '1'，其余保持不变
+                                            fileContent = String.Concat("1", fileContent.AsSpan(1))
+                                        Else
+                                            ' 如果文件是空的，添加 '1'
+                                            fileContent = "1"
+                                        End If
+
+                                        ' 写入修改后的内容
+                                        File.WriteAllText(filePath, fileContent)
+
+                                        filePath = "version\" + StartVer + "\Game\Usdata\" + "User"
+                                    Else
+                                        AntdUI.Notification.error(Me, "登录失败", "下载文件失败",,, 0)
+                                        Return 114
+                                    End If
+                                Else
+                                    AntdUI.Notification.error(Me, "登录失败", "密码错误",,, 0)
+                                    Return 3
+                                End If
+                            Else
+                                AntdUI.Notification.error(Me, "警告", "未找到密码字段",,, 0)
+                                Return 4
+                            End If
+                        End If
+                    Else
+                        AntdUI.Notification.warn(Me, "登录失败", "当前版本暂不支持HVKL内登录，已回退至Vacko内登录",,, 5)
+                    End If
+                End If
+            Catch ex As Exception
+                AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
+                Return 12
+            End Try
+        ElseIf Family = vbEmpty Then
+            ' 未定义架构
+            AntdUI.Notification.error(Me, "错误", "未定义架构",,, 5)
+            Return 1
+        End If
+
+
+
 
 
         ' 写入 updater:hrd
@@ -308,15 +408,18 @@ Public Class MainForm
     End Sub
 
     Private Sub VersionListPanel_Click(sender As Object, e As EventArgs) Handles DownloadVersionPanel.Click, DownloadVersionLabel.Click, DownloadVersionImage.Click
-        VersionForm.Show()
+        VersionForm.ShowDialog()
+        VersionForm.Dispose()
     End Sub
 
     Private Sub ManageVersionImage3d_Click(sender As Object, e As EventArgs) Handles ManageVersionImage3d.Click, ManageVersionLabel.Click, ManageVersionPanel.Click
-        ManageForm.Show()
+        ManageForm.ShowDialog()
+        ManageForm.Dispose()
     End Sub
 
     Private Sub SettingImage3d_Click(sender As Object, e As EventArgs) Handles SettingImage3d.Click, SettingLabel.Click, MainSettingPanel.Click
-        SettingForm.Show()
+        SettingForm.ShowDialog()
+        SettingForm.Dispose()
     End Sub
 
     Private Sub Select1_Click(sender As Object, e As EventArgs) Handles Select1.Click
@@ -357,7 +460,8 @@ Public Class MainForm
     End Sub
 
     Private Sub ToolsImage3d_Click(sender As Object, e As EventArgs) Handles ToolsImage3d.Click, LabelTools.Click, PanelTools.Click
-        ToolForm.Show()
+        ToolForm.ShowDialog()
+        ToolForm.Dispose()
     End Sub
 
     Private Sub Input1_TextChanged(sender As Object, e As EventArgs) Handles InputUser.TextChanged
@@ -408,7 +512,8 @@ Public Class MainForm
     End Sub
 
     Private Sub Label3_Click(sender As Object, e As EventArgs) Handles Label3.Click
-        RegisterForm.Show()
+        RegisterForm.ShowDialog()
+        RegisterForm.Dispose()
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick

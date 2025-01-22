@@ -37,6 +37,11 @@ Public Class ReplaceVersionForm
 
     Private Sub ReplaceVersion(ver As String, instMessage As String)
         AntdUI.Message.loading(Me, instMessage, Async Sub(Config)
+                                                    If Button2.InvokeRequired Then
+                                                        Button2.Invoke(Sub() Button2.Enabled = False)
+                                                    Else
+                                                        Button2.Enabled = False
+                                                    End If
                                                     If CustomDownloadUrl = "" Then
                                                         CustomDownloadUrl = DefaultDownloadUrl
                                                         SaveConfig(Me)
@@ -141,7 +146,11 @@ Public Class ReplaceVersionForm
                                                         Button2.Type = TTypeMini.Error
                                                         Config.Error("更换版本失败：" + ex.Message)
                                                     End Try
-
+                                                    If Button2.InvokeRequired Then
+                                                        Button2.Invoke(Sub() Button2.Enabled = True)
+                                                    Else
+                                                        Button2.Enabled = True
+                                                    End If
                                                 End Sub,, 2)
         MainForm.RefreshButton_Click()
         Button2.Text = "关闭"
