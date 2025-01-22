@@ -22,10 +22,11 @@ Partial Class ManageForm
     '不要使用代码编辑器修改它。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ManageForm))
         Select1 = New AntdUI.Select()
         Button1 = New AntdUI.Button()
-        WindowBar1 = New AntdUI.WindowBar()
         SettingPanel = New AntdUI.Panel()
+        Button4 = New AntdUI.Button()
         Select2 = New AntdUI.Select()
         InputDirName = New AntdUI.Input()
         Label4 = New AntdUI.Label()
@@ -35,6 +36,7 @@ Partial Class ManageForm
         Button2 = New AntdUI.Button()
         InputVersionName = New AntdUI.Input()
         Label1 = New AntdUI.Label()
+        PageHeader1 = New AntdUI.PageHeader()
         SettingPanel.SuspendLayout()
         SuspendLayout()
         ' 
@@ -54,21 +56,11 @@ Partial Class ManageForm
         Button1.Text = "删除版本"
         Button1.Type = AntdUI.TTypeMini.Error
         ' 
-        ' WindowBar1
-        ' 
-        WindowBar1.IsMax = False
-        WindowBar1.Location = New Point(0, 1)
-        WindowBar1.MaximizeBox = False
-        WindowBar1.MinimizeBox = False
-        WindowBar1.Name = "WindowBar1"
-        WindowBar1.Size = New Size(509, 23)
-        WindowBar1.TabIndex = 4
-        WindowBar1.Text = "版本管理"
-        ' 
         ' SettingPanel
         ' 
         SettingPanel.BackColor = Color.Transparent
         SettingPanel.BorderWidth = 1F
+        SettingPanel.Controls.Add(Button4)
         SettingPanel.Controls.Add(Select2)
         SettingPanel.Controls.Add(InputDirName)
         SettingPanel.Controls.Add(Label4)
@@ -87,6 +79,15 @@ Partial Class ManageForm
         SettingPanel.TabIndex = 9
         SettingPanel.Text = "Panel2"
         SettingPanel.Visible = False
+        ' 
+        ' Button4
+        ' 
+        Button4.Location = New Point(253, 24)
+        Button4.Name = "Button4"
+        Button4.Size = New Size(96, 35)
+        Button4.TabIndex = 13
+        Button4.Text = "导出整合包"
+        Button4.Type = AntdUI.TTypeMini.Primary
         ' 
         ' Select2
         ' 
@@ -161,14 +162,24 @@ Partial Class ManageForm
         Label1.TabIndex = 3
         Label1.Text = "名称："
         ' 
+        ' PageHeader1
+        ' 
+        PageHeader1.Icon = CType(resources.GetObject("PageHeader1.Icon"), Image)
+        PageHeader1.Location = New Point(1, 0)
+        PageHeader1.Name = "PageHeader1"
+        PageHeader1.ShowButton = True
+        PageHeader1.Size = New Size(510, 23)
+        PageHeader1.TabIndex = 10
+        PageHeader1.Text = "管理版本"
+        ' 
         ' ManageForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(511, 223)
+        Controls.Add(PageHeader1)
         Controls.Add(Select1)
         Controls.Add(SettingPanel)
-        Controls.Add(WindowBar1)
         FormBorderStyle = FormBorderStyle.FixedSingle
         Name = "ManageForm"
         Resizable = False
@@ -179,7 +190,6 @@ Partial Class ManageForm
 
     Friend WithEvents Select1 As AntdUI.Select
     Friend WithEvents Button1 As AntdUI.Button
-    Friend WithEvents WindowBar1 As AntdUI.WindowBar
     Friend WithEvents SettingPanel As AntdUI.Panel
     Friend WithEvents Divider3 As AntdUI.Divider
     Friend WithEvents SettingLabel As AntdUI.Label
@@ -192,4 +202,6 @@ Partial Class ManageForm
     Friend WithEvents Button3 As AntdUI.Button
     Friend WithEvents Label4 As AntdUI.Label
     Friend WithEvents InputDirName As AntdUI.Input
+    Friend WithEvents Button4 As AntdUI.Button
+    Friend WithEvents PageHeader1 As AntdUI.PageHeader
 End Class

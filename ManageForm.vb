@@ -1,4 +1,6 @@
 ﻿Imports System.IO
+Imports System.IO.Compression
+Imports System.Threading
 Imports AntdUI
 
 Public Class ManageForm
@@ -60,7 +62,7 @@ Public Class ManageForm
             .OkText = "删除",
             .OkType = TTypeMini.Error,
             .OnOk = Function(config)
-                        DeleteFolder("version\" + Select2.SelectedValue)
+                        DeleteFolder(Application.StartupPath + "version\" + Select2.SelectedValue)
                         System.Threading.Thread.Sleep(1000)
                         MainForm.RefreshVersion()
                         SetRefreshVersion()
@@ -72,8 +74,8 @@ Public Class ManageForm
 
     Private Sub Select1_SelectedIndexChanged() Handles Select1.SelectedIndexChanged
         Select2.SelectedIndex = Select1.SelectedIndex
-        Dim parentDirectory As String = "version\" + Select2.SelectedValue
-        Dim optionFilePath = "version\" + Select2.SelectedValue + "\option.json"
+        Dim parentDirectory As String = Application.StartupPath + "version\" + Select2.SelectedValue
+        Dim optionFilePath = Application.StartupPath + "version\" + Select2.SelectedValue + "\option.json"
         If Not Select2.SelectedValue = "" Then
             Try
                 GetOption(Me, Select2.SelectedValue)
@@ -90,21 +92,21 @@ Public Class ManageForm
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Dim parentDirectory As String = "version\" + Select2.SelectedValue
-        Dim optionFilePath = "version\" + Select2.SelectedValue + "\option.json"
+        Dim parentDirectory As String = Application.StartupPath + "version\" + Select2.SelectedValue
+        Dim optionFilePath = Application.StartupPath + "version\" + Select2.SelectedValue + "\option.json"
         Try
             GetOption(Me, Select2.SelectedValue)
             SettingPanel.Visible = True
             CustomName = InputVersionName.Text
             SaveOption(Me, Select2.SelectedValue)
             If Not Select2.SelectedValue = InputDirName.Text Then
-                My.Computer.FileSystem.RenameDirectory("version\" + Select2.SelectedValue, InputDirName.Text)
+                My.Computer.FileSystem.RenameDirectory(Application.StartupPath + "version\" + Select2.SelectedValue, InputDirName.Text)
             End If
             MainForm.RefreshVersion()
             SetRefreshVersion()
             SettingPanel.Visible = False
         Catch ex As Exception
-            AntdUI.Notification.error(Me, "保存更改错误", ex.Message,,, 0)
+            Notification.error(Me, "保存更改错误", ex.Message,,, 0)
         End Try
     End Sub
 
@@ -114,7 +116,7 @@ Public Class ManageForm
             .OkText = "更换",
             .OkType = TTypeMini.Warn,
             .OnOk = Function(config)
-                        Dim optionFilePath = "version\" + Select2.SelectedValue + "\option.json"
+                        Dim optionFilePath = Application.StartupPath + "version\" + Select2.SelectedValue + "\option.json"
                         Try
                             GetOption(Me, Select2.SelectedValue)
                             OriginalVersion = VackoVersion
@@ -127,6 +129,7 @@ Public Class ManageForm
                         Return True
                     End Function
         })
+            Thread.Sleep(500)
             MainForm.RefreshVersion()
             SetRefreshVersion()
             SettingPanel.Visible = False
@@ -135,4 +138,47 @@ Public Class ManageForm
         End Try
 
     End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        Dim sourceDir = Application.StartupPath + "version\" + Select2.SelectedValue
+
+        AntdUI.Message.loading(Me, "导出中", Sub(config)
+                                              ' 声明一个变量来存储用户选择的路径
+                                              Dim zipFilePath As String = Nothing
+
+                                              ' 创建一个新线程并强制 STA 模式
+                                              Dim saveFileDialogThread As New Threading.Thread(
+                                                  Sub()
+                                                      ' 初始化保存文件对话框
+                                                      Dim saveFileDialog As New SaveFileDialog With {
+                                                          .Title = "保存 Vacko 整合包",
+                                                          .Filter = "HVKL 整合包文件 (*.hvklzip)|*.hvklzip",
+                                                          .DefaultExt = "hvklzip"
+                                                      }
+
+                                                      ' 显示对话框并获取用户选择的路径
+                                                      If saveFileDialog.ShowDialog() = DialogResult.OK Then
+                                                          zipFilePath = saveFileDialog.FileName
+                                                      End If
+                                                  End Sub)
+                                              saveFileDialogThread.SetApartmentState(Threading.ApartmentState.STA) ' 设置为 STA 模式
+                                              saveFileDialogThread.Start()
+                                              saveFileDialogThread.Join() ' 等待线程完成
+
+                                              ' 如果用户没有取消保存操作
+                                              If Not String.IsNullOrEmpty(zipFilePath) Then
+                                                  Try
+                                                      ' 压缩指定目录为 ZIP 文件
+                                                      ZipFile.CreateFromDirectory(sourceDir, zipFilePath)
+                                                      config.OK("整合包已成功导出到: " + zipFilePath)
+                                                  Catch ex As Exception
+                                                      ' 错误处理
+                                                      config.Error("导出失败: " + ex.Message)
+                                                  End Try
+                                              Else
+                                                  config.Info("用户取消了保存操作。")
+                                              End If
+                                          End Sub,, 2)
+    End Sub
+
 End Class

@@ -22,22 +22,12 @@ Partial Class VersionForm
     '不要使用代码编辑器修改它。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        WindowBar1 = New AntdUI.WindowBar()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(VersionForm))
         Button1 = New AntdUI.Button()
         Select1 = New AntdUI.Select()
         Progress1 = New AntdUI.Progress()
+        PageHeader1 = New AntdUI.PageHeader()
         SuspendLayout()
-        ' 
-        ' WindowBar1
-        ' 
-        WindowBar1.IsMax = False
-        WindowBar1.Location = New Point(0, 0)
-        WindowBar1.MaximizeBox = False
-        WindowBar1.MinimizeBox = False
-        WindowBar1.Name = "WindowBar1"
-        WindowBar1.Size = New Size(509, 23)
-        WindowBar1.TabIndex = 0
-        WindowBar1.Text = "版本列表"
         ' 
         ' Button1
         ' 
@@ -66,24 +56,33 @@ Partial Class VersionForm
         Progress1.TabIndex = 1
         Progress1.Text = ""
         ' 
+        ' PageHeader1
+        ' 
+        PageHeader1.Icon = CType(resources.GetObject("PageHeader1.Icon"), Image)
+        PageHeader1.Location = New Point(0, 0)
+        PageHeader1.Name = "PageHeader1"
+        PageHeader1.ShowButton = True
+        PageHeader1.Size = New Size(510, 23)
+        PageHeader1.TabIndex = 11
+        PageHeader1.Text = "添加版本"
+        ' 
         ' VersionForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(509, 102)
+        Controls.Add(PageHeader1)
         Controls.Add(Select1)
         Controls.Add(Button1)
         Controls.Add(Progress1)
-        Controls.Add(WindowBar1)
         FormBorderStyle = FormBorderStyle.FixedSingle
         Name = "VersionForm"
         Resizable = False
         Text = "VersionForm"
         ResumeLayout(False)
     End Sub
-
-    Friend WithEvents WindowBar1 As AntdUI.WindowBar
     Friend WithEvents Button1 As AntdUI.Button
     Friend WithEvents Select1 As AntdUI.Select
     Friend WithEvents Progress1 As AntdUI.Progress
+    Friend WithEvents PageHeader1 As AntdUI.PageHeader
 End Class

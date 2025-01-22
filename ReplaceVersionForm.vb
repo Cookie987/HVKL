@@ -50,9 +50,9 @@ Public Class ReplaceVersionForm
                                                     Dim fileUrl As String = CustomDownloadUrl +
                                                     ver + ".zip"
                                                     ' 下载后的文件路径
-                                                    Dim downloadPath As String = Path.Combine("version\", "downloadedFile.zip")
+                                                    Dim downloadPath As String = Path.Combine(Application.StartupPath + "version\", "downloadedFile.zip")
                                                     ' 解压缩目标目录
-                                                    Dim extractPath As String = "version\" + OriginalDir
+                                                    Dim extractPath As String = Application.StartupPath + "version\" + OriginalDir
                                                     ' 创建HttpClient实例
                                                     Progress1.Text = "%删除旧版本配置中"
                                                     Dim httpClient As New HttpClient()
@@ -60,13 +60,13 @@ Public Class ReplaceVersionForm
                                                     Dim oldLastStartTime = LastStartTime
                                                     Dim oldName = CustomName
                                                     Try
-                                                        My.Computer.FileSystem.DeleteFile("version\" + OriginalDir + "\option.json", FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin, FileIO.UICancelOption.DoNothing)
+                                                        My.Computer.FileSystem.DeleteFile(Application.StartupPath + "version\" + OriginalDir + "\option.json", FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin, FileIO.UICancelOption.DoNothing)
                                                     Catch ex As Exception
                                                         Config.Error("删除版本配置文件失败：" + ex.Message)
                                                     End Try
                                                     Try
-                                                        My.Computer.FileSystem.DeleteFile("version\" + OriginalDir + "\" + "Game" + "\" + "Vacko2.exe", FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin, FileIO.UICancelOption.DoNothing)
-                                                        My.Computer.FileSystem.DeleteFile("version\" + OriginalDir + "\" + SubDirectory + "\" + ExeName, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin, FileIO.UICancelOption.DoNothing)
+                                                        My.Computer.FileSystem.DeleteFile(Application.StartupPath + "version\" + OriginalDir + "\" + "Game" + "\" + "Vacko2.exe", FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin, FileIO.UICancelOption.DoNothing)
+                                                        My.Computer.FileSystem.DeleteFile(Application.StartupPath + "version\" + OriginalDir + "\" + SubDirectory + "\" + ExeName, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin, FileIO.UICancelOption.DoNothing)
                                                         Progress1.Value = 0.2
                                                     Catch ex As Exception
                                                         AntdUI.Message.warn(Me, "删除源文件失败：" + ex.Message,, 2)
@@ -125,7 +125,7 @@ Public Class ReplaceVersionForm
                                                         End Using
                                                         Progress1.Value = 0.7
                                                         Try
-                                                            Dim optionRead2 As VersionOption = ReadOption("version\" + OriginalDir + "\option.json")
+                                                            Dim optionRead2 As VersionOption = ReadOption(Application.StartupPath + "version\" + OriginalDir + "\option.json")
                                                             GetOption(Me, OriginalDir)
                                                             CustomName = oldName
                                                             LastStartTime = oldLastStartTime
@@ -136,7 +136,7 @@ Public Class ReplaceVersionForm
                                                         Progress1.Value = 0.9
                                                         Progress1.Value = 1
                                                         Console.WriteLine("ZIP文件已下载并解压到指定目录。")
-                                                        File.Delete(Path.Combine("version\", "downloadedFile.zip"))
+                                                        File.Delete(Path.Combine(Application.StartupPath + "version\", "downloadedFile.zip"))
                                                         Progress1.Value = 1
                                                         Progress1.State = AntdUI.TType.Success
                                                         Button2.Type = TTypeMini.Success

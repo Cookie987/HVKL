@@ -6,6 +6,9 @@
 #define MyAppPublisher "RedCookieStudios"
 #define MyAppURL "https://cookie987.top"
 #define MyAppExeName "HVKL.exe"
+#define MyAppAssocName MyAppName + "整合包"
+#define MyAppAssocExt ".hvklzip"
+#define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
 
 [Setup]
 AppId={{B38310CB-5D1B-4103-ADD4-0DC4128979C7}
@@ -17,12 +20,13 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 UninstallDisplayIcon={app}\{#MyAppExeName}
+UninstallDisplayName={#MyAppName}
 DisableProgramGroupPage=yes
 LicenseFile=H:\Github\HVKL\LICENSE.txt
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=commandline
 OutputDir=H:\Github\HVKL\bin\Installer
-OutputBaseFilename=HVKLInstaller
+OutputBaseFilename=HVKL_{#MyAppVersion}_Setup
 InfoBeforeFile=H:\Github\HVKL\InfoBefore.txt
 SolidCompression=yes
 Compression=lzma
@@ -36,28 +40,23 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "H:\Github\HVKL\bin\Release\net9.0-windows10.0.26100.0\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "H:\Github\HVKL\bin\Release\net9.0-windows10.0.26100.0\AntdUI.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "H:\Github\HVKL\bin\Release\net9.0-windows10.0.26100.0\HVKL.deps.json"; DestDir: "{app}"; Flags: ignoreversion
-Source: "H:\Github\HVKL\bin\Release\net9.0-windows10.0.26100.0\HVKL.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "H:\Github\HVKL\bin\Release\net9.0-windows10.0.26100.0\HVKL.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "H:\Github\HVKL\bin\Release\net9.0-windows10.0.26100.0\HVKL.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion
-Source: "H:\Github\HVKL\bin\Release\net9.0-windows10.0.26100.0\Microsoft.Windows.SDK.NET.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "H:\Github\HVKL\bin\Release\net9.0-windows10.0.26100.0\Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "H:\Github\HVKL\bin\Release\net9.0-windows10.0.26100.0\Renci.SshNet.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "H:\Github\HVKL\bin\Release\net9.0-windows10.0.26100.0\WinRT.Runtime.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "H:\Github\HVKL\bin\Release\net9.0-windows10.0.26100.0\*"; DestDir: "{app}"; Flags: ignoreversion
+
 ; 注意：不要在任何共享系统文件上使用 "Flags: ignoreversion" 
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
+[Registry]
+Root: HKA; Subkey: "Software\Classes\{#MyAppAssocExt}\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppAssocKey}"; ValueData: ""; Flags: uninsdeletevalue
+Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocName}"; Flags: uninsdeletekey
+Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppExeName},0"
+Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
+Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes"; ValueType: string; ValueName: "{#MyAppAssocExt}"; ValueData: ""
+
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent runascurrentuser
-
-[Registry]
-Root: "HKLM64"; Subkey: "SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers"; \
-    ValueType: String; ValueName: "{app}\HVKL.exe"; ValueData: "RUNASADMIN"; \
-    Flags: uninsdeletekeyifempty uninsdeletevalue; MinVersion: 0,6.1
 
 [Code]
 const

@@ -155,7 +155,7 @@ Module ConfigModule
     Public Function GetOption(form, folderName)
         Dim httpClient As New HttpClient()
         Try
-            Dim optionRead As VersionOption = ReadOption("version\" + folderName + "\option.json")
+            Dim optionRead As VersionOption = ReadOption(Application.StartupPath+"version\" + folderName + "\option.json")
             VackoVersion = optionRead.VackoVersion
             SupportHVKLLogin = optionRead.SupportHVKLLogin
             Family = optionRead.Family
@@ -192,7 +192,7 @@ Module ConfigModule
                 .LastStartTime = LastStartTime
                 }
         Try
-            WriteOption(optionToWrite, "version\" + folderName + "\option.json")
+            WriteOption(optionToWrite, Application.StartupPath+"version\" + folderName + "\option.json")
             AntdUI.Message.success(form, "保存版本配置成功",, 2)
         Catch ex As Exception
             AntdUI.Notification.error(form, "写入配置文件错误", ex.Message,,, 0)

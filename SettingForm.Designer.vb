@@ -22,7 +22,7 @@ Partial Class SettingForm
     '不要使用代码编辑器修改它。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        WindowBar1 = New AntdUI.WindowBar()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SettingForm))
         SettingPanel = New AntdUI.Panel()
         StartTimesLabel = New AntdUI.Label()
         Label2 = New AntdUI.Label()
@@ -30,27 +30,17 @@ Partial Class SettingForm
         Divider3 = New AntdUI.Divider()
         SettingLabel = New AntdUI.Label()
         Panel1 = New AntdUI.Panel()
+        SwitchHorribleBanUI = New AntdUI.Switch()
+        Label4 = New AntdUI.Label()
         Label3 = New AntdUI.Label()
         Switch1 = New AntdUI.Switch()
         Divider1 = New AntdUI.Divider()
         Label5 = New AntdUI.Label()
         ButtonCheckUpdate = New AntdUI.Button()
-        Label4 = New AntdUI.Label()
-        SwitchHorribleBanUI = New AntdUI.Switch()
+        PageHeader1 = New AntdUI.PageHeader()
         SettingPanel.SuspendLayout()
         Panel1.SuspendLayout()
         SuspendLayout()
-        ' 
-        ' WindowBar1
-        ' 
-        WindowBar1.IsMax = False
-        WindowBar1.Location = New Point(0, -1)
-        WindowBar1.MaximizeBox = False
-        WindowBar1.MinimizeBox = False
-        WindowBar1.Name = "WindowBar1"
-        WindowBar1.Size = New Size(625, 23)
-        WindowBar1.TabIndex = 5
-        WindowBar1.Text = "设置"
         ' 
         ' SettingPanel
         ' 
@@ -81,7 +71,7 @@ Partial Class SettingForm
         ' Label2
         ' 
         Label2.Cursor = Cursors.Hand
-        Label2.Font = New Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point)
+        Label2.Font = New Font("Segoe UI", 14.25F)
         Label2.Location = New Point(80, 68)
         Label2.Name = "Label2"
         Label2.Size = New Size(75, 23)
@@ -91,7 +81,7 @@ Partial Class SettingForm
         ' 
         ' Label1
         ' 
-        Label1.Font = New Font("Segoe UI Symbol", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
+        Label1.Font = New Font("Segoe UI Symbol", 10.5F)
         Label1.Location = New Point(28, 120)
         Label1.Name = "Label1"
         Label1.Size = New Size(183, 23)
@@ -111,7 +101,7 @@ Partial Class SettingForm
         ' SettingLabel
         ' 
         SettingLabel.BackColor = Color.Transparent
-        SettingLabel.Font = New Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
+        SettingLabel.Font = New Font("Microsoft YaHei UI", 10.5F)
         SettingLabel.Location = New Point(33, 20)
         SettingLabel.Name = "SettingLabel"
         SettingLabel.Size = New Size(171, 33)
@@ -138,10 +128,28 @@ Partial Class SettingForm
         Panel1.Text = "Panel2"
         Panel1.Visible = False
         ' 
+        ' SwitchHorribleBanUI
+        ' 
+        SwitchHorribleBanUI.Location = New Point(53, 102)
+        SwitchHorribleBanUI.Name = "SwitchHorribleBanUI"
+        SwitchHorribleBanUI.Size = New Size(44, 25)
+        SwitchHorribleBanUI.TabIndex = 6
+        SwitchHorribleBanUI.Text = "12"
+        ' 
+        ' Label4
+        ' 
+        Label4.BackColor = Color.Transparent
+        Label4.Font = New Font("Microsoft YaHei UI", 10.5F)
+        Label4.Location = New Point(103, 98)
+        Label4.Name = "Label4"
+        Label4.Size = New Size(171, 33)
+        Label4.TabIndex = 5
+        Label4.Text = "有压迫感的封禁界面"
+        ' 
         ' Label3
         ' 
         Label3.BackColor = Color.Transparent
-        Label3.Font = New Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
+        Label3.Font = New Font("Microsoft YaHei UI", 10.5F)
         Label3.Location = New Point(103, 62)
         Label3.Name = "Label3"
         Label3.Size = New Size(171, 33)
@@ -150,7 +158,6 @@ Partial Class SettingForm
         ' 
         ' Switch1
         ' 
-        Switch1.AutoCheck = True
         Switch1.Location = New Point(53, 66)
         Switch1.Name = "Switch1"
         Switch1.Size = New Size(44, 25)
@@ -169,7 +176,7 @@ Partial Class SettingForm
         ' Label5
         ' 
         Label5.BackColor = Color.Transparent
-        Label5.Font = New Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
+        Label5.Font = New Font("Microsoft YaHei UI", 10.5F)
         Label5.Location = New Point(33, 20)
         Label5.Name = "Label5"
         Label5.Size = New Size(171, 33)
@@ -185,34 +192,25 @@ Partial Class SettingForm
         ButtonCheckUpdate.Text = "检查更新"
         ButtonCheckUpdate.Type = AntdUI.TTypeMini.Primary
         ' 
-        ' Label4
+        ' PageHeader1
         ' 
-        Label4.BackColor = Color.Transparent
-        Label4.Font = New Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
-        Label4.Location = New Point(103, 98)
-        Label4.Name = "Label4"
-        Label4.Size = New Size(171, 33)
-        Label4.TabIndex = 5
-        Label4.Text = "有压迫感的封禁界面"
-        ' 
-        ' SwitchHorribleBanUI
-        ' 
-        SwitchHorribleBanUI.AutoCheck = True
-        SwitchHorribleBanUI.Location = New Point(53, 102)
-        SwitchHorribleBanUI.Name = "SwitchHorribleBanUI"
-        SwitchHorribleBanUI.Size = New Size(44, 25)
-        SwitchHorribleBanUI.TabIndex = 6
-        SwitchHorribleBanUI.Text = "12"
+        PageHeader1.Icon = CType(resources.GetObject("PageHeader1.Icon"), Image)
+        PageHeader1.Location = New Point(1, -1)
+        PageHeader1.Name = "PageHeader1"
+        PageHeader1.ShowButton = True
+        PageHeader1.Size = New Size(624, 23)
+        PageHeader1.TabIndex = 11
+        PageHeader1.Text = "设置"
         ' 
         ' SettingForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(624, 393)
+        Controls.Add(PageHeader1)
         Controls.Add(ButtonCheckUpdate)
         Controls.Add(Panel1)
         Controls.Add(SettingPanel)
-        Controls.Add(WindowBar1)
         FormBorderStyle = FormBorderStyle.FixedSingle
         Name = "SettingForm"
         Resizable = False
@@ -221,8 +219,6 @@ Partial Class SettingForm
         Panel1.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
-
-    Friend WithEvents WindowBar1 As AntdUI.WindowBar
     Friend WithEvents SettingPanel As AntdUI.Panel
     Friend WithEvents Divider3 As AntdUI.Divider
     Friend WithEvents SettingLabel As AntdUI.Label
@@ -237,4 +233,5 @@ Partial Class SettingForm
     Friend WithEvents StartTimesLabel As AntdUI.Label
     Friend WithEvents SwitchHorribleBanUI As AntdUI.Switch
     Friend WithEvents Label4 As AntdUI.Label
+    Friend WithEvents PageHeader1 As AntdUI.PageHeader
 End Class

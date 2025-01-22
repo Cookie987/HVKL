@@ -22,7 +22,7 @@ Partial Class ToolForm
     '不要使用代码编辑器修改它。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        WindowBar1 = New AntdUI.WindowBar()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ToolForm))
         Panel1 = New AntdUI.Panel()
         Button1 = New AntdUI.Button()
         Input1 = New AntdUI.Input()
@@ -33,20 +33,10 @@ Partial Class ToolForm
         Input2 = New AntdUI.Input()
         Divider2 = New AntdUI.Divider()
         Label1 = New AntdUI.Label()
+        PageHeader1 = New AntdUI.PageHeader()
         Panel1.SuspendLayout()
         Panel2.SuspendLayout()
         SuspendLayout()
-        ' 
-        ' WindowBar1
-        ' 
-        WindowBar1.IsMax = False
-        WindowBar1.Location = New Point(1, -1)
-        WindowBar1.MaximizeBox = False
-        WindowBar1.MinimizeBox = False
-        WindowBar1.Name = "WindowBar1"
-        WindowBar1.Size = New Size(441, 23)
-        WindowBar1.TabIndex = 7
-        WindowBar1.Text = "工具"
         ' 
         ' Panel1
         ' 
@@ -93,7 +83,7 @@ Partial Class ToolForm
         ' Label5
         ' 
         Label5.BackColor = Color.Transparent
-        Label5.Font = New Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
+        Label5.Font = New Font("Microsoft YaHei UI", 10.5F)
         Label5.Location = New Point(33, 20)
         Label5.Name = "Label5"
         Label5.Size = New Size(171, 33)
@@ -145,20 +135,30 @@ Partial Class ToolForm
         ' Label1
         ' 
         Label1.BackColor = Color.Transparent
-        Label1.Font = New Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
+        Label1.Font = New Font("Microsoft YaHei UI", 10.5F)
         Label1.Location = New Point(33, 20)
         Label1.Name = "Label1"
         Label1.Size = New Size(171, 33)
         Label1.TabIndex = 1
         Label1.Text = "查找Vacko2邮箱可用性"
         ' 
+        ' PageHeader1
+        ' 
+        PageHeader1.Icon = CType(resources.GetObject("PageHeader1.Icon"), Image)
+        PageHeader1.Location = New Point(2, 0)
+        PageHeader1.Name = "PageHeader1"
+        PageHeader1.ShowButton = True
+        PageHeader1.Size = New Size(439, 23)
+        PageHeader1.TabIndex = 11
+        PageHeader1.Text = "工具"
+        ' 
         ' ToolForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(439, 302)
+        Controls.Add(PageHeader1)
         Controls.Add(Panel2)
-        Controls.Add(WindowBar1)
         Controls.Add(Panel1)
         Name = "ToolForm"
         Resizable = False
@@ -167,8 +167,6 @@ Partial Class ToolForm
         Panel2.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
-
-    Friend WithEvents WindowBar1 As AntdUI.WindowBar
     Friend WithEvents Panel1 As AntdUI.Panel
     Friend WithEvents Divider1 As AntdUI.Divider
     Friend WithEvents Label5 As AntdUI.Label
@@ -179,4 +177,5 @@ Partial Class ToolForm
     Friend WithEvents Input2 As AntdUI.Input
     Friend WithEvents Divider2 As AntdUI.Divider
     Friend WithEvents Label1 As AntdUI.Label
+    Friend WithEvents PageHeader1 As AntdUI.PageHeader
 End Class

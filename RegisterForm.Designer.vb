@@ -23,7 +23,7 @@ Partial Class RegisterForm
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
-        WindowBar1 = New AntdUI.WindowBar()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(RegisterForm))
         InputPwd = New AntdUI.Input()
         InputUser = New AntdUI.Input()
         InputEmail = New AntdUI.Input()
@@ -32,18 +32,8 @@ Partial Class RegisterForm
         InputCode = New AntdUI.Input()
         ButtonReg = New AntdUI.Button()
         Timer2 = New Timer(components)
+        PageHeader1 = New AntdUI.PageHeader()
         SuspendLayout()
-        ' 
-        ' WindowBar1
-        ' 
-        WindowBar1.IsMax = False
-        WindowBar1.Location = New Point(0, 0)
-        WindowBar1.MaximizeBox = False
-        WindowBar1.MinimizeBox = False
-        WindowBar1.Name = "WindowBar1"
-        WindowBar1.Size = New Size(323, 23)
-        WindowBar1.TabIndex = 8
-        WindowBar1.Text = "注册"
         ' 
         ' InputPwd
         ' 
@@ -117,15 +107,25 @@ Partial Class RegisterForm
         ' 
         Timer2.Enabled = True
         ' 
+        ' PageHeader1
+        ' 
+        PageHeader1.Icon = CType(resources.GetObject("PageHeader1.Icon"), Image)
+        PageHeader1.Location = New Point(1, 0)
+        PageHeader1.Name = "PageHeader1"
+        PageHeader1.ShowButton = True
+        PageHeader1.Size = New Size(320, 23)
+        PageHeader1.TabIndex = 11
+        PageHeader1.Text = "注册"
+        ' 
         ' RegisterForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(321, 208)
+        Controls.Add(PageHeader1)
         Controls.Add(ButtonReg)
         Controls.Add(InputCode)
         Controls.Add(Button1)
-        Controls.Add(WindowBar1)
         Controls.Add(InputUser)
         Controls.Add(InputPwd)
         Controls.Add(InputEmail)
@@ -134,8 +134,6 @@ Partial Class RegisterForm
         Text = "RegisterForm"
         ResumeLayout(False)
     End Sub
-
-    Friend WithEvents WindowBar1 As AntdUI.WindowBar
     Friend WithEvents InputPwd As AntdUI.Input
     Friend WithEvents InputUser As AntdUI.Input
     Friend WithEvents InputEmail As AntdUI.Input
@@ -144,4 +142,5 @@ Partial Class RegisterForm
     Friend WithEvents InputCode As AntdUI.Input
     Friend WithEvents ButtonReg As AntdUI.Button
     Friend WithEvents Timer2 As Timer
+    Friend WithEvents PageHeader1 As AntdUI.PageHeader
 End Class

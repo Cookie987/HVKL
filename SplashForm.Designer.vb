@@ -55,7 +55,7 @@ Partial Class SplashForm
         ' 
         ' Label1
         ' 
-        Label1.Font = New Font("Trebuchet MS", 15.75F, FontStyle.Bold, GraphicsUnit.Point)
+        Label1.Font = New Font("Trebuchet MS", 15.75F, FontStyle.Bold)
         Label1.ForeColor = Color.FromArgb(CByte(0), CByte(32), CByte(57))
         Label1.Location = New Point(106, 52)
         Label1.Name = "Label1"

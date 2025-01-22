@@ -1,8 +1,6 @@
 ﻿Imports System.IO
 Imports System.IO.Compression
-Imports System.Net
 Imports System.Net.Http
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports AntdUI
 
 Public Class VersionForm
@@ -24,10 +22,10 @@ Public Class VersionForm
                                                     Progress1.Text = "%建立连接中"
                                                     Progress1.Loading = True
                                                     ' 指定要解压到的目录
-                                                    Dim extractTo As String = "version\" + ver
+                                                    Dim extractTo As String = Application.StartupPath + "version\" + ver
                                                     Dim httpClient As New HttpClient()
-                                                    If Not Directory.Exists("version\" + ver) Then '检查文件夹是否存在
-                                                        Directory.CreateDirectory("version\" + ver)  '不存在，创建文件夹
+                                                    If Not Directory.Exists(Application.StartupPath + "version\" + ver) Then '检查文件夹是否存在
+                                                        Directory.CreateDirectory(Application.StartupPath + "version\" + ver)  '不存在，创建文件夹
                                                         Progress1.Value = 0
                                                         Try
                                                             ' 获取文件的总大小
@@ -94,9 +92,9 @@ Public Class VersionForm
                                                             Progress1.Loading = False
                                                             Try
                                                                 ' 检查文件夹是否存在
-                                                                If Directory.Exists("version\" + ver) Then
+                                                                If Directory.Exists(Application.StartupPath + "version\" + ver) Then
                                                                     ' 删除文件夹及其所有内容
-                                                                    Directory.Delete("version\" + ver, True)
+                                                                    Directory.Delete(Application.StartupPath + "version\" + ver, True)
                                                                 Else
                                                                 End If
                                                             Catch exp As Exception

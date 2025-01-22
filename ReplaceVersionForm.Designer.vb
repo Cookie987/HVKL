@@ -23,28 +23,17 @@ Partial Class ReplaceVersionForm
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ReplaceVersionForm))
-        WindowBar1 = New AntdUI.WindowBar()
         OriginalVerLabel = New AntdUI.Label()
         Image3d1 = New AntdUI.Image3D()
         Select1 = New AntdUI.Select()
         Button2 = New AntdUI.Button()
         Progress1 = New AntdUI.Progress()
+        PageHeader1 = New AntdUI.PageHeader()
         SuspendLayout()
-        ' 
-        ' WindowBar1
-        ' 
-        WindowBar1.IsMax = False
-        WindowBar1.Location = New Point(1, 0)
-        WindowBar1.MaximizeBox = False
-        WindowBar1.MinimizeBox = False
-        WindowBar1.Name = "WindowBar1"
-        WindowBar1.Size = New Size(389, 23)
-        WindowBar1.TabIndex = 6
-        WindowBar1.Text = "版本更换"
         ' 
         ' OriginalVerLabel
         ' 
-        OriginalVerLabel.Font = New Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point)
+        OriginalVerLabel.Font = New Font("Segoe UI", 15.75F)
         OriginalVerLabel.Location = New Point(33, 36)
         OriginalVerLabel.Name = "OriginalVerLabel"
         OriginalVerLabel.Size = New Size(122, 49)
@@ -87,17 +76,27 @@ Partial Class ReplaceVersionForm
         Progress1.TabIndex = 12
         Progress1.Text = ""
         ' 
+        ' PageHeader1
+        ' 
+        PageHeader1.Icon = CType(resources.GetObject("PageHeader1.Icon"), Image)
+        PageHeader1.Location = New Point(1, 2)
+        PageHeader1.Name = "PageHeader1"
+        PageHeader1.ShowButton = True
+        PageHeader1.Size = New Size(391, 23)
+        PageHeader1.TabIndex = 13
+        PageHeader1.Text = "替换版本"
+        ' 
         ' ReplaceVersionForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(391, 169)
+        Controls.Add(PageHeader1)
         Controls.Add(Progress1)
         Controls.Add(Button2)
         Controls.Add(Select1)
         Controls.Add(Image3d1)
         Controls.Add(OriginalVerLabel)
-        Controls.Add(WindowBar1)
         FormBorderStyle = FormBorderStyle.FixedSingle
         Mode = AntdUI.TAMode.Light
         Name = "ReplaceVersionForm"
@@ -106,10 +105,10 @@ Partial Class ReplaceVersionForm
         ResumeLayout(False)
     End Sub
 
-    Friend WithEvents WindowBar1 As AntdUI.WindowBar
     Friend WithEvents OriginalVerLabel As AntdUI.Label
     Friend WithEvents Image3d1 As AntdUI.Image3D
     Friend WithEvents Select1 As AntdUI.Select
     Friend WithEvents Button2 As AntdUI.Button
     Friend WithEvents Progress1 As AntdUI.Progress
+    Friend WithEvents PageHeader1 As AntdUI.PageHeader
 End Class

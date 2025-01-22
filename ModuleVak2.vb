@@ -6,7 +6,7 @@ Module ModuleVak2
         Try
             Dim WriteDatalengthstr As Integer = writestr.Length
             Dim WriteDataFLO1 As Integer = vak2FileContent.IndexOf(writestr, 0)
-            Dim filePath As String = "version\" + VackoVer + "\Game\Usdata\" + UserNameb + "\localdata.vak2"
+            Dim filePath As String = Application.StartupPath + "version\" + VackoVer + "\Game\Usdata\" + UserNameb + "\localdata.vak2"
 
             Using fs As New FileStream(filePath, FileMode.Open, FileAccess.Write)
 

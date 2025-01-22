@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.IO.Compression
 Imports System.Net.Http
 Imports System.Threading
 Imports AntdUI
@@ -11,12 +12,12 @@ Public Class MainForm
             AntdUI.Notification.error(Me, "错误", "未选择启动版本",,, 5)
             Return 1
         End If
-        Dim parentDirectory As String = "version\" + StartVer
-        Dim optionFilePath = "version\" + StartVer + "\option.json"
+        Dim parentDirectory As String = Application.StartupPath + "version\" + StartVer
+        Dim optionFilePath = Application.StartupPath + "version\" + StartVer + "\option.json"
 
         Try
             GetOption(Me, Select2.SelectedValue)
-            UpdaterFilePath = "version\" + StartVer + "\" + UpdaterFilePath
+            UpdaterFilePath = Application.StartupPath + "version\" + StartVer + "\" + UpdaterFilePath
         Catch ex As Exception
             AntdUI.Notification.error(Me, "读取版本配置文件错误", ex.Message,,, 0)
             Return 1
@@ -36,8 +37,11 @@ Public Class MainForm
 
                             ' 获取远程文件中的键值对
                             Dim credentials As Dictionary(Of String, String) = Await GetRemoteCredentials(remoteUrl)
-                            If credentials IsNot Nothing AndAlso credentials.ContainsKey("livpass") Then
-                                Dim storedPassword As String = credentials("livpass").Replace(Chr(0), "").Trim()
+
+                            Dim value As String = Nothing
+
+                            If credentials IsNot Nothing AndAlso credentials.TryGetValue("livpass", value) Then
+                                Dim storedPassword As String = value.Replace(Chr(0), "").Trim()
 
                                 If storedPassword = InputPwd.Text Then
                                     Dim banlistUrl As String = "http://vacko.cookie987.top:28987/VackoData/v1.2.7/PlayerData/BanList.txt"
@@ -49,11 +53,11 @@ Public Class MainForm
                                     AntdUI.Message.success(Me, "登录成功",, 2)
                                     Dim fileContent As String = Await DownloadVak2File(remoteUrl)
                                     If fileContent IsNot Nothing Then
-                                        Dim newFilePath As String = "version\" + StartVer + "\Game\Data\User\" + InputUser.Text + "\localdata.vak2" ' 本地保存的新文件路径
-                                        Dim folderPath = "version\" + StartVer + "\Game\Data\User\" + InputUser.Text
+                                        Dim newFilePath As String = Application.StartupPath + "version\" + StartVer + "\Game\Data\User\" + InputUser.Text + "\localdata.vak2" ' 本地保存的新文件路径
+                                        Dim folderPath = Application.StartupPath + "version\" + StartVer + "\Game\Data\User\" + InputUser.Text
                                         Try
                                             Directory.CreateDirectory(folderPath)
-                                            Directory.Delete("version\" + StartVer + "\Game\Data\User\User", True)
+                                            Directory.Delete(Application.StartupPath + "version\" + StartVer + "\Game\Data\User\User", True)
                                         Catch ex As Exception
 
                                         End Try
@@ -74,7 +78,7 @@ Public Class MainForm
 
                                         SaveVak2File("rempasstimes:", rempasstimes, 4, InputUser.Text, fileContent, StartVer)
 
-                                        Dim filePath = "version\" + StartVer + "\Game\Data\App\opi.vak2"
+                                        Dim filePath = Application.StartupPath + "version\" + StartVer + "\Game\Data\App\opi.vak2"
 
                                         ' 读取文件内容
                                         fileContent = File.ReadAllText(filePath)
@@ -91,7 +95,7 @@ Public Class MainForm
                                         ' 写入修改后的内容
                                         File.WriteAllText(filePath, fileContent)
 
-                                        filePath = "version\" + StartVer + "\Game\Data\User\" + "User"
+                                        filePath = Application.StartupPath + "version\" + StartVer + "\Game\Data\User\" + "User"
                                     Else
                                         AntdUI.Notification.error(Me, "登录失败", "下载文件失败",,, 0)
                                         Return 114
@@ -127,8 +131,11 @@ Public Class MainForm
 
                             ' 获取远程文件中的键值对
                             Dim credentials As Dictionary(Of String, String) = Await GetRemoteCredentials(remoteUrl)
-                            If credentials IsNot Nothing AndAlso credentials.ContainsKey("livpass") Then
-                                Dim storedPassword As String = credentials("livpass").Replace(Chr(0), "").Trim()
+
+                            Dim value As String = Nothing
+
+                            If credentials IsNot Nothing AndAlso credentials.TryGetValue("livpass", value) Then
+                                Dim storedPassword As String = value.Replace(Chr(0), "").Trim()
 
                                 If storedPassword = InputPwd.Text Then
                                     Dim banlistUrl As String = "http://vacko.cookie987.top:28987/VackoData/v1.2.7/PlayerData/BanList.txt"
@@ -140,11 +147,11 @@ Public Class MainForm
                                     AntdUI.Message.success(Me, "登录成功",, 2)
                                     Dim fileContent As String = Await DownloadVak2File(remoteUrl)
                                     If fileContent IsNot Nothing Then
-                                        Dim newFilePath As String = "version\" + StartVer + "\Game\Usdata\" + InputUser.Text + "\localdata.vak2" ' 本地保存的新文件路径
-                                        Dim folderPath = "version\" + StartVer + "\Game\Usdata\" + InputUser.Text
+                                        Dim newFilePath As String = Application.StartupPath + "version\" + StartVer + "\Game\Usdata\" + InputUser.Text + "\localdata.vak2" ' 本地保存的新文件路径
+                                        Dim folderPath = Application.StartupPath + "version\" + StartVer + "\Game\Usdata\" + InputUser.Text
                                         Try
                                             Directory.CreateDirectory(folderPath)
-                                            Directory.Delete("version\" + StartVer + "\Game\Usdata\User", True)
+                                            Directory.Delete(Application.StartupPath + "version\" + StartVer + "\Game\Usdata\User", True)
                                         Catch ex As Exception
 
                                         End Try
@@ -165,7 +172,7 @@ Public Class MainForm
 
                                         SaveVak2File("rempasstimes:", rempasstimes, 4, InputUser.Text, fileContent, StartVer)
 
-                                        Dim filePath = "version\" + StartVer + "\Game\Appdata\opi.vak2"
+                                        Dim filePath = Application.StartupPath + "version\" + StartVer + "\Game\Appdata\opi.vak2"
 
                                         ' 读取文件内容
                                         fileContent = File.ReadAllText(filePath)
@@ -182,7 +189,7 @@ Public Class MainForm
                                         ' 写入修改后的内容
                                         File.WriteAllText(filePath, fileContent)
 
-                                        filePath = "version\" + StartVer + "\Game\Usdata\" + "User"
+                                        filePath = Application.StartupPath + "version\" + StartVer + "\Game\Usdata\" + "User"
                                     Else
                                         AntdUI.Notification.error(Me, "登录失败", "下载文件失败",,, 0)
                                         Return 114
@@ -323,7 +330,7 @@ Public Class MainForm
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         AntdUI.Config.ShowInWindow = True
         RefreshVersion()
-        WindowBar1.SubText += "v" + My.Resources.Resource1.Version
+        PageHeader1.Text += " v" + My.Resources.Resource1.Version
 
         Dim FileExists As Boolean
         FileExists = My.Computer.FileSystem.FileExists(ConfigFilePath)
@@ -400,10 +407,40 @@ Public Class MainForm
                 End If
             End If
         End If
-        Dim isDirExist = Directory.Exists("version\")
+        Dim isDirExist = Directory.Exists(Application.StartupPath + "version\")
         If isDirExist Then
         Else
-            My.Computer.FileSystem.CreateDirectory("version\")
+            My.Computer.FileSystem.CreateDirectory(Application.StartupPath + "version\")
+        End If
+        ' 获取命令行参数
+        Dim args As String() = Environment.GetCommandLineArgs()
+
+        ' 检查是否传入文件路径
+        If args.Length > 1 Then
+            Dim zipFilePath As String = args(1) ' 第一个参数是拖入的文件路径
+
+            ' 检查文件扩展名是否为 .zip
+            If Path.GetExtension(zipFilePath).Equals(".hvklzip", StringComparison.CurrentCultureIgnoreCase) Then
+                AntdUI.Message.loading(Me, "导入整合包中", Sub(Config)
+                                                         Try
+                                                             ' 指定解压路径
+                                                             Dim targetDir As String = Path.Combine(Application.StartupPath, "version", Path.GetFileNameWithoutExtension(zipFilePath))
+                                                             ' 如果目录不存在，则创建
+                                                             If Not Directory.Exists(targetDir) Then
+                                                                 Directory.CreateDirectory(targetDir)
+                                                             End If
+                                                             ' 解压 ZIP 文件
+                                                             ZipFile.ExtractToDirectory(zipFilePath, targetDir)
+                                                             ' 显示成功消息
+                                                             Config.OK("整合包已成功导入到: " & targetDir)
+                                                         Catch ex As Exception
+                                                             ' 错误处理
+                                                             Config.Error("导入失败: " & ex.Message)
+                                                         End Try
+                                                     End Sub,, 2)
+            Else
+            End If
+        Else
         End If
     End Sub
 
@@ -429,7 +466,7 @@ Public Class MainForm
     Public Sub RefreshButton_Click()
         AntdUI.Message.loading(Me, "获取版本中", Sub(config)
                                                 ' 指定要列出子文件夹的路径
-                                                Dim folderPath As String = "version"
+                                                Dim folderPath As String = Application.StartupPath + "\version"
                                                 ' 检查路径是否存在
                                                 If Directory.Exists(folderPath) Then
                                                     ' 获取所有子文件夹
@@ -561,7 +598,7 @@ Public Class MainForm
                    Case "Refresh"
                        RefreshButton_Click()
                    Case "OpenVersionDir"
-                       Dim relativePath As String = ".\version"
+                       Dim relativePath As String = Application.StartupPath + "\version"
                        Dim folderPath As String = Path.GetFullPath(relativePath)
                        Process.Start("explorer.exe", folderPath)
                End Select

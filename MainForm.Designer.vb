@@ -24,7 +24,6 @@ Partial Class MainForm
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
-        WindowBar1 = New AntdUI.WindowBar()
         DownloadVersionPanel = New AntdUI.Panel()
         DownloadVersionImage = New AntdUI.Image3D()
         Divider1 = New AntdUI.Divider()
@@ -57,6 +56,7 @@ Partial Class MainForm
         Divider8 = New AntdUI.Divider()
         Label2 = New AntdUI.Label()
         Timer1 = New Timer(components)
+        PageHeader1 = New AntdUI.PageHeader()
         DownloadVersionPanel.SuspendLayout()
         ManageVersionPanel.SuspendLayout()
         MainSettingPanel.SuspendLayout()
@@ -65,26 +65,10 @@ Partial Class MainForm
         Panel2.SuspendLayout()
         SuspendLayout()
         ' 
-        ' WindowBar1
-        ' 
-        WindowBar1.BackColor = Color.White
-        WindowBar1.DividerShow = True
-        WindowBar1.DividerThickness = 2F
-        WindowBar1.Font = New Font("Segoe UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
-        WindowBar1.IconSvg = ""
-        WindowBar1.IsMax = False
-        WindowBar1.Location = New Point(-1, -1)
-        WindowBar1.MaximizeBox = False
-        WindowBar1.Name = "WindowBar1"
-        WindowBar1.Size = New Size(772, 32)
-        WindowBar1.SubText = ""
-        WindowBar1.TabIndex = 0
-        WindowBar1.Text = "Hello Vacko Launcher"
-        ' 
         ' DownloadVersionPanel
         ' 
         DownloadVersionPanel.BackColor = Color.Transparent
-        DownloadVersionPanel.BorderWidth = 1F
+        DownloadVersionPanel.BorderWidth = 1.0F
         DownloadVersionPanel.Controls.Add(DownloadVersionImage)
         DownloadVersionPanel.Controls.Add(Divider1)
         DownloadVersionPanel.Controls.Add(DownloadVersionLabel)
@@ -118,7 +102,7 @@ Partial Class MainForm
         ' DownloadVersionLabel
         ' 
         DownloadVersionLabel.BackColor = Color.Transparent
-        DownloadVersionLabel.Font = New Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
+        DownloadVersionLabel.Font = New Font("Microsoft YaHei UI", 10.5F)
         DownloadVersionLabel.Location = New Point(33, 20)
         DownloadVersionLabel.Name = "DownloadVersionLabel"
         DownloadVersionLabel.Size = New Size(116, 33)
@@ -129,7 +113,7 @@ Partial Class MainForm
         ' ManageVersionPanel
         ' 
         ManageVersionPanel.BackColor = Color.Transparent
-        ManageVersionPanel.BorderWidth = 1F
+        ManageVersionPanel.BorderWidth = 1.0F
         ManageVersionPanel.Controls.Add(ManageVersionImage3d)
         ManageVersionPanel.Controls.Add(Divider2)
         ManageVersionPanel.Controls.Add(ManageVersionLabel)
@@ -163,7 +147,7 @@ Partial Class MainForm
         ' ManageVersionLabel
         ' 
         ManageVersionLabel.BackColor = Color.Transparent
-        ManageVersionLabel.Font = New Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
+        ManageVersionLabel.Font = New Font("Microsoft YaHei UI", 10.5F)
         ManageVersionLabel.Location = New Point(33, 20)
         ManageVersionLabel.Name = "ManageVersionLabel"
         ManageVersionLabel.Size = New Size(116, 33)
@@ -174,7 +158,7 @@ Partial Class MainForm
         ' MainSettingPanel
         ' 
         MainSettingPanel.BackColor = Color.Transparent
-        MainSettingPanel.BorderWidth = 1F
+        MainSettingPanel.BorderWidth = 1.0F
         MainSettingPanel.Controls.Add(SettingImage3d)
         MainSettingPanel.Controls.Add(Divider3)
         MainSettingPanel.Controls.Add(SettingLabel)
@@ -208,7 +192,7 @@ Partial Class MainForm
         ' SettingLabel
         ' 
         SettingLabel.BackColor = Color.Transparent
-        SettingLabel.Font = New Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
+        SettingLabel.Font = New Font("Microsoft YaHei UI", 10.5F)
         SettingLabel.Location = New Point(33, 20)
         SettingLabel.Name = "SettingLabel"
         SettingLabel.Size = New Size(116, 33)
@@ -219,7 +203,7 @@ Partial Class MainForm
         ' Panel1
         ' 
         Panel1.BackColor = Color.Transparent
-        Panel1.BorderWidth = 1F
+        Panel1.BorderWidth = 1.0F
         Panel1.Controls.Add(RadioHVKLLogin)
         Panel1.Controls.Add(RadioVackoLogin)
         Panel1.Controls.Add(Divider7)
@@ -237,7 +221,6 @@ Partial Class MainForm
         ' 
         ' RadioHVKLLogin
         ' 
-        RadioHVKLLogin.AutoCheck = True
         RadioHVKLLogin.Location = New Point(174, 124)
         RadioHVKLLogin.Name = "RadioHVKLLogin"
         RadioHVKLLogin.Size = New Size(104, 21)
@@ -246,7 +229,6 @@ Partial Class MainForm
         ' 
         ' RadioVackoLogin
         ' 
-        RadioVackoLogin.AutoCheck = True
         RadioVackoLogin.Checked = True
         RadioVackoLogin.Location = New Point(36, 124)
         RadioVackoLogin.Name = "RadioVackoLogin"
@@ -283,7 +265,7 @@ Partial Class MainForm
         ' Label1
         ' 
         Label1.BackColor = Color.Transparent
-        Label1.Font = New Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
+        Label1.Font = New Font("Microsoft YaHei UI", 10.5F)
         Label1.Location = New Point(33, 20)
         Label1.Name = "Label1"
         Label1.Size = New Size(116, 33)
@@ -302,7 +284,7 @@ Partial Class MainForm
         ' PanelTools
         ' 
         PanelTools.BackColor = Color.Transparent
-        PanelTools.BorderWidth = 1F
+        PanelTools.BorderWidth = 1.0F
         PanelTools.Controls.Add(ToolsImage3d)
         PanelTools.Controls.Add(Divider5)
         PanelTools.Controls.Add(LabelTools)
@@ -336,7 +318,7 @@ Partial Class MainForm
         ' LabelTools
         ' 
         LabelTools.BackColor = Color.Transparent
-        LabelTools.Font = New Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
+        LabelTools.Font = New Font("Microsoft YaHei UI", 10.5F)
         LabelTools.Location = New Point(33, 20)
         LabelTools.Name = "LabelTools"
         LabelTools.Size = New Size(116, 33)
@@ -347,7 +329,7 @@ Partial Class MainForm
         ' Panel2
         ' 
         Panel2.BackColor = Color.Transparent
-        Panel2.BorderWidth = 1F
+        Panel2.BorderWidth = 1.0F
         Panel2.Controls.Add(Label3)
         Panel2.Controls.Add(Checkbox1)
         Panel2.Controls.Add(InputPwd)
@@ -365,7 +347,7 @@ Partial Class MainForm
         ' 
         ' Label3
         ' 
-        Label3.Font = New Font("Microsoft YaHei UI", 9F, FontStyle.Underline, GraphicsUnit.Point)
+        Label3.Font = New Font("Microsoft YaHei UI", 9.0F, FontStyle.Underline)
         Label3.ForeColor = Color.SteelBlue
         Label3.Location = New Point(37, 133)
         Label3.Name = "Label3"
@@ -375,7 +357,6 @@ Partial Class MainForm
         ' 
         ' Checkbox1
         ' 
-        Checkbox1.AutoCheck = True
         Checkbox1.Location = New Point(118, 132)
         Checkbox1.Name = "Checkbox1"
         Checkbox1.Size = New Size(77, 23)
@@ -417,7 +398,7 @@ Partial Class MainForm
         ' Label2
         ' 
         Label2.BackColor = Color.Transparent
-        Label2.Font = New Font("Microsoft YaHei UI", 10.5F, FontStyle.Regular, GraphicsUnit.Point)
+        Label2.Font = New Font("Microsoft YaHei UI", 10.5F)
         Label2.Location = New Point(33, 20)
         Label2.Name = "Label2"
         Label2.Size = New Size(116, 33)
@@ -429,13 +410,24 @@ Partial Class MainForm
         Timer1.Enabled = True
         Timer1.Interval = 1
         ' 
+        ' PageHeader1
+        ' 
+        PageHeader1.Icon = CType(resources.GetObject("PageHeader1.Icon"), Image)
+        PageHeader1.Location = New Point(2, 1)
+        PageHeader1.Name = "PageHeader1"
+        PageHeader1.ShowButton = True
+        PageHeader1.Size = New Size(765, 23)
+        PageHeader1.TabIndex = 9
+        PageHeader1.Text = "Hello! Vacko Launcher"
+        ' 
         ' MainForm
         ' 
-        AutoScaleDimensions = New SizeF(7F, 17F)
+        AutoScaleDimensions = New SizeF(7.0F, 17.0F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.White
         BackgroundImageLayout = ImageLayout.Stretch
         ClientSize = New Size(767, 479)
+        Controls.Add(PageHeader1)
         Controls.Add(Panel2)
         Controls.Add(PanelTools)
         Controls.Add(Select2)
@@ -443,7 +435,6 @@ Partial Class MainForm
         Controls.Add(MainSettingPanel)
         Controls.Add(ManageVersionPanel)
         Controls.Add(DownloadVersionPanel)
-        Controls.Add(WindowBar1)
         FormBorderStyle = FormBorderStyle.FixedSingle
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
         MaximizeBox = False
@@ -459,8 +450,6 @@ Partial Class MainForm
         Panel2.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
-
-    Friend WithEvents WindowBar1 As AntdUI.WindowBar
     Friend WithEvents DownloadVersionPanel As AntdUI.Panel
     Friend WithEvents DownloadVersionLabel As AntdUI.Label
     Friend WithEvents Divider1 As AntdUI.Divider
@@ -493,5 +482,6 @@ Partial Class MainForm
     Friend WithEvents InputPwd As AntdUI.Input
     Friend WithEvents Label3 As AntdUI.Label
     Friend WithEvents Timer1 As Timer
+    Friend WithEvents PageHeader1 As AntdUI.PageHeader
 
 End Class
