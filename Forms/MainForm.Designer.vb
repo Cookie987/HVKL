@@ -414,8 +414,10 @@ Partial Class MainForm
         ' 
         PageHeader1.Icon = CType(resources.GetObject("PageHeader1.Icon"), Image)
         PageHeader1.Location = New Point(2, 1)
+        PageHeader1.MaximizeBox = False
         PageHeader1.Name = "PageHeader1"
         PageHeader1.ShowButton = True
+        PageHeader1.ShowIcon = True
         PageHeader1.Size = New Size(765, 23)
         PageHeader1.TabIndex = 9
         PageHeader1.Text = "Hello! Vacko Launcher"

@@ -37,6 +37,7 @@ Partial Class ManageForm
         InputVersionName = New AntdUI.Input()
         Label1 = New AntdUI.Label()
         PageHeader1 = New AntdUI.PageHeader()
+        Button5 = New AntdUI.Button()
         SettingPanel.SuspendLayout()
         SuspendLayout()
         ' 
@@ -60,6 +61,7 @@ Partial Class ManageForm
         ' 
         SettingPanel.BackColor = Color.Transparent
         SettingPanel.BorderWidth = 1F
+        SettingPanel.Controls.Add(Button5)
         SettingPanel.Controls.Add(Button4)
         SettingPanel.Controls.Add(Select2)
         SettingPanel.Controls.Add(InputDirName)
@@ -172,6 +174,15 @@ Partial Class ManageForm
         PageHeader1.TabIndex = 10
         PageHeader1.Text = "管理版本"
         ' 
+        ' Button5
+        ' 
+        Button5.Location = New Point(253, 57)
+        Button5.Name = "Button5"
+        Button5.Size = New Size(96, 35)
+        Button5.TabIndex = 14
+        Button5.Text = "音乐管理"
+        Button5.Type = AntdUI.TTypeMini.Primary
+        ' 
         ' ManageForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
@@ -204,4 +215,5 @@ Partial Class ManageForm
     Friend WithEvents InputDirName As AntdUI.Input
     Friend WithEvents Button4 As AntdUI.Button
     Friend WithEvents PageHeader1 As AntdUI.PageHeader
+    Friend WithEvents Button5 As AntdUI.Button
 End Class

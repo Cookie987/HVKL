@@ -145,12 +145,12 @@ Public Class ManageForm
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         Dim sourceDir = Application.StartupPath + "version\" + Select2.SelectedValue
 
-        AntdUI.Message.loading(Me, "导出中", Sub(config)
+        Message.loading(Me, "导出中", Sub(config)
                                               ' 声明一个变量来存储用户选择的路径
                                               Dim zipFilePath As String = Nothing
 
                                               ' 创建一个新线程并强制 STA 模式
-                                              Dim saveFileDialogThread As New Threading.Thread(
+                                              Dim saveFileDialogThread As New Thread(
                                                   Sub()
                                                       ' 初始化保存文件对话框
                                                       Dim saveFileDialog As New SaveFileDialog With {
@@ -160,13 +160,13 @@ Public Class ManageForm
                                                       }
 
                                                       ' 显示对话框并获取用户选择的路径
-                                                      If saveFileDialog.ShowDialog() = DialogResult.OK Then
+                                                      If saveFileDialog.ShowDialog = DialogResult.OK Then
                                                           zipFilePath = saveFileDialog.FileName
                                                       End If
                                                   End Sub)
-                                              saveFileDialogThread.SetApartmentState(Threading.ApartmentState.STA) ' 设置为 STA 模式
-                                              saveFileDialogThread.Start()
-                                              saveFileDialogThread.Join() ' 等待线程完成
+                                              saveFileDialogThread.SetApartmentState(ApartmentState.STA) ' 设置为 STA 模式
+                                              saveFileDialogThread.Start
+                                              saveFileDialogThread.Join ' 等待线程完成
 
                                               ' 如果用户没有取消保存操作
                                               If Not String.IsNullOrEmpty(zipFilePath) Then
@@ -183,4 +183,6 @@ Public Class ManageForm
                                           End Sub,, 2)
     End Sub
 
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+    End Sub
 End Class
