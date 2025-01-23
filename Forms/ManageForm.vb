@@ -63,7 +63,6 @@ Public Class ManageForm
             .OkType = TTypeMini.Error,
             .OnOk = Function(config)
                         DeleteFolder(Application.StartupPath + "version\" + Select2.SelectedValue)
-                        System.Threading.Thread.Sleep(1000)
                         MainForm.RefreshVersion()
                         SetRefreshVersion()
                         Return True
@@ -121,15 +120,19 @@ Public Class ManageForm
                             GetOption(Me, Select2.SelectedValue)
                             OriginalVersion = VackoVersion
                             OriginalDir = Select2.SelectedValue
-                            ReplaceVersionForm.ShowDialog()
-                            ReplaceVersionForm.Dispose()
+                            ' 使用 Invoke 保证在主线程中显示对话框
+                            Me.Invoke(Sub()
+                                          Using replaceVersionForm As New ReplaceVersionForm()
+                                              replaceVersionForm.StartPosition = FormStartPosition.CenterParent ' 居中显示
+                                              replaceVersionForm.ShowDialog(Me) ' 模态显示
+                                          End Using
+                                      End Sub)
                         Catch ex As Exception
                             AntdUI.Notification.error(Me, "读取版本配置文件错误", ex.Message,,, 0)
                         End Try
                         Return True
                     End Function
-        })
-            Thread.Sleep(500)
+            })
             MainForm.RefreshVersion()
             SetRefreshVersion()
             SettingPanel.Visible = False
@@ -176,7 +179,6 @@ Public Class ManageForm
                                                       config.Error("导出失败: " + ex.Message)
                                                   End Try
                                               Else
-                                                  config.Info("用户取消了保存操作。")
                                               End If
                                           End Sub,, 2)
     End Sub

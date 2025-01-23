@@ -59,9 +59,9 @@ Partial Class SplashForm
         Label1.ForeColor = Color.FromArgb(CByte(0), CByte(32), CByte(57))
         Label1.Location = New Point(106, 52)
         Label1.Name = "Label1"
-        Label1.Size = New Size(228, 23)
+        Label1.Size = New Size(234, 23)
         Label1.TabIndex = 2
-        Label1.Text = "Hello Vacko Launcher"
+        Label1.Text = "Hello! Vacko Launcher"
         ' 
         ' Label2
         ' 
@@ -70,7 +70,7 @@ Partial Class SplashForm
         Label2.Name = "Label2"
         Label2.Size = New Size(286, 71)
         Label2.TabIndex = 3
-        Label2.Text = "HVKL 为 Vacko 授权的的启动器。" & vbCrLf & "Vacko™ 是 Lemon Studio 的商标。" & vbCrLf & "©2024 R.C.S. All rights reserved."
+        Label2.Text = "HVKL 为 Vacko 授权的的启动器。" & vbCrLf & "Vacko™ 是 Lemon Studio 的商标。" & vbCrLf & "©2025 RedCookieStudios. All rights reserved."
         Label2.TextAlign = ContentAlignment.TopLeft
         ' 
         ' Image3d2
@@ -85,7 +85,7 @@ Partial Class SplashForm
         ' Label3
         ' 
         Label3.ForeColor = SystemColors.GrayText
-        Label3.Location = New Point(36, 232)
+        Label3.Location = New Point(36, 236)
         Label3.Name = "Label3"
         Label3.Size = New Size(286, 71)
         Label3.TabIndex = 5
@@ -94,11 +94,12 @@ Partial Class SplashForm
         ' 
         ' Image3d3
         ' 
-        Image3d3.Image = CType(resources.GetObject("Image3d3.Image"), Image)
-        Image3d3.Location = New Point(340, 31)
+        Image3d3.Image = My.Resources.Resource1.WinterBox
+        Image3d3.Location = New Point(346, 31)
         Image3d3.Name = "Image3d3"
         Image3d3.Radius = 10
         Image3d3.Size = New Size(347, 394)
+        Image3d3.Speed = 20
         Image3d3.TabIndex = 6
         Image3d3.Text = "Image3d3"
         ' 

@@ -18,7 +18,7 @@ Module ConfigModule
     Public LastUsedPassword
     Public TotalStartTimes
     Public CustomDownloadUrl
-    Public ConfigFilePath = "config.json"
+    Public ConfigFilePath = Application.StartupPath + "config.json"
 
     ' 定义配置类
     Public Class Config
@@ -40,8 +40,8 @@ Module ConfigModule
         Public Property TotalStartTimes As Long
     End Class
 
-        ' 写入配置到JSON文件的函数
-        Public Sub WriteConfig(ByVal config As Config, ByVal filePath As String)
+    ' 写入配置到JSON文件的函数
+    Public Sub WriteConfig(ByVal config As Config, ByVal filePath As String)
         Dim json As String = JsonConvert.SerializeObject(config, Formatting.Indented)
         File.WriteAllText(filePath, json)
         Console.WriteLine("配置已保存到 " & filePath)
@@ -95,7 +95,7 @@ Module ConfigModule
                 .TotalStartTimes = TotalStartTimes
                 }
         Try
-            WriteConfig(configToWrite, "config.json")
+            WriteConfig(configToWrite, Application.StartupPath + "config.json")
         Catch ex As Exception
             AntdUI.Notification.error(form, "写入配置文件错误", ex.Message,,, 0)
             Return ex.Message
@@ -155,7 +155,7 @@ Module ConfigModule
     Public Function GetOption(form, folderName)
         Dim httpClient As New HttpClient()
         Try
-            Dim optionRead As VersionOption = ReadOption(Application.StartupPath+"version\" + folderName + "\option.json")
+            Dim optionRead As VersionOption = ReadOption(Application.StartupPath + "version\" + folderName + "\option.json")
             VackoVersion = optionRead.VackoVersion
             SupportHVKLLogin = optionRead.SupportHVKLLogin
             Family = optionRead.Family
@@ -192,7 +192,7 @@ Module ConfigModule
                 .LastStartTime = LastStartTime
                 }
         Try
-            WriteOption(optionToWrite, Application.StartupPath+"version\" + folderName + "\option.json")
+            WriteOption(optionToWrite, Application.StartupPath + "version\" + folderName + "\option.json")
             AntdUI.Message.success(form, "保存版本配置成功",, 2)
         Catch ex As Exception
             AntdUI.Notification.error(form, "写入配置文件错误", ex.Message,,, 0)

@@ -79,10 +79,10 @@ Partial Class ReplaceVersionForm
         ' PageHeader1
         ' 
         PageHeader1.Icon = CType(resources.GetObject("PageHeader1.Icon"), Image)
-        PageHeader1.Location = New Point(1, 2)
+        PageHeader1.Location = New Point(-2, 0)
         PageHeader1.Name = "PageHeader1"
         PageHeader1.ShowButton = True
-        PageHeader1.Size = New Size(391, 23)
+        PageHeader1.Size = New Size(396, 23)
         PageHeader1.TabIndex = 13
         PageHeader1.Text = "替换版本"
         ' 
@@ -90,7 +90,7 @@ Partial Class ReplaceVersionForm
         ' 
         AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(391, 169)
+        ClientSize = New Size(374, 152)
         Controls.Add(PageHeader1)
         Controls.Add(Progress1)
         Controls.Add(Button2)

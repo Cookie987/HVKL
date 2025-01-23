@@ -6,6 +6,7 @@ Imports AntdUI
 
 Public Class MainForm
     Dim mutex As Mutex
+    Private overlay As OverlayWindow ' 覆盖层窗体
     Private Async Function StartGame(StartVer As String) As Task(Of Integer)
         ' 定义父目录路径
         If StartVer = "" Then
@@ -412,34 +413,87 @@ Public Class MainForm
         Else
             My.Computer.FileSystem.CreateDirectory(Application.StartupPath + "version\")
         End If
-        ' 获取命令行参数
-        Dim args As String() = Environment.GetCommandLineArgs()
 
-        ' 检查是否传入文件路径
-        If args.Length > 1 Then
-            Dim zipFilePath As String = args(1) ' 第一个参数是拖入的文件路径
+        ' 设置窗口支持拖放
+        Me.AllowDrop = True
+        ' 初始化覆盖窗口，但初始不显示
+        overlay = New OverlayWindow() With {
+            .Visible = False,
+            .Bounds = Me.Bounds ' 确保覆盖主窗口
+        }
+    End Sub
 
-            ' 检查文件扩展名是否为 .zip
-            If Path.GetExtension(zipFilePath).Equals(".hvklzip", StringComparison.CurrentCultureIgnoreCase) Then
-                AntdUI.Message.loading(Me, "导入整合包中", Sub(Config)
-                                                         Try
-                                                             ' 指定解压路径
-                                                             Dim targetDir As String = Path.Combine(Application.StartupPath, "version", Path.GetFileNameWithoutExtension(zipFilePath))
-                                                             ' 如果目录不存在，则创建
-                                                             If Not Directory.Exists(targetDir) Then
-                                                                 Directory.CreateDirectory(targetDir)
-                                                             End If
-                                                             ' 解压 ZIP 文件
-                                                             ZipFile.ExtractToDirectory(zipFilePath, targetDir)
-                                                             ' 显示成功消息
-                                                             Config.OK("整合包已成功导入到: " & targetDir)
-                                                         Catch ex As Exception
-                                                             ' 错误处理
-                                                             Config.Error("导入失败: " & ex.Message)
-                                                         End Try
-                                                     End Sub,, 2)
+    Private Sub MainWindow_Move(sender As Object, e As EventArgs) Handles Me.Move
+        If overlay IsNot Nothing Then
+            overlay.Bounds = Me.Bounds
+        End If
+    End Sub
+
+    Private Sub MainWindow_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+        If overlay IsNot Nothing Then
+            overlay.Bounds = Me.Bounds
+        End If
+    End Sub
+
+    Private Sub MainWindow_DragEnter(sender As Object, e As DragEventArgs) Handles Me.DragEnter
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            Dim files = CType(e.Data.GetData(DataFormats.FileDrop), String())
+            If files.Length = 1 AndAlso Path.GetExtension(files(0)).Equals(".hvklzip", StringComparison.CurrentCultureIgnoreCase) Then
+                e.Effect = DragDropEffects.Copy
+                overlay.Visible = True ' 显示覆盖层
             Else
+                e.Effect = DragDropEffects.None
             End If
+        Else
+            e.Effect = DragDropEffects.None
+        End If
+    End Sub
+
+    Private Sub MainWindow_DragOver(sender As Object, e As DragEventArgs) Handles Me.DragOver
+        ' 确保鼠标拖动时保持覆盖窗口显示
+        If Not overlay.Visible Then
+            overlay.Show()
+        End If
+    End Sub
+
+    Private Sub MainWindow_DragLeave(sender As Object, e As EventArgs) Handles Me.DragLeave
+        ' 只有在鼠标真正离开时才隐藏覆盖窗口
+        If overlay.Visible Then
+            overlay.Hide()
+        End If
+    End Sub
+
+    ' 放下文件时触发
+    Private Sub MainWindow_DragDrop(sender As Object, e As DragEventArgs) Handles Me.DragDrop
+        overlay.Visible = False
+
+        Dim files = CType(e.Data.GetData(DataFormats.FileDrop), String())
+        If files.Length = 1 AndAlso Path.GetExtension(files(0)).Equals(".hvklzip", StringComparison.CurrentCultureIgnoreCase) Then
+            Dim zipFilePath = files(0)
+
+            AntdUI.Modal.open(New AntdUI.Modal.Config(Me, "提示", "是否导入整合包？" + vbCrLf + "整合包将会导入到" + Path.Combine(Application.StartupPath, "version", Path.GetFileNameWithoutExtension(zipFilePath)), AntdUI.TType.Info) With {
+                .OkText = "导入",
+                .OkType = TTypeMini.Primary,
+                .OnOk = Function(config)
+                            Try
+                                ' 指定解压路径
+                                Dim targetDir As String = Path.Combine(Application.StartupPath, "version", Path.GetFileNameWithoutExtension(zipFilePath))
+                                ' 如果目录不存在，则创建
+                                If Not Directory.Exists(targetDir) Then
+                                    Directory.CreateDirectory(targetDir)
+                                End If
+                                ' 解压 ZIP 文件
+                                ZipFile.ExtractToDirectory(zipFilePath, targetDir)
+                                ' 显示成功消息
+                                AntdUI.Notification.success(Me, "导入整合包", "整合包 " + Path.GetFileNameWithoutExtension(zipFilePath) + " 已成功导入",,, 5)
+                                Return True
+                            Catch ex As Exception
+                                ' 错误处理
+                                AntdUI.Notification.error(Me, "导入整合包错误", ex.Message,,, 0)
+                                Return True
+                            End Try
+                        End Function
+                })
         Else
         End If
     End Sub
@@ -554,6 +608,47 @@ Public Class MainForm
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+
+        Timer1.Enabled = False
+
+        ' 导入整合包
+        ' 获取命令行参数
+        Dim args As String() = Environment.GetCommandLineArgs()
+
+        ' 检查是否传入文件路径
+        If args.Length > 1 Then
+            Dim zipFilePath As String = args(1) ' 第一个参数是拖入的文件路径
+
+            ' 检查文件扩展名是否为 .hvklzip
+            If Path.GetExtension(zipFilePath).Equals(".hvklzip", StringComparison.CurrentCultureIgnoreCase) Then
+                AntdUI.Modal.open(New AntdUI.Modal.Config(Me, "提示", "是否导入整合包？" + vbCrLf + "整合包将会导入到" + Path.Combine(Application.StartupPath, "version", Path.GetFileNameWithoutExtension(zipFilePath)), AntdUI.TType.Info) With {
+                .OkText = "导入",
+                .OkType = TTypeMini.Primary,
+                .OnOk = Function(config)
+                            Try
+                                ' 指定解压路径
+                                Dim targetDir As String = Path.Combine(Application.StartupPath, "version", Path.GetFileNameWithoutExtension(zipFilePath))
+                                ' 如果目录不存在，则创建
+                                If Not Directory.Exists(targetDir) Then
+                                    Directory.CreateDirectory(targetDir)
+                                End If
+                                ' 解压 ZIP 文件
+                                ZipFile.ExtractToDirectory(zipFilePath, targetDir)
+                                ' 显示成功消息
+                                AntdUI.Notification.success(Me, "导入整合包", "整合包 " + Path.GetFileNameWithoutExtension(zipFilePath) + " 已成功导入",,, 5)
+                                Return True
+                            Catch ex As Exception
+                                ' 错误处理
+                                AntdUI.Notification.error(Me, "导入整合包错误", ex.Message,,, 0)
+                                Return True
+                            End Try
+                        End Function
+                })
+            Else
+            End If
+        Else
+        End If
+
         Dim buttons = New AntdUI.FloatButton.Config(Me, New AntdUI.FloatButton.ConfigBtn() {
             New AntdUI.FloatButton.ConfigBtn("OpenVersionDir", My.Resources.Resource1.FolderSVG, True) With {
                 .Badge = "",
@@ -604,6 +699,5 @@ Public Class MainForm
                End Select
            End Sub)
         FloatButton.open(buttons)
-        Timer1.Enabled = False
     End Sub
 End Class

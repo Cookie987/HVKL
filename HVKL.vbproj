@@ -20,6 +20,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="HVKL.~is" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="favicon (1).ico" />
   </ItemGroup>
 
@@ -71,10 +75,6 @@
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>

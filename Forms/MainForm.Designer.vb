@@ -68,7 +68,7 @@ Partial Class MainForm
         ' DownloadVersionPanel
         ' 
         DownloadVersionPanel.BackColor = Color.Transparent
-        DownloadVersionPanel.BorderWidth = 1.0F
+        DownloadVersionPanel.BorderWidth = 1F
         DownloadVersionPanel.Controls.Add(DownloadVersionImage)
         DownloadVersionPanel.Controls.Add(Divider1)
         DownloadVersionPanel.Controls.Add(DownloadVersionLabel)
@@ -113,7 +113,7 @@ Partial Class MainForm
         ' ManageVersionPanel
         ' 
         ManageVersionPanel.BackColor = Color.Transparent
-        ManageVersionPanel.BorderWidth = 1.0F
+        ManageVersionPanel.BorderWidth = 1F
         ManageVersionPanel.Controls.Add(ManageVersionImage3d)
         ManageVersionPanel.Controls.Add(Divider2)
         ManageVersionPanel.Controls.Add(ManageVersionLabel)
@@ -158,7 +158,7 @@ Partial Class MainForm
         ' MainSettingPanel
         ' 
         MainSettingPanel.BackColor = Color.Transparent
-        MainSettingPanel.BorderWidth = 1.0F
+        MainSettingPanel.BorderWidth = 1F
         MainSettingPanel.Controls.Add(SettingImage3d)
         MainSettingPanel.Controls.Add(Divider3)
         MainSettingPanel.Controls.Add(SettingLabel)
@@ -203,7 +203,7 @@ Partial Class MainForm
         ' Panel1
         ' 
         Panel1.BackColor = Color.Transparent
-        Panel1.BorderWidth = 1.0F
+        Panel1.BorderWidth = 1F
         Panel1.Controls.Add(RadioHVKLLogin)
         Panel1.Controls.Add(RadioVackoLogin)
         Panel1.Controls.Add(Divider7)
@@ -284,7 +284,7 @@ Partial Class MainForm
         ' PanelTools
         ' 
         PanelTools.BackColor = Color.Transparent
-        PanelTools.BorderWidth = 1.0F
+        PanelTools.BorderWidth = 1F
         PanelTools.Controls.Add(ToolsImage3d)
         PanelTools.Controls.Add(Divider5)
         PanelTools.Controls.Add(LabelTools)
@@ -329,7 +329,7 @@ Partial Class MainForm
         ' Panel2
         ' 
         Panel2.BackColor = Color.Transparent
-        Panel2.BorderWidth = 1.0F
+        Panel2.BorderWidth = 1F
         Panel2.Controls.Add(Label3)
         Panel2.Controls.Add(Checkbox1)
         Panel2.Controls.Add(InputPwd)
@@ -347,7 +347,7 @@ Partial Class MainForm
         ' 
         ' Label3
         ' 
-        Label3.Font = New Font("Microsoft YaHei UI", 9.0F, FontStyle.Underline)
+        Label3.Font = New Font("Microsoft YaHei UI", 9F, FontStyle.Underline)
         Label3.ForeColor = Color.SteelBlue
         Label3.Location = New Point(37, 133)
         Label3.Name = "Label3"
@@ -422,7 +422,7 @@ Partial Class MainForm
         ' 
         ' MainForm
         ' 
-        AutoScaleDimensions = New SizeF(7.0F, 17.0F)
+        AutoScaleDimensions = New SizeF(7F, 17F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.White
         BackgroundImageLayout = ImageLayout.Stretch
