@@ -95,8 +95,6 @@ Public Class MainForm
 
                                         ' 写入修改后的内容
                                         File.WriteAllText(filePath, fileContent)
-
-                                        filePath = Application.StartupPath + "version\" + StartVer + "\Game\Data\User\" + "User"
                                     Else
                                         AntdUI.Notification.error(Me, "登录失败", "下载文件失败",,, 0)
                                         Return 114
@@ -171,7 +169,7 @@ Public Class MainForm
                                         End If
 
 
-                                        SaveVak2File("rempasstimes:", rempasstimes, 4, InputUser.Text, fileContent, StartVer)
+                                        SaveVak2FileOld("rempasstimes:", rempasstimes, 4, InputUser.Text, fileContent, StartVer)
 
                                         Dim filePath = Application.StartupPath + "version\" + StartVer + "\Game\Appdata\opi.vak2"
 
@@ -651,19 +649,16 @@ Public Class MainForm
 
         Dim buttons = New AntdUI.FloatButton.Config(Me, New AntdUI.FloatButton.ConfigBtn() {
             New AntdUI.FloatButton.ConfigBtn("OpenVersionDir", My.Resources.Resource1.FolderSVG, True) With {
-                .Badge = "",
                 .Tooltip = "打开version文件夹",
                 .Round = True,
                 .Type = AntdUI.TTypeMini.Default
             },
             New AntdUI.FloatButton.ConfigBtn("Refresh", My.Resources.Resource1.RefreshSVG, True) With {
-                .Badge = "",
                 .Tooltip = "刷新",
                 .Round = True,
                 .Type = AntdUI.TTypeMini.Default
             },
             New AntdUI.FloatButton.ConfigBtn("StartGame", My.Resources.Resource1.RocketSVG, True) With {
-                .Badge = "",
                 .Tooltip = "启动选择的Vacko2版本",
                 .Round = True,
                 .Type = AntdUI.TTypeMini.Primary

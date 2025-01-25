@@ -6,6 +6,37 @@ Module ModuleVak2
         Try
             Dim WriteDatalengthstr As Integer = writestr.Length
             Dim WriteDataFLO1 As Integer = vak2FileContent.IndexOf(writestr, 0)
+            Dim filePath As String = Application.StartupPath + "version\" + VackoVer + "\Game\Data\User\" + UserNameb + "\localdata.vak2"
+
+            Using fs As New FileStream(filePath, FileMode.Open, FileAccess.Write)
+
+                fs.Seek(WriteDataFLO1 + WriteDatalengthstr, SeekOrigin.Begin)
+
+                ' 使用 System.Text.Encoding.Default.GetBytes 将字符串转换为字节数组
+                Dim wdataBytes As Byte() = System.Text.Encoding.Default.GetBytes(wdata)
+                If wlength > wdataBytes.Length Then
+                    wlength = wdataBytes.Length ' 避免越界
+                End If
+
+                fs.Write(wdataBytes, 0, wlength)
+
+            End Using
+        Catch ex As Exception
+            Return ex
+        End Try
+        Return 0
+        ' 写入内容
+        ' writestr： 从哪里开始
+
+        ' wdata：写什么
+
+        ' wlength：写入的长度
+    End Function
+
+    Public Function SaveVak2FileOld(writestr As String, wdata As String, wlength As Integer, UserNameb As String, vak2FileContent As String, VackoVer As String)
+        Try
+            Dim WriteDatalengthstr As Integer = writestr.Length
+            Dim WriteDataFLO1 As Integer = vak2FileContent.IndexOf(writestr, 0)
             Dim filePath As String = Application.StartupPath + "version\" + VackoVer + "\Game\Usdata\" + UserNameb + "\localdata.vak2"
 
             Using fs As New FileStream(filePath, FileMode.Open, FileAccess.Write)

@@ -81,8 +81,15 @@ Public Class ManageForm
                 SettingPanel.Visible = True
                 InputVersionName.Text = CustomName
                 InputDirName.Text = Select2.SelectedValue
-                Label2.Text = "Vacko版本：" + VackoVersion + "（架构：" + Family + "）"
+                Label2.Text = "Vacko版本：" + VackoVersion + "（" + Family + "）"
                 Label3.Text = "上次启动：" + LastStartTime
+                If Family = "StarLake" Then
+                    Button5.Enabled = True
+                Else
+                    Button5.Enabled = False
+                End If
+
+
             Catch ex As Exception
                 AntdUI.Notification.error(Me, "读取版本配置文件错误", ex.Message,,, 0)
             End Try
@@ -184,5 +191,7 @@ Public Class ManageForm
     End Sub
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        MusicForm.ShowDialog(Me)
+        MusicForm.Dispose()
     End Sub
 End Class
