@@ -111,7 +111,7 @@ Partial Class ToolForm
         Button2.Location = New Point(278, 62)
         Button2.Name = "Button2"
         Button2.Size = New Size(114, 35)
-        Button2.TabIndex = 4
+        Button2.TabIndex = 6
         Button2.Text = "查找"
         Button2.Type = AntdUI.TTypeMini.Primary
         ' 
@@ -121,7 +121,7 @@ Partial Class ToolForm
         Input2.Name = "Input2"
         Input2.PlaceholderText = "输入邮箱"
         Input2.Size = New Size(207, 35)
-        Input2.TabIndex = 3
+        Input2.TabIndex = 5
         ' 
         ' Divider2
         ' 

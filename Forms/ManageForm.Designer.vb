@@ -26,6 +26,7 @@ Partial Class ManageForm
         Select1 = New AntdUI.Select()
         Button1 = New AntdUI.Button()
         SettingPanel = New AntdUI.Panel()
+        Button5 = New AntdUI.Button()
         Button4 = New AntdUI.Button()
         Select2 = New AntdUI.Select()
         InputDirName = New AntdUI.Input()
@@ -37,7 +38,6 @@ Partial Class ManageForm
         InputVersionName = New AntdUI.Input()
         Label1 = New AntdUI.Label()
         PageHeader1 = New AntdUI.PageHeader()
-        Button5 = New AntdUI.Button()
         SettingPanel.SuspendLayout()
         SuspendLayout()
         ' 
@@ -46,7 +46,7 @@ Partial Class ManageForm
         Select1.Location = New Point(35, 31)
         Select1.Name = "Select1"
         Select1.Size = New Size(450, 34)
-        Select1.TabIndex = 7
+        Select1.TabIndex = 1
         ' 
         ' Button1
         ' 
@@ -82,12 +82,21 @@ Partial Class ManageForm
         SettingPanel.Text = "Panel2"
         SettingPanel.Visible = False
         ' 
+        ' Button5
+        ' 
+        Button5.Location = New Point(253, 57)
+        Button5.Name = "Button5"
+        Button5.Size = New Size(96, 35)
+        Button5.TabIndex = 5
+        Button5.Text = "音乐管理"
+        Button5.Type = AntdUI.TTypeMini.Primary
+        ' 
         ' Button4
         ' 
         Button4.Location = New Point(253, 24)
         Button4.Name = "Button4"
         Button4.Size = New Size(96, 35)
-        Button4.TabIndex = 13
+        Button4.TabIndex = 4
         Button4.Text = "导出整合包"
         Button4.Type = AntdUI.TTypeMini.Primary
         ' 
@@ -105,7 +114,7 @@ Partial Class ManageForm
         InputDirName.Location = New Point(87, 108)
         InputDirName.Name = "InputDirName"
         InputDirName.Size = New Size(149, 31)
-        InputDirName.TabIndex = 12
+        InputDirName.TabIndex = 3
         ' 
         ' Label4
         ' 
@@ -120,7 +129,7 @@ Partial Class ManageForm
         Button3.Location = New Point(355, 57)
         Button3.Name = "Button3"
         Button3.Size = New Size(96, 35)
-        Button3.TabIndex = 10
+        Button3.TabIndex = 7
         Button3.Text = "更换版本"
         Button3.Type = AntdUI.TTypeMini.Warn
         ' 
@@ -145,7 +154,7 @@ Partial Class ManageForm
         Button2.Location = New Point(355, 91)
         Button2.Name = "Button2"
         Button2.Size = New Size(96, 35)
-        Button2.TabIndex = 7
+        Button2.TabIndex = 8
         Button2.Text = "保存更改"
         Button2.Type = AntdUI.TTypeMini.Primary
         ' 
@@ -154,7 +163,7 @@ Partial Class ManageForm
         InputVersionName.Location = New Point(62, 25)
         InputVersionName.Name = "InputVersionName"
         InputVersionName.Size = New Size(149, 31)
-        InputVersionName.TabIndex = 4
+        InputVersionName.TabIndex = 2
         ' 
         ' Label1
         ' 
@@ -168,20 +177,12 @@ Partial Class ManageForm
         ' 
         PageHeader1.Icon = CType(resources.GetObject("PageHeader1.Icon"), Image)
         PageHeader1.Location = New Point(1, 0)
+        PageHeader1.MaximizeBox = False
         PageHeader1.Name = "PageHeader1"
         PageHeader1.ShowButton = True
         PageHeader1.Size = New Size(510, 23)
         PageHeader1.TabIndex = 10
         PageHeader1.Text = "管理版本"
-        ' 
-        ' Button5
-        ' 
-        Button5.Location = New Point(253, 57)
-        Button5.Name = "Button5"
-        Button5.Size = New Size(96, 35)
-        Button5.TabIndex = 14
-        Button5.Text = "音乐管理"
-        Button5.Type = AntdUI.TTypeMini.Primary
         ' 
         ' ManageForm
         ' 

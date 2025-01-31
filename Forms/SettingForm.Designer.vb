@@ -133,7 +133,7 @@ Partial Class SettingForm
         SwitchHorribleBanUI.Location = New Point(53, 102)
         SwitchHorribleBanUI.Name = "SwitchHorribleBanUI"
         SwitchHorribleBanUI.Size = New Size(44, 25)
-        SwitchHorribleBanUI.TabIndex = 6
+        SwitchHorribleBanUI.TabIndex = 3
         SwitchHorribleBanUI.Text = "12"
         ' 
         ' Label4
@@ -161,7 +161,7 @@ Partial Class SettingForm
         Switch1.Location = New Point(53, 66)
         Switch1.Name = "Switch1"
         Switch1.Size = New Size(44, 25)
-        Switch1.TabIndex = 3
+        Switch1.TabIndex = 2
         Switch1.Text = "12"
         ' 
         ' Divider1
@@ -188,7 +188,7 @@ Partial Class SettingForm
         ButtonCheckUpdate.Location = New Point(258, 193)
         ButtonCheckUpdate.Name = "ButtonCheckUpdate"
         ButtonCheckUpdate.Size = New Size(104, 36)
-        ButtonCheckUpdate.TabIndex = 8
+        ButtonCheckUpdate.TabIndex = 1
         ButtonCheckUpdate.Text = "检查更新"
         ButtonCheckUpdate.Type = AntdUI.TTypeMini.Primary
         ' 

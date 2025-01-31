@@ -39,8 +39,8 @@ Name: "chinesesimplified"; MessagesFile: "compiler:Languages\ChineseSimplified.i
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "H:\Github\HVKL\bin\Release\net9.0-windows10.0.26100.0\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "H:\Github\HVKL\bin\Release\net9.0-windows10.0.26100.0\*"; DestDir: "{app}"; Flags: ignoreversion
+Source: "H:\Github\HVKL\bin\Release\publish-installer\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "H:\Github\HVKL\bin\Release\publish-installer\*"; DestDir: "{app}"; Flags: ignoreversion
 
 ; 注意：不要在任何共享系统文件上使用 "Flags: ignoreversion" 
 

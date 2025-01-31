@@ -3,6 +3,8 @@ Imports System.IO.Compression
 Imports System.Net.Http
 Imports System.Threading
 Imports AntdUI
+Imports AntdUI.Svg
+Imports Newtonsoft.Json.Linq
 
 Public Class MainForm
     Dim mutex As Mutex
@@ -23,8 +25,72 @@ Public Class MainForm
             AntdUI.Notification.error(Me, "读取版本配置文件错误", ex.Message,,, 0)
             Return 1
         End Try
+        If Family = "BanGDream" Then
+            ' BanGDream架构
+            Try
+                ' 登录
+                If RadioHVKLLogin.Checked = True Then
+                    If SupportHVKLLogin = True Then
+                        If InputUser.Text = "User" Or InputUser.Text = "nonelivaccno" Or InputPwd.Text = "nonelivpas" Then
+                            AntdUI.Notification.error(Me, "用户名或密码不合法", "请更换",,, 0)
+                            Return 1
+                        Else
+                            Dim remoteUrl As String = "http://vacko.cookie987.top:28987/VackoData/v1.3/PlayerData/Player/" + LastUsedUser + "-Data.json"
+                            Dim remoteJson
+                            Using httpClient As New HttpClient()
+                                remoteJson = httpClient.GetStringAsync(remoteUrl).Result
+                            End Using
+                            Dim obj As JObject = JObject.Parse(remoteJson)
+                            Dim passwordValue As String = obj("AccountInfo")("Password").Value(Of String)()
+                            If passwordValue IsNot Nothing AndAlso passwordValue = InputPwd.Text Then
 
-        If Family = "StarLake" Then
+                                Dim banlistUrl As String = "http://vacko.cookie987.top:28987/VackoData/v1.3/PlayerData/BanList.txt"
+                                ' 获取远程文件中
+                                Dim banlistFile As String = Await DownloadVak2File(banlistUrl)
+                                If InStr(banlistFile, InputUser.Text) Then
+                                    Return 8
+                                End If
+                                AntdUI.Message.success(Me, "登录成功",, 2)
+                                Dim PwdAttemptsLeftValue As Integer = obj("AccountInfo")("PwdAttemptsLeft").Value(Of Integer)()
+                                If PwdAttemptsLeftValue > 1 Then
+                                    obj("AccountInfo")("PwdAttemptsLeft") = PwdAttemptsLeftValue + 1
+                                Else
+                                    obj("AccountInfo")("PwdAttemptsLeft") = 1
+                                End If
+                                Dim appJson = File.ReadAllText(Application.StartupPath + "version\" + StartVer + "\Game\Data\AppData.json")
+                                Dim obj2 As JObject = JObject.Parse(appJson)
+                                obj2("Settings")("Convenience_1") = True
+                                'obj2("Settings")("Convenience_2") = True
+                                If obj IsNot Nothing Then
+                                    Dim newFilePath As String = Application.StartupPath + "version\" + StartVer + "\Game\Data\" + InputUser.Text + "-Data.json" ' 本地保存的新文件路径
+                                    Try
+                                        File.Delete(Application.StartupPath + "version\" + StartVer + "\Game\Data\User-Data.json")
+                                    Catch ex As Exception
+                                        'AntdUI.Notification.error(Me, "登录失败", "删除占位用户失败：" + ex.Message,,, 0)
+                                        'Return 114
+                                    End Try
+                                    ' 将修改后的内容写入文件
+                                    File.WriteAllText(newFilePath, obj.ToString)
+                                    File.WriteAllText(Application.StartupPath + "version\" + StartVer + "\Game\Data\AppData.json", obj2.ToString)
+                                Else
+                                    AntdUI.Notification.error(Me, "登录失败", "下载文件失败",,, 0)
+                                    Return 114
+                                End If
+                            Else
+                                AntdUI.Notification.error(Me, "警告", "未找到密码字段",,, 0)
+                                Return 4
+                            End If
+                        End If
+                    Else
+                        AntdUI.Notification.warn(Me, "登录失败", "当前版本暂不支持HVKL内登录，已回退至Vacko内登录",,, 5)
+                    End If
+                End If
+            Catch ex As Exception
+                AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
+                Return 12
+            End Try
+
+        ElseIf Family = "StarLake" Then
             ' StarLake架构
             Try
                 ' 登录
@@ -112,6 +178,15 @@ Public Class MainForm
                         AntdUI.Notification.warn(Me, "登录失败", "当前版本暂不支持HVKL内登录，已回退至Vacko内登录",,, 5)
                     End If
                 End If
+                ' 写入 updater:hrd
+                Try
+                    Using writer As New StreamWriter(UpdaterFilePath, False)
+                        writer.WriteLine(UpdaterFileContent)
+                    End Using
+                Catch ex As Exception
+                    AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
+                    Return 1
+                End Try
             Catch ex As Exception
                 AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
                 Return 12
@@ -206,6 +281,15 @@ Public Class MainForm
                         AntdUI.Notification.warn(Me, "登录失败", "当前版本暂不支持HVKL内登录，已回退至Vacko内登录",,, 5)
                     End If
                 End If
+                ' 写入 updater:hrd
+                Try
+                    Using writer As New StreamWriter(UpdaterFilePath, False)
+                        writer.WriteLine(UpdaterFileContent)
+                    End Using
+                Catch ex As Exception
+                    AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
+                    Return 1
+                End Try
             Catch ex As Exception
                 AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
                 Return 12
@@ -215,20 +299,6 @@ Public Class MainForm
             AntdUI.Notification.error(Me, "错误", "未定义架构",,, 5)
             Return 1
         End If
-
-
-
-
-
-        ' 写入 updater:hrd
-        Try
-            Using writer As New StreamWriter(UpdaterFilePath, False)
-                writer.WriteLine(UpdaterFileContent)
-            End Using
-        Catch ex As Exception
-            AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
-            Return 1
-        End Try
 
         Dim appPath As String = Path.Combine(parentDirectory, SubDirectory, ExeName)
 
@@ -342,6 +412,7 @@ Public Class MainForm
             LastUsedLoginMethod = Nothing
             CustomDownloadUrl = DefaultDownloadUrl
             TotalStartTimes = 0
+            MusicPlayMode = 0
             SaveConfig(Me)
         Else
             Try
@@ -355,6 +426,7 @@ Public Class MainForm
                 LastUsedLoginMethod = Nothing
                 CustomDownloadUrl = DefaultDownloadUrl
                 TotalStartTimes = 0
+                MusicPlayMode = 0
                 SaveConfig(Me)
             End Try
 
@@ -362,8 +434,10 @@ Public Class MainForm
                 AntdUI.Message.info(Me, "已迁移旧版本HVKL数据")
                 CustomDownloadUrl = DefaultDownloadUrl
                 HVKLVersion = My.Resources.Resource1.Version
+                MusicPlayMode = 0
                 SaveConfig(Me)
             End If
+
             Try
                 Select1.SelectedIndex = LastStartVersion
                 Select2.SelectedIndex = LastStartVersion
@@ -497,18 +571,15 @@ Public Class MainForm
     End Sub
 
     Private Sub VersionListPanel_Click(sender As Object, e As EventArgs) Handles DownloadVersionPanel.Click, DownloadVersionLabel.Click, DownloadVersionImage.Click
-        VersionForm.ShowDialog()
-        VersionForm.Dispose()
+        VersionForm.Show()
     End Sub
 
     Private Sub ManageVersionImage3d_Click(sender As Object, e As EventArgs) Handles ManageVersionImage3d.Click, ManageVersionLabel.Click, ManageVersionPanel.Click
-        ManageForm.ShowDialog()
-        ManageForm.Dispose()
+        ManageForm.Show()
     End Sub
 
     Private Sub SettingImage3d_Click(sender As Object, e As EventArgs) Handles SettingImage3d.Click, SettingLabel.Click, MainSettingPanel.Click
-        SettingForm.ShowDialog()
-        SettingForm.Dispose()
+        SettingForm.Show()
     End Sub
 
     Private Sub Select1_Click(sender As Object, e As EventArgs) Handles Select1.Click
@@ -549,8 +620,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ToolsImage3d_Click(sender As Object, e As EventArgs) Handles ToolsImage3d.Click, LabelTools.Click, PanelTools.Click
-        ToolForm.ShowDialog()
-        ToolForm.Dispose()
+        ToolForm.Show()
     End Sub
 
     Private Sub Input1_TextChanged(sender As Object, e As EventArgs) Handles InputUser.TextChanged
@@ -601,8 +671,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Label3_Click(sender As Object, e As EventArgs) Handles Label3.Click
-        RegisterForm.ShowDialog()
-        RegisterForm.Dispose()
+        RegisterForm.Show()
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
@@ -673,7 +742,7 @@ Public Class MainForm
                                                                  config.OK("启动成功")
                                                              ElseIf returnVal = 8 Then
                                                                  If HorribleBanUI = True Then
-                                                                     BanForm.ShowDialog()
+                                                                     BanForm.Show()
                                                                  Else
                                                                      config.Error("登录失败")
                                                                      AntdUI.Modal.open(New AntdUI.Modal.Config(Me, "错误", "您的账户已被 LeBan 封禁" + vbCrLf +

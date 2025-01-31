@@ -125,7 +125,7 @@ Public Class RegisterForm
                                                   Try
                                                       If InputCode.Text = verifyCode Then
                                                           If Not (InputPwd.Text = "" Or ContainsSymbol(InputPwd.Text) Or InputUser.Text = "" Or InputUser.Text = "User" Or InputUser.Text = "nonelivaccno" Or InputPwd.Text = "nonelivpas") Then
-                                                              Dim websiteUrl = "http://vacko.cookie987.top:28987/VackoData/v1.2.7/PlayerData/"
+                                                              Dim websiteUrl = "http://vacko.cookie987.top:28987/VackoData/v1.3/PlayerData/"
                                                               Dim directoryNameToCheck = InputUser.Text.Trim
                                                               ' 创建 HttpClient 进行 HTTP 请求
                                                               Using httpClient As New HttpClient
@@ -139,16 +139,51 @@ Public Class RegisterForm
                                                                           config.Error("名称已被占用")
                                                                       Else
                                                                           Dim playerUid = "987987987"
-                                                                          Dim LatestUid = Await GetFileContentAsync(websiteUrl + "CreUid.txt")
+                                                                          Dim LatestUid = Await GetFileContentAsync("http://vacko.cookie987.top:28987/VackoData/v1.3/" + "CreUid.txt")
                                                                           Dim PlayerEmi = Await GetFileContentAsync(websiteUrl + "PlayerEmi.txt")
                                                                           Dim NameList = Await GetFileContentAsync(websiteUrl + "NameList.txt")
                                                                           playerUid = LatestUid
-                                                                          Dim vak2File = "livacc:" + PadWithNull(InputUser.Text, 12) + ";" +
-                                                                          "livpass:" + PadWithNull(InputPwd.Text, 10) + ";" +
-                                                                          "acclength:" + PadWithNull(InputUser.Text.Length, 3) + ";" +
-                                                                          "passlength:" + PadWithNull(InputPwd.Text.Length, 3) + ";" +
-                                                                          "rempasstimes:" + PadWithNull("none", 4) + ";" +
-                                                                          "playeruid:" + PadWithNull(playerUid.Trim, 9) + ";" + vbLf + "Created by HVKL" + HVKLVersion
+                                                                          Dim jsonFile = "
+                                                                            {
+                                                                            ""AccountInfo"": {
+                                                                                ""Password"": """",
+                                                                                ""PwdAttemptsLeft"": """",
+                                                                                ""Uid"": """",
+                                                                                ""User"": """"
+                                                                                }
+                                                                            }"
+                                                                          Dim jsonSettings = "
+                                                                            {
+                                                                              ""Settings"": {
+                                                                                ""Convenience_1"": false,
+                                                                                ""Convenience_2"": false,
+                                                                                ""Personalized_1_First"": ""0"",
+                                                                                ""Personalized_1_Second"": ""0"",
+                                                                                ""Personalized_1_SystemColor"": ""00"",
+                                                                                ""Personalized_2_Sys"": ""0"",
+                                                                                ""Personalized_2_Sysin"": ""0"",
+                                                                                ""Personalized_2_Pcs"": ""0""
+                                                                              },
+                                                                              ""MusicSettings"": {
+                                                                                ""Music_Cache_Number"": ""0000"",
+                                                                                ""Music_Cache_Time"": ""000"",
+                                                                                ""Music_Cache_Status"": ""0"",
+                                                                                ""Music_Cache_Speed"": ""1.0x"",
+                                                                                ""Volume"": 50,
+                                                                                ""PlayMode"": ""0"",
+                                                                                ""Like"": [
+
+                                                                                ],
+                                                                                ""Cache"": [
+
+                                                                                ]
+                                                                              }
+                                                                            }"
+                                                                          Dim obj As JObject = JObject.Parse(jsonFile)
+                                                                          obj("AccountInfo")("Password") = InputPwd.Text
+                                                                          obj("AccountInfo")("PwdAttemptsLeft") = 0
+                                                                          obj("AccountInfo")("Uid") = playerUid
+                                                                          obj("AccountInfo")("User") = InputUser.Text
                                                                           PlayerEmi += InputEmail.Text + vbLf
                                                                           NameList += InputUser.Text + ";" + vbLf
                                                                           Dim tempFilePath As String = Path.GetTempFileName()
@@ -156,11 +191,13 @@ Public Class RegisterForm
                                                                           Dim tempFilePath3 As String = Path.GetTempFileName()
                                                                           Dim tempFilePath4 As String = Path.GetTempFileName()
                                                                           Dim tempFilePath5 As String = Path.GetTempFileName()
-                                                                          File.WriteAllText(tempFilePath, vak2File)
+                                                                          Dim tempFilePath6 As String = Path.GetTempFileName()
+                                                                          File.WriteAllText(tempFilePath, obj.ToString)
                                                                           File.WriteAllText(tempFilePath2, Str(LatestUid + 1).Trim)
                                                                           File.WriteAllText(tempFilePath3, PlayerEmi)
                                                                           File.WriteAllText(tempFilePath4, NameList)
                                                                           File.WriteAllText(tempFilePath5, "")
+                                                                          File.WriteAllText(tempFilePath6, jsonSettings)
                                                                           ' 使用 SFTP 上传文件
                                                                           Using sftp As New SftpClient(remoteHost, remotePort, sftpUser, sftpPassword)
                                                                               Try
@@ -171,10 +208,10 @@ Public Class RegisterForm
                                                                                   End If
                                                                                   ' 打开临时文件进行上传
                                                                                   Using fileStream As New FileStream(tempFilePath, FileMode.Open)
-                                                                                      sftp.UploadFile(fileStream, remoteFilePath + InputUser.Text + "/localdata.vak2")
+                                                                                      sftp.UploadFile(fileStream, remoteFilePath + "/Player/" + InputUser.Text + "-Data.json")
                                                                                   End Using
                                                                                   Using fileStream As New FileStream(tempFilePath2, FileMode.Open)
-                                                                                      sftp.UploadFile(fileStream, remoteFilePath + "CreUid.txt")
+                                                                                      sftp.UploadFile(fileStream, remoteFilePath2 + "CreUid.txt")
                                                                                   End Using
                                                                                   Using fileStream As New FileStream(tempFilePath3, FileMode.Open)
                                                                                       sftp.UploadFile(fileStream, remoteFilePath + "PlayerEmi.txt")
@@ -184,6 +221,9 @@ Public Class RegisterForm
                                                                                   End Using
                                                                                   Using fileStream As New FileStream(tempFilePath5, FileMode.Open)
                                                                                       sftp.UploadFile(fileStream, remoteFilePath + "PlayerFriends/" + InputUser.Text + ".txt")
+                                                                                  End Using
+                                                                                  Using fileStream As New FileStream(tempFilePath6, FileMode.Open)
+                                                                                      sftp.UploadFile(fileStream, remoteFilePath + "/Settings/" + InputUser.Text + "-AppData.json")
                                                                                   End Using
                                                                                   ' 确保连接断开
                                                                                   If sftp.IsConnected Then

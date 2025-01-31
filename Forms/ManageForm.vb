@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿Imports System.ComponentModel
+Imports System.IO
 Imports System.IO.Compression
 Imports System.Threading
 Imports AntdUI
@@ -83,7 +84,7 @@ Public Class ManageForm
                 InputDirName.Text = Select2.SelectedValue
                 Label2.Text = "Vacko版本：" + VackoVersion + "（" + Family + "）"
                 Label3.Text = "上次启动：" + LastStartTime
-                If Family = "StarLake" Then
+                If Not Family = "MoonBridge" Then
                     Button5.Enabled = True
                 Else
                     Button5.Enabled = False
@@ -153,11 +154,11 @@ Public Class ManageForm
         Dim sourceDir = Application.StartupPath + "version\" + Select2.SelectedValue
 
         Message.loading(Me, "导出中", Sub(config)
-                                              ' 声明一个变量来存储用户选择的路径
-                                              Dim zipFilePath As String = Nothing
+                                       ' 声明一个变量来存储用户选择的路径
+                                       Dim zipFilePath As String = Nothing
 
-                                              ' 创建一个新线程并强制 STA 模式
-                                              Dim saveFileDialogThread As New Thread(
+                                       ' 创建一个新线程并强制 STA 模式
+                                       Dim saveFileDialogThread As New Thread(
                                                   Sub()
                                                       ' 初始化保存文件对话框
                                                       Dim saveFileDialog As New SaveFileDialog With {
@@ -171,27 +172,33 @@ Public Class ManageForm
                                                           zipFilePath = saveFileDialog.FileName
                                                       End If
                                                   End Sub)
-                                              saveFileDialogThread.SetApartmentState(ApartmentState.STA) ' 设置为 STA 模式
-                                              saveFileDialogThread.Start
-                                              saveFileDialogThread.Join ' 等待线程完成
+                                       saveFileDialogThread.SetApartmentState(ApartmentState.STA) ' 设置为 STA 模式
+                                       saveFileDialogThread.Start()
+                                       saveFileDialogThread.Join() ' 等待线程完成
 
-                                              ' 如果用户没有取消保存操作
-                                              If Not String.IsNullOrEmpty(zipFilePath) Then
-                                                  Try
-                                                      ' 压缩指定目录为 ZIP 文件
-                                                      ZipFile.CreateFromDirectory(sourceDir, zipFilePath)
-                                                      config.OK("整合包已成功导出到: " + zipFilePath)
-                                                  Catch ex As Exception
-                                                      ' 错误处理
-                                                      config.Error("导出失败: " + ex.Message)
-                                                  End Try
-                                              Else
-                                              End If
-                                          End Sub,, 2)
+                                       ' 如果用户没有取消保存操作
+                                       If Not String.IsNullOrEmpty(zipFilePath) Then
+                                           Try
+                                               ' 压缩指定目录为 ZIP 文件
+                                               ZipFile.CreateFromDirectory(sourceDir, zipFilePath)
+                                               config.OK("整合包已成功导出到: " + zipFilePath)
+                                           Catch ex As Exception
+                                               ' 错误处理
+                                               config.Error("导出失败: " + ex.Message)
+                                           End Try
+                                       Else
+                                       End If
+                                   End Sub,, 2)
     End Sub
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
-        MusicForm.ShowDialog(Me)
-        MusicForm.Dispose()
+        MusicForm.Show()
+    End Sub
+
+    Private Sub ManageForm_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        If Not MusicDownloadForm.IsDisposed AndAlso Not MusicForm.IsDisposed Then
+            MusicForm.Close()
+            MusicDownloadForm.Close()
+        End If
     End Sub
 End Class

@@ -1,7 +1,5 @@
-﻿Imports System.Net
-Imports System.Net.Http
+﻿Imports System.Net.Http
 Imports System.Text.RegularExpressions
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 
 Public Class ToolForm
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

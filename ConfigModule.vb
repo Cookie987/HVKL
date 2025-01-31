@@ -1,12 +1,11 @@
 ﻿Imports System.IO
-Imports System.Net
 Imports System.Net.Http
 Imports Newtonsoft.Json
 
 Module ConfigModule
     Public OriginalVersion
     Public OriginalDir
-    Public DefaultDownloadUrl = "https://mirror.ghproxy.com/https://raw.githubusercontent.com/Cookie987/Cookie987.github.io.assets/main/vacko2/version/Vacko"
+    Public DefaultDownloadUrl = "https://ghfast.top/https://raw.githubusercontent.com/Cookie987/Cookie987.github.io.assets/main/vacko2/version/Vacko"
 
     Public HVKLVersion
     Public DeveloperMode
@@ -18,6 +17,14 @@ Module ConfigModule
     Public LastUsedPassword
     Public TotalStartTimes
     Public CustomDownloadUrl
+
+    Public MusicPlayMode
+    Public MusicVolume
+    Public MusicMute
+    Public MusicCurrentMusicId
+    Public MusicCurrentMusicProgress
+    Public MusicFormTopMost
+
     Public ConfigFilePath = Application.StartupPath + "config.json"
 
     ' 定义配置类
@@ -35,6 +42,15 @@ Module ConfigModule
             Public Property LastUsedLoginMethod As String
             Public Property LastUsedUser As String
             Public Property LastUsedPassword As String
+        End Class
+        Public Property MusicOptions As Music
+        Public Class Music
+            Public Property PlayMode As Integer
+            Public Property Volume As Integer
+            Public Property Mute As Boolean
+            Public Property CurrentMusicId As Integer
+            Public Property CurrentMusicProgress As TimeSpan
+            Public Property FormTopMost As Boolean
         End Class
         Public Property LastStartVersion As String
         Public Property TotalStartTimes As Long
@@ -70,6 +86,12 @@ Module ConfigModule
             LastUsedPassword = configRead.HVKLLoginOptions.LastUsedPassword
             TotalStartTimes = configRead.TotalStartTimes
             CustomDownloadUrl = configRead.CustomDownloadUrl
+            MusicPlayMode = configRead.MusicOptions.PlayMode
+            MusicVolume = configRead.MusicOptions.Volume
+            MusicMute = configRead.MusicOptions.Mute
+            MusicCurrentMusicId = configRead.MusicOptions.CurrentMusicId
+            MusicCurrentMusicProgress = configRead.MusicOptions.CurrentMusicProgress
+            MusicFormTopMost = configRead.MusicOptions.FormTopMost
         Catch ex As Exception
             AntdUI.Notification.error(form, "读取配置文件错误", ex.Message,,, 0)
             Return 1
@@ -91,6 +113,14 @@ Module ConfigModule
                     .LastUsedLoginMethod = LastUsedLoginMethod,
                     .LastUsedUser = LastUsedUser,
                     .LastUsedPassword = LastUsedPassword
+                },
+                .MusicOptions = New Config.Music With {
+                    .PlayMode = MusicPlayMode,
+                    .CurrentMusicId = MusicCurrentMusicId,
+                    .CurrentMusicProgress = MusicCurrentMusicProgress,
+                    .Mute = MusicMute,
+                    .Volume = MusicVolume,
+                    .FormTopMost = MusicFormTopMost
                 },
                 .TotalStartTimes = TotalStartTimes
                 }

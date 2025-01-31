@@ -408,7 +408,7 @@ Partial Class MainForm
         ' Timer1
         ' 
         Timer1.Enabled = True
-        Timer1.Interval = 1
+        Timer1.Interval = 1000
         ' 
         ' PageHeader1
         ' 

@@ -44,7 +44,7 @@ Partial Class VersionForm
         Select1.Location = New Point(38, 30)
         Select1.Name = "Select1"
         Select1.Size = New Size(324, 34)
-        Select1.TabIndex = 3
+        Select1.TabIndex = 1
         ' 
         ' Progress1
         ' 
