@@ -60,7 +60,7 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 
 [Code]
 const
-  RequiredDotNetVersion = 'Microsoft.NETCore.App 9.0.0';
+  RequiredDotNetVersion = 'Microsoft.NETCore.App 8.';
   
 function IsDotNetInstalled(DotNetName: string): Boolean;
 var
@@ -109,11 +109,11 @@ begin
   // 检查 .NET Core 是否安装
   if not IsDotNetInstalled('Microsoft.NETCore.App 9.') then
   begin
-    if MsgBox('本程序需要的 .NET Runtime 9.0 没有安装. 你要现在下载吗?', mbInformation, MB_YESNO) = IDYES then
+    if MsgBox('本程序需要的 .NET Runtime 8.0 没有安装. 你要现在下载吗?', mbInformation, MB_YESNO) = IDYES then
     begin
-      if not ShellExec('Open', 'https://dotnet.microsoft.com/zh-cn/download/dotnet/9.0', '', '', SW_SHOWNORMAL, ewNoWait, Error) then
+      if not ShellExec('Open', 'https://dotnet.microsoft.com/zh-cn/download/dotnet/8.0', '', '', SW_SHOWNORMAL, ewNoWait, Error) then
       begin
-        MsgBox('无法打开 .NET Runtime 9.0 下载页面，请手动下载。', mbError, MB_OK);
+        MsgBox('无法打开 .NET Runtime 8.0 下载页面，请手动下载。', mbError, MB_OK);
       end;
     end;
     Abort; // 终止安装
