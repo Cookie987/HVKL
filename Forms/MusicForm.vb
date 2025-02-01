@@ -690,7 +690,7 @@ Public Class MusicForm
 
     Private Sub BtnNext_Click(sender As Object, e As EventArgs) Handles BtnNext.Click
         ' 播放下一首歌曲
-        If currentSelectItem IsNot Nothing AndAlso currentSelectItem.ID <= Tree1.Items.LongCount Then
+        If currentSelectItem IsNot Nothing AndAlso currentSelectItem.ID <= Tree1.Items.Count Then
             Try
                 Tree1.SelectItem = Tree1.Items(currentSelectItem.ID)
                 PlayMusic(True)
