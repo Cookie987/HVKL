@@ -25,7 +25,7 @@ Module ConfigModule
     Public MusicCurrentMusicProgress
     Public MusicFormTopMost
 
-    Public ConfigFilePath = Application.StartupPath + "config.json"
+    Public ConfigFilePath = Application.StartupPath + "\config.json"
 
     ' 定义配置类
     Public Class Config

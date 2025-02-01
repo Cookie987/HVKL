@@ -9,6 +9,7 @@ Imports Newtonsoft.Json.Linq
 Public Class MainForm
     Dim mutex As Mutex
     Private overlay As OverlayWindow ' 覆盖层窗体
+    Dim Starting As Boolean = True
     Private Async Function StartGame(StartVer As String) As Task(Of Integer)
         ' 定义父目录路径
         If StartVer = "" Then
@@ -53,9 +54,9 @@ Public Class MainForm
                                 AntdUI.Message.success(Me, "登录成功",, 2)
                                 Dim PwdAttemptsLeftValue As Integer = obj("AccountInfo")("PwdAttemptsLeft").Value(Of Integer)()
                                 If PwdAttemptsLeftValue > 1 Then
-                                    obj("AccountInfo")("PwdAttemptsLeft") = PwdAttemptsLeftValue + 1
+                                    obj("AccountInfo")("PwdAttemptsLeft") = (PwdAttemptsLeftValue + 1).ToString
                                 Else
-                                    obj("AccountInfo")("PwdAttemptsLeft") = 1
+                                    obj("AccountInfo")("PwdAttemptsLeft") = "1"
                                 End If
                                 Dim appJson = File.ReadAllText(Application.StartupPath + "version\" + StartVer + "\Game\Data\AppData.json")
                                 Dim obj2 As JObject = JObject.Parse(appJson)
@@ -398,12 +399,10 @@ Public Class MainForm
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         AntdUI.Config.ShowInWindow = True
-        RefreshVersion()
-        PageHeader1.Text += " v" + My.Resources.Resource1.Version
-
         Dim FileExists As Boolean
         FileExists = My.Computer.FileSystem.FileExists(ConfigFilePath)
-
+        RefreshVersion()
+        PageHeader1.Text += " v" + My.Resources.Resource1.Version
         If FileExists = False Then
             HVKLVersion = My.Resources.Resource1.Version
             DeveloperMode = False
@@ -493,6 +492,7 @@ Public Class MainForm
             .Visible = False,
             .Bounds = Me.Bounds ' 确保覆盖主窗口
         }
+        Starting = False
     End Sub
 
     Private Sub MainWindow_Move(sender As Object, e As EventArgs) Handles Me.Move
@@ -626,7 +626,9 @@ Public Class MainForm
     Private Sub Input1_TextChanged(sender As Object, e As EventArgs) Handles InputUser.TextChanged
         GetConfig(Me)
         LastUsedUser = InputUser.Text
-        SaveConfig(Me)
+        If Not Starting Then
+            SaveConfig(Me)
+        End If
     End Sub
 
     Private Sub Checkbox1_CheckedChanged() Handles Checkbox1.CheckedChanged
@@ -636,14 +638,18 @@ Public Class MainForm
         Else
             LastUsedPassword = ""
         End If
-        SaveConfig(Me)
+        If Not Starting Then
+            SaveConfig(Me)
+        End If
     End Sub
 
     Private Sub InputPwd_TextChanged(sender As Object, e As EventArgs) Handles InputPwd.TextChanged
         GetConfig(Me)
         If Checkbox1.Checked Then
             LastUsedPassword = InputPwd.Text
-            SaveConfig(Me)
+            If Not Starting Then
+                SaveConfig(Me)
+            End If
         Else
             LastUsedPassword = ""
         End If
@@ -659,7 +665,10 @@ Public Class MainForm
             LastUsedLoginMethod = "Vacko"
             Panel2.Visible = False
         End If
-        SaveConfig(Me)
+        If Not Starting Then
+            SaveConfig(Me)
+        End If
+
     End Sub
 
     Private Sub RadioVackoLogin_CheckedChanged() Handles RadioVackoLogin.CheckedChanged
@@ -763,5 +772,9 @@ Public Class MainForm
                End Select
            End Sub)
         FloatButton.open(buttons)
+
+        If LastUsedLoginMethod = "HVKL" Then
+            RadioHVKLLogin.Checked = True
+        End If
     End Sub
 End Class

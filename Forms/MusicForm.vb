@@ -434,6 +434,12 @@ Public Class MusicForm
     Private Sub MusicForm_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Timer1.Stop()
         vlcMediaPlayer.Stop()
+        If Not ManageForm.IsDisposed Then
+            ManageForm.Button5.Enabled = False
+        End If
+        If Not MusicDownloadForm.IsDisposed Then
+            MusicDownloadForm.Dispose()
+        End If
     End Sub
 
     Private Sub LoadLyricsFromMp3(mp3FilePath As String)

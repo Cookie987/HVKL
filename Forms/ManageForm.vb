@@ -5,6 +5,8 @@ Imports System.Threading
 Imports AntdUI
 
 Public Class ManageForm
+    Public selectedVersion
+
     Private Sub SetRefreshVersion()
         Select1.SelectedValue = ""
         Select2.SelectedValue = ""
@@ -89,13 +91,13 @@ Public Class ManageForm
                 Else
                     Button5.Enabled = False
                 End If
-
-
             Catch ex As Exception
                 AntdUI.Notification.error(Me, "读取版本配置文件错误", ex.Message,,, 0)
             End Try
         End If
-
+        If Not MusicForm.IsDisposed Then
+            Button5.Enabled = False
+        End If
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
@@ -192,13 +194,11 @@ Public Class ManageForm
     End Sub
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        selectedVersion = Select2.SelectedValue
         MusicForm.Show()
+        Button5.Enabled = False
     End Sub
 
     Private Sub ManageForm_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-        If Not MusicDownloadForm.IsDisposed AndAlso Not MusicForm.IsDisposed Then
-            MusicForm.Close()
-            MusicDownloadForm.Close()
-        End If
     End Sub
 End Class

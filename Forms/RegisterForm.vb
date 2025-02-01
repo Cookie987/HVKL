@@ -181,7 +181,7 @@ Public Class RegisterForm
                                                                             }"
                                                                           Dim obj As JObject = JObject.Parse(jsonFile)
                                                                           obj("AccountInfo")("Password") = InputPwd.Text
-                                                                          obj("AccountInfo")("PwdAttemptsLeft") = 0
+                                                                          obj("AccountInfo")("PwdAttemptsLeft") = Nothing
                                                                           obj("AccountInfo")("Uid") = playerUid
                                                                           obj("AccountInfo")("User") = InputUser.Text
                                                                           PlayerEmi += InputEmail.Text + vbLf
