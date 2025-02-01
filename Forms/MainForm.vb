@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.IO.Compression
+Imports System.Net
 Imports System.Net.Http
 Imports System.Threading
 Imports AntdUI
@@ -87,6 +88,10 @@ Public Class MainForm
                     End If
                 End If
             Catch ex As Exception
+                If ex.HResult = -2146233088 Then
+                    AntdUI.Notification.error(Me, "登录失败", "用户不存在",,, 0)
+                    Return 2
+                End If
                 AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
                 Return 12
             End Try
@@ -189,6 +194,10 @@ Public Class MainForm
                     Return 1
                 End Try
             Catch ex As Exception
+                If ex.HResult = -2146233088 Then
+                    AntdUI.Notification.error(Me, "登录失败", "用户不存在",,, 0)
+                    Return 2
+                End If
                 AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
                 Return 12
             End Try
@@ -203,10 +212,16 @@ Public Class MainForm
                             Return 1
                         Else
                             Dim remoteUrl As String = "http://vacko.cookie987.top:28987/VackoData/v1.2.7/PlayerData/" + LastUsedUser + "/localdata.vak2"
-
-                            ' 获取远程文件中的键值对
-                            Dim credentials As Dictionary(Of String, String) = Await GetRemoteCredentials(remoteUrl)
-
+                            Dim credentials As Dictionary(Of String, String)
+                            Try
+                                ' 获取远程文件中的键值对
+                                credentials = Await GetRemoteCredentials(remoteUrl)
+                            Catch ex As Exception
+                                If ex.HResult = -2146233088 Then
+                                    AntdUI.Notification.error(Me, "登录失败", "用户不存在",,, 0)
+                                    Return 2
+                                End If
+                            End Try
                             Dim value As String = Nothing
 
                             If credentials IsNot Nothing AndAlso credentials.TryGetValue("livpass", value) Then
@@ -274,7 +289,7 @@ Public Class MainForm
                                     Return 3
                                 End If
                             Else
-                                AntdUI.Notification.error(Me, "警告", "未找到密码字段",,, 0)
+                                AntdUI.Notification.error(Me, "登录失败", "未找到密码字段",,, 0)
                                 Return 4
                             End If
                         End If
@@ -292,6 +307,10 @@ Public Class MainForm
                     Return 1
                 End Try
             Catch ex As Exception
+                If ex.HResult = -2146233088 Then
+                    AntdUI.Notification.error(Me, "登录失败", "用户不存在",,, 0)
+                    Return 2
+                End If
                 AntdUI.Notification.error(Me, "启动错误 ", ex.Message,,, 0)
                 Return 12
             End Try
