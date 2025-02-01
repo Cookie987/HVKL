@@ -221,9 +221,9 @@ Public Class MainForm
                                     AntdUI.Notification.error(Me, "登录失败", "用户不存在",,, 0)
                                     Return 2
                                 End If
+                                credentials = Nothing
                             End Try
                             Dim value As String = Nothing
-
                             If credentials IsNot Nothing AndAlso credentials.TryGetValue("livpass", value) Then
                                 Dim storedPassword As String = value.Replace(Chr(0), "").Trim()
 
