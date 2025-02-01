@@ -95,7 +95,7 @@ Public Class MusicDownloadForm
                         Dim href = HttpUtility.UrlDecode(node.GetAttributeValue("href", ""))
 
                         ' Check if it's a folder
-                        If href.EndsWith("/") AndAlso Not href.Equals("../") Then
+                        If href.EndsWith("/"c) AndAlso Not href.Equals("../") Then
                             Dim subFolderUrl = baseUrl & href
                             Dim subFolderName = href.TrimEnd("/")
 
@@ -132,7 +132,7 @@ Public Class MusicDownloadForm
                         Dim href = HttpUtility.UrlDecode(node.GetAttributeValue("href", ""))
 
                         ' Exclude parent directory link and subfolders
-                        If Not (href.Equals("../") OrElse href.EndsWith("/")) Then
+                        If Not (href.Equals("../") OrElse href.EndsWith("/"c)) Then
                             fileList.Add(href)
                         End If
                     Next

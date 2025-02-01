@@ -275,7 +275,7 @@ Public Class RegisterForm
         For Each line As String In lines
             If line.Contains("href=") AndAlso line.Contains("/"c) Then
                 Dim startIndex As Integer = line.IndexOf("href=") + 6
-                Dim endIndex As Integer = line.IndexOf("/", startIndex)
+                Dim endIndex As Integer = line.IndexOf("/"c, startIndex)
                 Dim directoryName As String = line.Substring(startIndex, endIndex - startIndex)
                 directories.Add(directoryName)
             End If

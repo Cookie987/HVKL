@@ -565,7 +565,7 @@ Public Class MusicForm
         ' 防止递归调用
         If isProcessing Then Exit Sub
         isProcessing = True
-        vlcMediaPlayer.Media = New Media(libVLC, fullPath, FromType.FromPath)
+        vlcMediaPlayer.Media = New Media(libVLC, fullPath, FromType.FromPath, Array.Empty(Of String))
         If autoPlay Then
             vlcMediaPlayer.Play()
         Else
