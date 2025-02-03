@@ -1,10 +1,8 @@
 ﻿Imports System.IO
 Imports System.IO.Compression
-Imports System.Net
 Imports System.Net.Http
 Imports System.Threading
 Imports AntdUI
-Imports AntdUI.Svg
 Imports Newtonsoft.Json.Linq
 
 Public Class MainForm
@@ -53,7 +51,10 @@ Public Class MainForm
                                     Return 8
                                 End If
                                 AntdUI.Message.success(Me, "登录成功",, 2)
-                                Dim PwdAttemptsLeftValue As Integer = obj("AccountInfo")("PwdAttemptsLeft").Value(Of Integer)()
+                                Dim PwdAttemptsLeftValue As String = obj("AccountInfo")("PwdAttemptsLeft").Value(Of String)()
+                                If PwdAttemptsLeftValue = "none" Then
+                                    PwdAttemptsLeftValue = 1
+                                End If
                                 If PwdAttemptsLeftValue > 1 Then
                                     obj("AccountInfo")("PwdAttemptsLeft") = (PwdAttemptsLeftValue + 1).ToString
                                 Else

@@ -5,7 +5,6 @@ Imports System.Threading
 Imports AntdUI
 
 Public Class ManageForm
-    Public selectedVersion
 
     Private Sub SetRefreshVersion()
         Select1.SelectedValue = ""
@@ -95,7 +94,7 @@ Public Class ManageForm
                 AntdUI.Notification.error(Me, "读取版本配置文件错误", ex.Message,,, 0)
             End Try
         End If
-        If Not MusicForm.IsDisposed Then
+        If MusicForm.Created Then
             Button5.Enabled = False
         End If
     End Sub

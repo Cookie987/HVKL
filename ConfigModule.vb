@@ -26,6 +26,7 @@ Module ConfigModule
     Public MusicFormTopMost
 
     Public ConfigFilePath = Application.StartupPath + "\config.json"
+    Public selectedVersion
 
     ' 定义配置类
     Public Class Config

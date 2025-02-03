@@ -332,11 +332,9 @@ Partial Class MusicForm
         ' 
         ' Timer2
         ' 
-        Timer2.Enabled = True
         ' 
         ' Timer3
         ' 
-        Timer3.Enabled = True
         Timer3.Interval = 1000
         ' 
         ' MusicForm

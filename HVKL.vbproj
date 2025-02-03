@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <StartupObject>HVKL.My.MyApplication</StartupObject>
+	<TargetFramework>net8.0-windows</TargetFramework>
+	<StartupObject>HVKL.My.MyApplication</StartupObject>
     <UseWindowsForms>true</UseWindowsForms>
     <MyType>WindowsForms</MyType>
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
@@ -17,6 +17,7 @@
     <PackageProjectUrl>https://cookie987.top</PackageProjectUrl>
     <PackageIcon>a2a7641a26b367608c6ef28ce9b7e983.png</PackageIcon>
     <ApplicationIcon>favicon (1).ico</ApplicationIcon>
+	<TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
   </PropertyGroup>
 
   <ItemGroup>

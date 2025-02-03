@@ -8,6 +8,7 @@ Public Class MusicDownloadForm
         ' Initialize server and local file lists
         LoadServerFiles()
         LoadLocalFiles()
+        PageHeader1.Text += " - 当前管理版本：" + selectedVersion
     End Sub
 
     Private Async Sub LoadServerFiles()
@@ -147,7 +148,7 @@ Public Class MusicDownloadForm
 
     Private Sub LoadLocalFiles()
         ' Fetch files from the local folder
-        Dim localFiles = Directory.GetFiles(Application.StartupPath + "version\" + ManageForm.Select2.SelectedValue + "\Config\Cache")
+        Dim localFiles = Directory.GetFiles(Application.StartupPath + "version\" + selectedVersion + "\Config\Cache")
 
         For Each file In localFiles
             Dim item As New ListViewItem(Path.GetFileName(file)) With {
@@ -164,7 +165,7 @@ Public Class MusicDownloadForm
                 Dim fileName = item.Text
                 Dim folderName = item.SubItems(1).Text
                 Dim serverPath = $"http://vacko.cookie987.top:28987/HVKLData/v1/Music/{folderName}/{fileName}"
-                Dim localPath = Application.StartupPath + "version\" + ManageForm.Select2.SelectedValue + "\Config\Cache\" + "（" + folderName + "）" + fileName
+                Dim localPath = Application.StartupPath + "version\" + selectedVersion + "\Config\Cache\" + "（" + folderName + "）" + fileName
 
                 Try
                     Directory.CreateDirectory(Path.GetDirectoryName(localPath))
@@ -191,7 +192,7 @@ Public Class MusicDownloadForm
         For Each item As ListViewItem In lvLocalFiles.Items
             If item.Checked Then
                 Dim fileName = item.Text
-                Dim localPath = Path.Combine(Application.StartupPath + "version\" + ManageForm.Select2.SelectedValue + "\Config\Cache\", fileName)
+                Dim localPath = Path.Combine(Application.StartupPath + "version\" + selectedVersion + "\Config\Cache\", fileName)
 
                 Try
                     If File.Exists(localPath) Then

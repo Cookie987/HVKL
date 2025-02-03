@@ -14,7 +14,7 @@ Public Class RegisterForm
         If IsValidEmail(email) Then
             Timer1.Enabled = True
             AntdUI.Message.loading(Me, "检查中", Async Sub(config)
-                                                  Dim url As String = "http://vacko.cookie987.top:28987/VackoData/v1.2.7/PlayerData/PlayerEmi.txt"
+                                                  Dim url As String = "http://vacko.cookie987.top:28987/VackoData/v1.3/PlayerData/PlayerEmi.txt"
                                                   Dim searchString As String = email
                                                   Try
                                                       Dim fileContent As String = Await GetFileContentAsync(url)
@@ -124,18 +124,14 @@ Public Class RegisterForm
             AntdUI.Message.loading(Me, "注册中", Async Sub(config)
                                                   Try
                                                       If InputCode.Text = verifyCode Then
-                                                          If Not (InputPwd.Text = "" Or ContainsSymbol(InputPwd.Text) Or InputUser.Text = "" Or InputUser.Text = "User" Or InputUser.Text = "nonelivaccno" Or InputPwd.Text = "nonelivpas") Then
+                                                          If Not (InputPwd.Text = "" Or ContainsSymbol(InputPwd.Text) Or InputUser.Text = "" Or InputUser.Text = "User" Or ContainsSymbol(InputUser.Text)) Then
                                                               Dim websiteUrl = "http://vacko.cookie987.top:28987/VackoData/v1.3/PlayerData/"
-                                                              Dim directoryNameToCheck = InputUser.Text.Trim
                                                               ' 创建 HttpClient 进行 HTTP 请求
                                                               Using httpClient As New HttpClient
                                                                   Try
-                                                                      ' 异步下载目录列表为字符串
-                                                                      Dim directoryListing = Await httpClient.GetStringAsync(websiteUrl)
-                                                                      ' 提取目录名称（假设列表为简单的 HTML 格式）
-                                                                      Dim directories = ExtractDirectories(directoryListing)
-                                                                      ' 检查目录名称是否存在
-                                                                      If directories.Contains(directoryNameToCheck) Then
+                                                                      Dim remoteNameList = Await GetFileContentAsync("http://vacko.cookie987.top:28987/VackoData/v1.3/" + "/PlayerData/NameList.txt")
+                                                                      ' 检查名称是否存在
+                                                                      If remoteNameList.Contains(InputUser.Text.Trim) Then
                                                                           config.Error("名称已被占用")
                                                                       Else
                                                                           Dim playerUid = "987987987"
@@ -143,46 +139,46 @@ Public Class RegisterForm
                                                                           Dim PlayerEmi = Await GetFileContentAsync(websiteUrl + "PlayerEmi.txt")
                                                                           Dim NameList = Await GetFileContentAsync(websiteUrl + "NameList.txt")
                                                                           playerUid = LatestUid
-                                                                          Dim jsonFile = "
-                                                                            {
-                                                                            ""AccountInfo"": {
-                                                                                ""Password"": """",
-                                                                                ""PwdAttemptsLeft"": """",
-                                                                                ""Uid"": """",
-                                                                                ""User"": """"
-                                                                                }
-                                                                            }"
-                                                                          Dim jsonSettings = "
-                                                                            {
-                                                                              ""Settings"": {
-                                                                                ""Convenience_1"": false,
-                                                                                ""Convenience_2"": false,
-                                                                                ""Personalized_1_First"": ""0"",
-                                                                                ""Personalized_1_Second"": ""0"",
-                                                                                ""Personalized_1_SystemColor"": ""00"",
-                                                                                ""Personalized_2_Sys"": ""0"",
-                                                                                ""Personalized_2_Sysin"": ""0"",
-                                                                                ""Personalized_2_Pcs"": ""0""
-                                                                              },
-                                                                              ""MusicSettings"": {
-                                                                                ""Music_Cache_Number"": ""0000"",
-                                                                                ""Music_Cache_Time"": ""000"",
-                                                                                ""Music_Cache_Status"": ""0"",
-                                                                                ""Music_Cache_Speed"": ""1.0x"",
-                                                                                ""Volume"": 50,
-                                                                                ""PlayMode"": ""0"",
-                                                                                ""Like"": [
+                                                                          Dim jsonFile = <string>
+{
+    "AccountInfo": {
+        "Password": "",
+        "PwdAttemptsLeft": "",
+        "Uid": "",
+        "User": ""
+    }
+}</string>.Value
+                                                                          Dim jsonSettings = <string>
+{
+    "Settings": {
+        "Convenience_1": false,
+        "Convenience_2": false,
+        "Personalized_1_First": "0",
+        "Personalized_1_Second": "0",
+        "Personalized_1_SystemColor": "00",
+        "Personalized_2_Sys": "0",
+        "Personalized_2_Sysin": "0",
+        "Personalized_2_Pcs": "0"
+    },
+    "MusicSettings": {
+        "Music_Cache_Number": "0000",
+        "Music_Cache_Time": "000",
+        "Music_Cache_Status": "0",
+        "Music_Cache_Speed": "1.0x",
+        "Volume": 50,
+        "PlayMode": "0",
+        "Like": [
 
-                                                                                ],
-                                                                                ""Cache"": [
+        ],
+        "Cache": [
 
-                                                                                ]
-                                                                              }
-                                                                            }"
+        ]
+    }
+}</string>.Value
                                                                           Dim obj As JObject = JObject.Parse(jsonFile)
                                                                           obj("AccountInfo")("Password") = InputPwd.Text
-                                                                          obj("AccountInfo")("PwdAttemptsLeft") = Nothing
-                                                                          obj("AccountInfo")("Uid") = playerUid
+                                                                          obj("AccountInfo")("PwdAttemptsLeft") = "none"
+                                                                          obj("AccountInfo")("Uid") = Replace(playerUid, vbLf, Nothing)
                                                                           obj("AccountInfo")("User") = InputUser.Text
                                                                           PlayerEmi += InputEmail.Text + vbLf
                                                                           NameList += InputUser.Text + ";" + vbLf
@@ -203,9 +199,6 @@ Public Class RegisterForm
                                                                               Try
                                                                                   ' 连接到远程服务器
                                                                                   sftp.Connect()
-                                                                                  If Not sftp.Exists(remoteFilePath + InputUser.Text) Then
-                                                                                      CreateRemoteDirectory(sftp, remoteFilePath + InputUser.Text)
-                                                                                  End If
                                                                                   ' 打开临时文件进行上传
                                                                                   Using fileStream As New FileStream(tempFilePath, FileMode.Open)
                                                                                       sftp.UploadFile(fileStream, remoteFilePath + "/Player/" + InputUser.Text + "-Data.json")
@@ -320,8 +313,8 @@ Public Class RegisterForm
     End Sub
 
     Private Function ContainsSymbol(input As String) As Boolean
-        ' 定义一个正则表达式，匹配非字母和数字的字符
-        Dim pattern As String = "[^\w]"
+        ' 定义一个正则表达式，匹配json中需要转义的字符
+        Dim pattern As String = "[\\\""\b\f\n\r\t]"
         Return Regex.IsMatch(input, pattern)
     End Function
 End Class

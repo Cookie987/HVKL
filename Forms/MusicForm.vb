@@ -4,12 +4,9 @@ Imports System.Text.RegularExpressions
 Imports System.Net.Http
 Imports LibVLCSharp.Shared
 Imports AntdUI
-Imports Microsoft.Web.WebView2.Core
 Imports Microsoft.Win32
-Imports Newtonsoft.Json
 Imports Newtonsoft.Json.Linq
-Imports System.Net
-Imports System.Security.Policy
+Imports Windows.Media
 
 Public Class MusicForm
     Private isProcessing As Boolean = False
@@ -26,6 +23,8 @@ Public Class MusicForm
     ' 定义一个标志变量，用来判断是否是手动拖动
     Private isDragging As Boolean = False
     Dim vlcMediaList As MediaList
+
+    Private smtc As SystemMediaTransportControls
 
     Dim defaultHtml = "
             <!DOCTYPE html>
@@ -134,9 +133,17 @@ Public Class MusicForm
     End Sub
 
     Private Sub MusicForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Timer3.Enabled = False
+        PageHeader1.Text += " - 当前管理版本：" + selectedVersion
+
         Core.Initialize()
         libVLC = New LibVLC("--verbose=2")
+
+        smtc = SystemMediaTransportControls.GetForCurrentView()
+        smtc.IsEnabled = True
+        smtc.IsPlayEnabled = True
+        smtc.IsPauseEnabled = True
+        smtc.IsNextEnabled = True
+        smtc.IsPreviousEnabled = True
 
         vlcMediaPlayer = New MediaPlayer(libVLC)
 
@@ -145,7 +152,7 @@ Public Class MusicForm
         WebView21.Source = New Uri("data:text/html," & Uri.EscapeDataString(defaultHtml))
         WebView21.DefaultBackgroundColor = Color.White
         VideoView1.MediaPlayer = vlcMediaPlayer
-        Dim filePath = Application.StartupPath + "version\" + ManageForm.Select2.SelectedValue + "\Game\Data\AppData.json"
+        Dim filePath = Application.StartupPath + "version\" + selectedVersion + "\Game\Data\AppData.json"
         Try
             Dim likeSongs As String() = GetLikeArray("path_to_your_file.json")
 
@@ -158,7 +165,7 @@ Public Class MusicForm
         End Try
 
         Try
-            LoadMp3Files(Application.StartupPath + "version\" + ManageForm.Select2.SelectedValue + "\Config\Cache")
+            LoadMp3Files(Application.StartupPath + "version\" + selectedVersion + "\Config\Cache")
         Catch ex As Exception
             AntdUI.Message.error(Me, "无法加载歌曲：" + ex.Message,, 2)
         End Try
@@ -218,6 +225,7 @@ Public Class MusicForm
         End If
         SelectSpeed.SelectedIndex = 1
         Timer3.Enabled = True
+        Timer2.Enabled = True
     End Sub
 
     Shared Function GetLikeArray(filePath As String) As String()
@@ -434,8 +442,8 @@ Public Class MusicForm
     Private Sub MusicForm_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Timer1.Stop()
         vlcMediaPlayer.Stop()
-        If Not ManageForm.IsDisposed Then
-            ManageForm.Button5.Enabled = False
+        If ManageForm.Created Then
+            ManageForm.Button5.Enabled = True
         End If
         If Not MusicDownloadForm.IsDisposed Then
             MusicDownloadForm.Dispose()
@@ -519,7 +527,7 @@ Public Class MusicForm
         Tree1.Items.Clear()
 
         Try
-            LoadMp3Files(Application.StartupPath + "version\" + ManageForm.Select2.SelectedValue + "\Config\Cache")
+            LoadMp3Files(Application.StartupPath + "version\" + selectedVersion + "\Config\Cache")
         Catch ex As Exception
             AntdUI.Message.error(Me, "无法加载歌曲：" + ex.Message,, 2)
         End Try
@@ -542,7 +550,7 @@ Public Class MusicForm
         ' 加载歌词和封面
         currentSelectItem = Tree1.SelectItem
         Dim fullPath = mp3Files(Tree1.SelectItem.ID - 1)
-        Dim lrcFilePath = Application.StartupPath + "version\" + ManageForm.Select2.SelectedValue + "\Config\Cache\" + Tree1.SelectItem.ToString + ".lrc"
+        Dim lrcFilePath = Application.StartupPath + "version\" + selectedVersion + "\Config\Cache\" + Tree1.SelectItem.ToString + ".lrc"
         lrcDictionary.Clear()
 
         If File.Exists(lrcFilePath) Then
@@ -561,6 +569,9 @@ Public Class MusicForm
         ' 启动定时器同步歌词
         Timer1.Interval = 1
         Timer1.Start()
+        UpdateSMTCDisplay(vlcMediaPlayer.Media.Meta(MetadataType.Title),
+                          vlcMediaPlayer.Media.Meta(MetadataType.Artist),
+                            Image3d1.Image)
 
         ' 防止递归调用
         If isProcessing Then Exit Sub
@@ -777,5 +788,31 @@ Public Class MusicForm
         Catch ex As Exception
             AntdUI.Message.error(Me, "无法设置播放速度：" + ex.Message,, 2)
         End Try
+    End Sub
+
+    ' 处理 SMTC 按钮事件
+    Private Sub Smtc_ButtonPressed(sender As SystemMediaTransportControls, args As SystemMediaTransportControlsButtonPressedEventArgs)
+        Select Case args.Button
+            Case SystemMediaTransportControlsButton.Play
+                ' 播放媒体
+                BtnPlayPause_Click(Nothing, Nothing)
+            Case SystemMediaTransportControlsButton.Pause
+                ' 暂停媒体
+                BtnPlayPause_Click(Nothing, Nothing)
+            Case SystemMediaTransportControlsButton.Next
+                ' 处理下一首逻辑
+                BtnNext_Click(Nothing, Nothing)
+            Case SystemMediaTransportControlsButton.Previous
+                BtnPrevious_Click(Nothing, Nothing)
+        End Select
+    End Sub
+
+    Private Sub UpdateSMTCDisplay(title As String, artist As String, thumbnail As Object)
+        Dim updater = smtc.DisplayUpdater
+        updater.Type = Windows.Media.MediaPlaybackType.Music
+        updater.MusicProperties.Title = title
+        updater.MusicProperties.Artist = artist
+        updater.Thumbnail = thumbnail
+        updater.Update()
     End Sub
 End Class
