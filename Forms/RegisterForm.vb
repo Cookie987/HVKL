@@ -14,7 +14,7 @@ Public Class RegisterForm
         If IsValidEmail(email) Then
             Timer1.Enabled = True
             AntdUI.Message.loading(Me, "检查中", Async Sub(config)
-                                                  Dim url As String = "http://vacko.cookie987.top:28987/VackoData/v1.3/PlayerData/PlayerEmi.txt"
+                                                  Dim url As String = "http://" + remoteHost + ":" + remotePort + "/VackoData/v1.3/PlayerData/PlayerEmi.txt"
                                                   Dim searchString As String = email
                                                   Try
                                                       Dim fileContent As String = Await GetFileContentAsync(url)
@@ -125,17 +125,17 @@ Public Class RegisterForm
                                                   Try
                                                       If InputCode.Text = verifyCode Then
                                                           If Not (InputPwd.Text = "" Or ContainsSymbol(InputPwd.Text) Or InputUser.Text = "" Or InputUser.Text = "User" Or ContainsSymbol(InputUser.Text)) Then
-                                                              Dim websiteUrl = "http://vacko.cookie987.top:28987/VackoData/v1.3/PlayerData/"
+                                                              Dim websiteUrl = "http://" + remoteHost + ":" + remotePort + "/VackoData/v1.3/PlayerData/"
                                                               ' 创建 HttpClient 进行 HTTP 请求
                                                               Using httpClient As New HttpClient
                                                                   Try
-                                                                      Dim remoteNameList = Await GetFileContentAsync("http://vacko.cookie987.top:28987/VackoData/v1.3/" + "/PlayerData/NameList.txt")
+                                                                      Dim remoteNameList = Await GetFileContentAsync("http://" + remoteHost + ":" + remotePort + "/VackoData/v1.3/" + "/PlayerData/NameList.txt")
                                                                       ' 检查名称是否存在
                                                                       If remoteNameList.Contains(InputUser.Text.Trim) Then
                                                                           config.Error("名称已被占用")
                                                                       Else
                                                                           Dim playerUid = "987987987"
-                                                                          Dim LatestUid = Await GetFileContentAsync("http://vacko.cookie987.top:28987/VackoData/v1.3/" + "CreUid.txt")
+                                                                          Dim LatestUid = Await GetFileContentAsync("http://" + remoteHost + ":" + remotePort + "/VackoData/v1.3/" + "CreUid.txt")
                                                                           Dim PlayerEmi = Await GetFileContentAsync(websiteUrl + "PlayerEmi.txt")
                                                                           Dim NameList = Await GetFileContentAsync(websiteUrl + "NameList.txt")
                                                                           playerUid = LatestUid

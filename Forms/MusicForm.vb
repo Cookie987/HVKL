@@ -547,13 +547,13 @@ Public Class MusicForm
             AntdUI.Message.error(Me, "无法加载封面：" + ex.Message,, 2)
         End Try
         Try
-            Dim cssContent As String = Await GetCssFileAsync("http://vacko.cookie987.top:28987/HVKLData/v1/MusicHtml/" + Path.GetFileNameWithoutExtension(mp3Path) + ".html")
+            Dim cssContent As String = Await GetCssFileAsync("http://"+remoteHost+":"+remotePort+"/HVKLData/v1/MusicHtml/" + Path.GetFileNameWithoutExtension(mp3Path) + ".html")
             If cssContent.Contains("404 Not Found") Then
                 If cssContent.Contains("nginx") Then
                     Throw New Exception("404")
                 End If
             End If
-            Await ChromiumWebBrowser1.LoadUrlAsync("http://vacko.cookie987.top:28987/HVKLData/v1/MusicHtml/" + Path.GetFileNameWithoutExtension(mp3Path) + ".html")
+            Await ChromiumWebBrowser1.LoadUrlAsync("http://"+remoteHost+":"+remotePort+"/HVKLData/v1/MusicHtml/" + Path.GetFileNameWithoutExtension(mp3Path) + ".html")
         Catch ex As Exception
             ChromiumWebBrowser1.LoadHtml(defaultHtml)
         End Try

@@ -35,7 +35,7 @@ Public Class MainForm
                             AntdUI.Notification.error(Me, "用户名或密码不合法", "请更换",,, 0)
                             Return 1
                         Else
-                            Dim remoteUrl As String = "http://vacko.cookie987.top:28987/VackoData/v1.3/PlayerData/Player/" + LastUsedUser + "-Data.json"
+                            Dim remoteUrl As String = "http://" + remoteHost + ":" + remotePort + "/VackoData/v1.3/PlayerData/Player/" + LastUsedUser + "-Data.json"
                             Dim remoteJson
                             Using httpClient As New HttpClient()
                                 remoteJson = httpClient.GetStringAsync(remoteUrl).Result
@@ -44,7 +44,7 @@ Public Class MainForm
                             Dim passwordValue As String = obj("AccountInfo")("Password").Value(Of String)()
                             If passwordValue IsNot Nothing AndAlso passwordValue = InputPwd.Text Then
 
-                                Dim banlistUrl As String = "http://vacko.cookie987.top:28987/VackoData/v1.3/PlayerData/BanList.txt"
+                                Dim banlistUrl As String = "http://" + remoteHost + ":" + remotePort + "/VackoData/v1.3/PlayerData/BanList.txt"
                                 ' 获取远程文件中
                                 Dim banlistFile As String = Await DownloadVak2File(banlistUrl)
                                 If InStr(banlistFile, InputUser.Text) Then
@@ -107,7 +107,7 @@ Public Class MainForm
                             AntdUI.Notification.error(Me, "用户名或密码不合法", "请更换",,, 0)
                             Return 1
                         Else
-                            Dim remoteUrl As String = "http://vacko.cookie987.top:28987/VackoData/v1.2.7/PlayerData/" + LastUsedUser + "/localdata.vak2"
+                            Dim remoteUrl As String = "http://" + remoteHost + ":" + remotePort + "/VackoData/v1.2.7/PlayerData/" + LastUsedUser + "/localdata.vak2"
 
                             ' 获取远程文件中的键值对
                             Dim credentials As Dictionary(Of String, String) = Await GetRemoteCredentials(remoteUrl)
@@ -118,7 +118,7 @@ Public Class MainForm
                                 Dim storedPassword As String = value.Replace(Chr(0), "").Trim()
 
                                 If storedPassword = InputPwd.Text Then
-                                    Dim banlistUrl As String = "http://vacko.cookie987.top:28987/VackoData/v1.2.7/PlayerData/BanList.txt"
+                                    Dim banlistUrl As String = "http://" + remoteHost + ":" + remotePort + "/VackoData/v1.2.7/PlayerData/BanList.txt"
                                     ' 获取远程文件中
                                     Dim banlistFile As String = Await DownloadVak2File(banlistUrl)
                                     If InStr(banlistFile, InputUser.Text) Then
@@ -212,7 +212,7 @@ Public Class MainForm
                             AntdUI.Notification.error(Me, "用户名或密码不合法", "请更换",,, 0)
                             Return 1
                         Else
-                            Dim remoteUrl As String = "http://vacko.cookie987.top:28987/VackoData/v1.2.7/PlayerData/" + LastUsedUser + "/localdata.vak2"
+                            Dim remoteUrl As String = "http://" + remoteHost + ":" + remotePort + "/VackoData/v1.2.7/PlayerData/" + LastUsedUser + "/localdata.vak2"
                             Dim credentials As Dictionary(Of String, String)
                             Try
                                 ' 获取远程文件中的键值对
@@ -229,7 +229,7 @@ Public Class MainForm
                                 Dim storedPassword As String = value.Replace(Chr(0), "").Trim()
 
                                 If storedPassword = InputPwd.Text Then
-                                    Dim banlistUrl As String = "http://vacko.cookie987.top:28987/VackoData/v1.2.7/PlayerData/BanList.txt"
+                                    Dim banlistUrl As String = "http://" + remoteHost + ":" + remotePort + "/VackoData/v1.2.7/PlayerData/BanList.txt"
                                     ' 获取远程文件中
                                     Dim banlistFile As String = Await DownloadVak2File(banlistUrl)
                                     If InStr(banlistFile, InputUser.Text) Then

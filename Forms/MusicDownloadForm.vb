@@ -14,7 +14,7 @@ Public Class MusicDownloadForm
     Private Async Sub LoadServerFiles()
         Try
             ' Fetch file list from the server
-            Dim serverFiles = Await GetServerFilesAsync("http://vacko.cookie987.top:28987/HVKLData/v1/Music/")
+            Dim serverFiles = Await GetServerFilesAsync("http://" + remoteHost + ":" + remotePort + "/HVKLData/v1/Music/")
 
             lvServerFiles.Items.Clear()
             ' 确保 ListView 的 View 属性是 Details
@@ -32,7 +32,7 @@ Public Class MusicDownloadForm
                 item.Checked = False
                 lvServerFiles.Items.Add(item)
             Next
-            AddHandler lvServerFiles.ColumnClick, AddressOf lvServerFiles_ColumnClick
+            AddHandler lvServerFiles.ColumnClick, AddressOf LvServerFiles_ColumnClick
         Catch ex As Exception
             AntdUI.Message.error(Me, "获取服务端文件失败：" + ex.Message,, 5)
         End Try
@@ -164,7 +164,7 @@ Public Class MusicDownloadForm
             If item.Checked Then
                 Dim fileName = item.Text
                 Dim folderName = item.SubItems(1).Text
-                Dim serverPath = $"http://vacko.cookie987.top:28987/HVKLData/v1/Music/{folderName}/{fileName}"
+                Dim serverPath = "http://" + remoteHost + ":" + remotePort + $"/HVKLData/v1/Music/{folderName}/{fileName}"
                 Dim localPath = Application.StartupPath + "version\" + selectedVersion + "\Config\Cache\" + "（" + folderName + "）" + fileName
 
                 Try
