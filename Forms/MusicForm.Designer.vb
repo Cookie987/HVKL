@@ -28,7 +28,7 @@ Partial Class MusicForm
         Timer1 = New Timer(components)
         Image3d1 = New AntdUI.Image3D()
         Panel1 = New AntdUI.Panel()
-        WebView21 = New Microsoft.Web.WebView2.WinForms.WebView2()
+        ChromiumWebBrowser1 = New CefSharp.WinForms.ChromiumWebBrowser()
         Label1 = New AntdUI.Label()
         VideoView1 = New LibVLCSharp.WinForms.VideoView()
         Panel2 = New AntdUI.Panel()
@@ -52,7 +52,6 @@ Partial Class MusicForm
         Timer2 = New Timer(components)
         Timer3 = New Timer(components)
         Panel1.SuspendLayout()
-        CType(WebView21, ComponentModel.ISupportInitialize).BeginInit()
         CType(VideoView1, ComponentModel.ISupportInitialize).BeginInit()
         Panel2.SuspendLayout()
         Panel3.SuspendLayout()
@@ -85,7 +84,7 @@ Partial Class MusicForm
         ' 
         ' Panel1
         ' 
-        Panel1.Controls.Add(WebView21)
+        Panel1.Controls.Add(ChromiumWebBrowser1)
         Panel1.Controls.Add(Label1)
         Panel1.Location = New Point(0, 29)
         Panel1.Name = "Panel1"
@@ -95,17 +94,13 @@ Partial Class MusicForm
         Panel1.TabIndex = 29
         Panel1.Text = "Panel1"
         ' 
-        ' WebView21
+        ' ChromiumWebBrowser1
         ' 
-        WebView21.AllowExternalDrop = True
-        WebView21.BackColor = Color.White
-        WebView21.CreationProperties = Nothing
-        WebView21.DefaultBackgroundColor = Color.White
-        WebView21.Location = New Point(19, 19)
-        WebView21.Name = "WebView21"
-        WebView21.Size = New Size(880, 85)
-        WebView21.TabIndex = 33
-        WebView21.ZoomFactor = 1R
+        ChromiumWebBrowser1.ActivateBrowserOnCreation = False
+        ChromiumWebBrowser1.Location = New Point(20, 19)
+        ChromiumWebBrowser1.Name = "ChromiumWebBrowser1"
+        ChromiumWebBrowser1.Size = New Size(880, 85)
+        ChromiumWebBrowser1.TabIndex = 20
         ' 
         ' Label1
         ' 
@@ -351,7 +346,6 @@ Partial Class MusicForm
         Name = "MusicForm"
         Text = "MusicForm"
         Panel1.ResumeLayout(False)
-        CType(WebView21, ComponentModel.ISupportInitialize).EndInit()
         CType(VideoView1, ComponentModel.ISupportInitialize).EndInit()
         Panel2.ResumeLayout(False)
         Panel3.ResumeLayout(False)
@@ -384,6 +378,6 @@ Partial Class MusicForm
     Friend WithEvents LblProgress As AntdUI.Label
     Friend WithEvents Checkbox1 As AntdUI.Checkbox
     Friend WithEvents Label2 As AntdUI.Label
-    Friend WithEvents WebView21 As Microsoft.Web.WebView2.WinForms.WebView2
     Friend WithEvents SelectSpeed As AntdUI.Select
+    Friend WithEvents ChromiumWebBrowser1 As CefSharp.WinForms.ChromiumWebBrowser
 End Class

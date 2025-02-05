@@ -392,7 +392,7 @@ Public Class MainForm
         Select1.SelectedValue = ""
         Select2.SelectedValue = ""
         ' 指定要列出子文件夹的路径
-        Dim folderPath As String = "version"
+        Dim folderPath As String = Application.StartupPath + "/version"
         ' 检查路径是否存在
         If Directory.Exists(folderPath) Then
             ' 获取所有子文件夹

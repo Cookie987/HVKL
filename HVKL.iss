@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Hello! Vacko Launcher"
-#define MyAppVersion "1.2.0"
+#define MyAppVersion "25w02a"
 #define MyAppPublisher "RedCookieStudios"
 #define MyAppURL "https://cookie987.top"
 #define MyAppExeName "HVKL.exe"
@@ -40,12 +40,12 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "H:\Github\HVKL\bin\Release\publish-installer\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "H:\Github\HVKL\bin\Release\publish-installer\*"; DestDir: "{app}"; Flags: ignoreversion
+Source: "H:\Github\HVKL\bin\Release\publish-installer\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 
-; 注意：不要在任何共享系统文件上使用 "Flags: ignoreversion" 
+// 注意：不要在任何共享系统文件上使用 "Flags: ignoreversion" 
 
 [Icons]
-Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}";
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Registry]
@@ -54,7 +54,8 @@ Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}"; ValueType: string; Value
 Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\fileico.ico,0"
 Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
 Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes"; ValueType: string; ValueName: "{#MyAppAssocExt}"; ValueData: ""
-
+// 设置 AppUserModelID
+Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}"; ValueType: string; ValueName: "AppUserModelID"; ValueData: "YourCompany.YourApp"; Flags: uninsdeletevalue
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent runascurrentuser
 
@@ -72,7 +73,6 @@ begin
   Cmd := ExpandConstant('{cmd}');
   Args := '/C dotnet --list-runtimes > "' + FileName + '" 2>&1';
   Result := False;
-
   // 执行命令并检查结果
   if Exec(Cmd, Args, '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0) then
   begin

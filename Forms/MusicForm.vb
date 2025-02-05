@@ -7,6 +7,19 @@ Imports AntdUI
 Imports Microsoft.Win32
 Imports Newtonsoft.Json.Linq
 Imports Windows.Media
+Imports System.Runtime.InteropServices
+Imports CefSharp
+Imports WinRT.Interop
+Imports Windows.Storage.Streams
+Imports CefSharp.WinForms
+Imports CefSharp.DevTools
+
+<ComImport>
+<Guid("3E68D4BD-7135-4D10-8018-9FB6D9F33FA1")>
+<InterfaceType(ComInterfaceType.InterfaceIsIUnknown)>
+Public Interface IInitializeWithWindow
+    Sub Initialize(hwnd As IntPtr)
+End Interface
 
 Public Class MusicForm
     Private isProcessing As Boolean = False
@@ -25,7 +38,8 @@ Public Class MusicForm
     Dim vlcMediaList As MediaList
 
     Private smtc As SystemMediaTransportControls
-
+    Private player = New Windows.Media.Playback.MediaPlayer
+    Private mediaPlayer As New Windows.Media.Playback.MediaPlayer
     Dim defaultHtml = "
             <!DOCTYPE html>
         <html lang=""en"">
@@ -106,6 +120,8 @@ Public Class MusicForm
         </html>
         "
 
+    Dim imagePath = Path.Combine(Path.GetTempPath(), "thumbnail.jpg")
+
     Private Sub LoadLrcFile(lrcFilePath As String)
         Dim lines = File.ReadAllLines(lrcFilePath)
         ' 支持 [mm:ss] 或 [mm:ss.ms] 的正则
@@ -138,19 +154,29 @@ Public Class MusicForm
         Core.Initialize()
         libVLC = New LibVLC("--verbose=2")
 
-        smtc = SystemMediaTransportControls.GetForCurrentView()
+        ' **获取窗口句柄**
+        Dim hwnd As IntPtr = Me.Handle
+
+
+
+        ' **创建 SystemMediaTransportControls**
+        smtc = MediaPlayer.SystemMediaTransportControls
+
+        ' **绑定窗口**
         smtc.IsEnabled = True
         smtc.IsPlayEnabled = True
         smtc.IsPauseEnabled = True
         smtc.IsNextEnabled = True
         smtc.IsPreviousEnabled = True
 
+        ' 监听媒体按键事件
+        AddHandler smtc.ButtonPressed, AddressOf Smtc_ButtonPressed
+
         vlcMediaPlayer = New MediaPlayer(libVLC)
 
         mp3Files = New List(Of String)()
         ResetStyle()
-        WebView21.Source = New Uri("data:text/html," & Uri.EscapeDataString(defaultHtml))
-        WebView21.DefaultBackgroundColor = Color.White
+        ChromiumWebBrowser1.LoadHtml(defaultHtml)
         VideoView1.MediaPlayer = vlcMediaPlayer
         Dim filePath = Application.StartupPath + "version\" + selectedVersion + "\Game\Data\AppData.json"
         Try
@@ -401,7 +427,7 @@ Public Class MusicForm
         End If
     End Sub
 
-    Private Async Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Try
             If vlcMediaPlayer.IsPlaying Then
                 ' 获取当前播放时间并应用偏移量
@@ -427,7 +453,7 @@ Public Class MusicForm
                     If Label1.Text <> closestLyric Then
                         Label1.Text = closestLyric
                         subtitleText = Replace(closestLyric, vbCrLf, "<br>")
-                        Await WebView21.ExecuteScriptAsync($"updateSubtitle(`{subtitleText}`);")
+                        ChromiumWebBrowser1.ExecuteScriptAsync($"updateSubtitle(`{subtitleText}`);")
                     End If
                     currentLyric = closestLyric
                     nextLyric = upcomingLyric
@@ -448,6 +474,14 @@ Public Class MusicForm
         If Not MusicDownloadForm.IsDisposed Then
             MusicDownloadForm.Dispose()
         End If
+        ' 检查 smtc 是否已初始化
+        If smtc IsNot Nothing Then
+            ' 取消订阅 ButtonPressed 事件
+            RemoveHandler smtc.ButtonPressed, AddressOf Smtc_ButtonPressed
+            ' 禁用 SMTC
+            smtc.IsEnabled = False
+        End If
+        Cef.Shutdown()
     End Sub
 
     Private Sub LoadLyricsFromMp3(mp3FilePath As String)
@@ -496,11 +530,12 @@ Public Class MusicForm
             ' 检查是否包含封面图像
             If tagFile.Tag.Pictures IsNot Nothing AndAlso tagFile.Tag.Pictures.Length > 0 Then
                 Dim pictureData As Byte() = tagFile.Tag.Pictures(0).Data.Data
-
                 ' 将封面图像数据转换为 Image 对象
-                Using ms As New IO.MemoryStream(pictureData)
+                Using ms As New System.IO.MemoryStream(pictureData)
+                    Image.FromStream(ms).Save(imagePath, System.Drawing.Imaging.ImageFormat.Jpeg)
                     pictureBox.Image = Image.FromStream(ms)
                 End Using
+
                 Image3d1.Visible = True
             Else
                 ' 如果没有封面，设置为默认图片或清空
@@ -513,11 +548,15 @@ Public Class MusicForm
         End Try
         Try
             Dim cssContent As String = Await GetCssFileAsync("http://vacko.cookie987.top:28987/HVKLData/v1/MusicHtml/" + Path.GetFileNameWithoutExtension(mp3Path) + ".html")
-            WebView21.Source = New Uri("data:text/html," & Uri.EscapeDataString(cssContent))
+            If cssContent.Contains("404 Not Found") Then
+                If cssContent.Contains("nginx") Then
+                    Throw New Exception("404")
+                End If
+            End If
+            Await ChromiumWebBrowser1.LoadUrlAsync("http://vacko.cookie987.top:28987/HVKLData/v1/MusicHtml/" + Path.GetFileNameWithoutExtension(mp3Path) + ".html")
         Catch ex As Exception
-            WebView21.Source = New Uri("data:text/html," & Uri.EscapeDataString(defaultHtml))
+            ChromiumWebBrowser1.LoadHtml(defaultHtml)
         End Try
-
 
         'ApplyCssToLabel(cssContent)
     End Sub
@@ -569,9 +608,6 @@ Public Class MusicForm
         ' 启动定时器同步歌词
         Timer1.Interval = 1
         Timer1.Start()
-        UpdateSMTCDisplay(vlcMediaPlayer.Media.Meta(MetadataType.Title),
-                          vlcMediaPlayer.Media.Meta(MetadataType.Artist),
-                            Image3d1.Image)
 
         ' 防止递归调用
         If isProcessing Then Exit Sub
@@ -583,6 +619,11 @@ Public Class MusicForm
             vlcMediaPlayer.Pause()
         End If
         BtnPlayPause.IconSvg = "<svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 24 24""><title>pause-outline</title><path d=""M14,19H18V5H14M6,19H10V5H6V19Z"" /></svg>"
+        If vlcMediaPlayer.Media IsNot Nothing Then
+            UpdateSMTCDisplay(vlcMediaPlayer.Media.Meta(MetadataType.Title),
+                          vlcMediaPlayer.Media.Meta(MetadataType.Artist),
+                            Image3d1.Image)
+        End If
         isProcessing = False
     End Sub
 
@@ -655,10 +696,12 @@ Public Class MusicForm
     Private Sub BtnPlayPause_Click(sender As Object, e As EventArgs) Handles BtnPlayPause.Click
         If vlcMediaPlayer.IsPlaying = True Then
             vlcMediaPlayer.Pause()
+            smtc.PlaybackStatus = MediaPlaybackStatus.Stopped
             BtnPlayPause.IconSvg = "<svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 24 24""><title>play-outline</title><path d=""M8.5,8.64L13.77,12L8.5,15.36V8.64M6.5,5V19L17.5,12"" /></svg>"
         Else
             vlcMediaPlayer.Play()
             vlcMediaPlayer.SeekTo(MusicCurrentMusicProgress)
+            smtc.PlaybackStatus = MediaPlaybackStatus.Playing
             BtnPlayPause.IconSvg = "<svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 24 24""><title>pause-outline</title><path d=""M14,19H18V5H14M6,19H10V5H6V19Z"" /></svg>"
         End If
     End Sub
@@ -684,6 +727,7 @@ Public Class MusicForm
 
     Private Sub BtnStop_Click(sender As Object, e As EventArgs) Handles BtnStop.Click
         vlcMediaPlayer.Stop()
+        smtc.PlaybackStatus = MediaPlaybackStatus.Stopped
         BtnPlayPause.IconSvg = "<svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 24 24""><title>play-outline</title><path d=""M8.5,8.64L13.77,12L8.5,15.36V8.64M6.5,5V19L17.5,12"" /></svg>"
     End Sub
 
@@ -807,12 +851,14 @@ Public Class MusicForm
         End Select
     End Sub
 
-    Private Sub UpdateSMTCDisplay(title As String, artist As String, thumbnail As Object)
+    Private Async Sub UpdateSMTCDisplay(title As String, artist As String, thumbnail As Object)
         Dim updater = smtc.DisplayUpdater
         updater.Type = Windows.Media.MediaPlaybackType.Music
         updater.MusicProperties.Title = title
         updater.MusicProperties.Artist = artist
-        updater.Thumbnail = thumbnail
+        Dim file = Await Windows.Storage.StorageFile.GetFileFromPathAsync(imagePath) ' 读取 StorageFile
+        updater.Thumbnail = RandomAccessStreamReference.CreateFromFile(file) ' 设置封面
+        updater.AppMediaId = "HVKL"
         updater.Update()
     End Sub
 End Class
