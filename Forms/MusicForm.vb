@@ -151,13 +151,19 @@ Public Class MusicForm
     Private Sub MusicForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         PageHeader1.Text += " - 当前管理版本：" + selectedVersion
 
+
+        If Not Cef.IsInitialized Then
+            Dim settings As New CefSettings()
+            ' 可在这里设置其他配置，例如 RootCachePath 等
+            Cef.Initialize(settings)
+        End If
+
+
         Core.Initialize()
         libVLC = New LibVLC("--verbose=2")
 
         ' **获取窗口句柄**
         Dim hwnd As IntPtr = Me.Handle
-
-
 
         ' **创建 SystemMediaTransportControls**
         smtc = MediaPlayer.SystemMediaTransportControls
@@ -168,7 +174,7 @@ Public Class MusicForm
         smtc.IsPauseEnabled = True
         smtc.IsNextEnabled = True
         smtc.IsPreviousEnabled = True
-
+        smtc.PlaybackStatus = MediaPlaybackStatus.Stopped
         ' 监听媒体按键事件
         AddHandler smtc.ButtonPressed, AddressOf Smtc_ButtonPressed
 
@@ -481,7 +487,8 @@ Public Class MusicForm
             ' 禁用 SMTC
             smtc.IsEnabled = False
         End If
-        Cef.Shutdown()
+        'ChromiumWebBrowser1.Dispose()
+        'Cef.Shutdown()
     End Sub
 
     Private Sub LoadLyricsFromMp3(mp3FilePath As String)
@@ -547,13 +554,13 @@ Public Class MusicForm
             AntdUI.Message.error(Me, "无法加载封面：" + ex.Message,, 2)
         End Try
         Try
-            Dim cssContent As String = Await GetCssFileAsync("http://"+remoteHost+":"+remotePort+"/HVKLData/v1/MusicHtml/" + Path.GetFileNameWithoutExtension(mp3Path) + ".html")
+            Dim cssContent As String = Await GetCssFileAsync("http://" + remoteHost + ":" + remotePort.ToString + "/HVKLData/v1/MusicHtml/" + Path.GetFileNameWithoutExtension(mp3Path) + ".html")
             If cssContent.Contains("404 Not Found") Then
                 If cssContent.Contains("nginx") Then
                     Throw New Exception("404")
                 End If
             End If
-            Await ChromiumWebBrowser1.LoadUrlAsync("http://"+remoteHost+":"+remotePort+"/HVKLData/v1/MusicHtml/" + Path.GetFileNameWithoutExtension(mp3Path) + ".html")
+            Await ChromiumWebBrowser1.LoadUrlAsync("http://" + remoteHost + ":" + remotePort.ToString + "/HVKLData/v1/MusicHtml/" + Path.GetFileNameWithoutExtension(mp3Path) + ".html")
         Catch ex As Exception
             ChromiumWebBrowser1.LoadHtml(defaultHtml)
         End Try
@@ -615,10 +622,12 @@ Public Class MusicForm
         vlcMediaPlayer.Media = New Media(libVLC, fullPath, FromType.FromPath, Array.Empty(Of String))
         If autoPlay Then
             vlcMediaPlayer.Play()
+
         Else
             vlcMediaPlayer.Pause()
         End If
         BtnPlayPause.IconSvg = "<svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 24 24""><title>pause-outline</title><path d=""M14,19H18V5H14M6,19H10V5H6V19Z"" /></svg>"
+        smtc.PlaybackStatus = MediaPlaybackStatus.Playing
         If vlcMediaPlayer.Media IsNot Nothing Then
             UpdateSMTCDisplay(vlcMediaPlayer.Media.Meta(MetadataType.Title),
                           vlcMediaPlayer.Media.Meta(MetadataType.Artist),
@@ -758,6 +767,7 @@ Public Class MusicForm
     Private Sub Timer3_Tick(sender As Object, e As EventArgs) Handles Timer3.Tick
         GetConfig(Me)
         If vlcMediaPlayer.State = VLCState.Ended Then
+            smtc.PlaybackStatus = MediaPlaybackStatus.Stopped
             BtnPlayPause.IconSvg = "<svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 24 24""><title>play-outline</title><path d=""M8.5,8.64L13.77,12L8.5,15.36V8.64M6.5,5V19L17.5,12"" /></svg>"
             If Select1.SelectedIndex = 0 Then
                 Tree1.SelectItem = Tree1.Items(currentSelectItem.ID - 1)
@@ -790,7 +800,9 @@ Public Class MusicForm
             Catch ex As Exception
                 Label2.Text = "未知"
             End Try
-
+            smtc.PlaybackStatus = MediaPlaybackStatus.Playing
+        ElseIf vlcMediaPlayer.State = VLCState.Paused Then
+            smtc.PlaybackStatus = MediaPlaybackStatus.Paused
         End If
         If currentSelectItem IsNot Nothing Then
             MusicCurrentMusicId = currentSelectItem.ID

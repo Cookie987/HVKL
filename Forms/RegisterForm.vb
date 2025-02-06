@@ -195,7 +195,7 @@ Public Class RegisterForm
                                                                           File.WriteAllText(tempFilePath5, "")
                                                                           File.WriteAllText(tempFilePath6, jsonSettings)
                                                                           ' 使用 SFTP 上传文件
-                                                                          Using sftp As New SftpClient(remoteHost, remotePort, sftpUser, sftpPassword)
+                                                                          Using sftp As New SftpClient(remoteHost, remotePortSftp, sftpUser, sftpPassword)
                                                                               Try
                                                                                   ' 连接到远程服务器
                                                                                   sftp.Connect()
