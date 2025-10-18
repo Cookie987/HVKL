@@ -18,13 +18,13 @@ Public Class RegisterForm
                                                   Dim searchString As String = email
                                                   Try
                                                       Dim fileContent As String = Await GetFileContentAsync(url)
-                                                      If fileContent.Contains(searchString) Then
+                                                      If fileContent.Contains("'" + searchString + "'") Then
                                                           config.Error("邮箱已被占用")
                                                       Else
                                                           ' 生成验证码 
                                                           Dim random As New Random()
                                                           verifyCode = random.Next(0, 1000000).ToString("D6") ' 保证是6位数字
-                                                          Dim a = Await GetFileContentAsync("https://987assests.s3.bitiful.net/vacko2/template.html")
+                                                          Dim a = Await GetFileContentAsync("https://assets.cookie987.top/vacko2/template.html")
                                                           Dim Body As String = a _
                                                             .Replace("{{HEADER_LINK}}", "https://cookie987.top") _
                                                             .Replace("{{HEADER_LINK_TEXT}}", "RedCookieStudios - HVKL") _
@@ -131,7 +131,7 @@ Public Class RegisterForm
                                                                   Try
                                                                       Dim remoteNameList = Await GetFileContentAsync("http://" + remoteHost + ":" + remotePort + "/VackoData/v1.3/" + "/PlayerData/NameList.txt")
                                                                       ' 检查名称是否存在
-                                                                      If remoteNameList.Contains(InputUser.Text.Trim) Then
+                                                                      If remoteNameList.Contains("'" + InputUser.Text.Trim + "'") Then
                                                                           config.Error("名称已被占用")
                                                                       Else
                                                                           Dim playerUid = "987987987"
@@ -181,7 +181,7 @@ Public Class RegisterForm
                                                                           obj("AccountInfo")("Uid") = Replace(playerUid, vbLf, Nothing)
                                                                           obj("AccountInfo")("User") = InputUser.Text
                                                                           PlayerEmi += InputEmail.Text + vbLf
-                                                                          NameList += InputUser.Text + ";" + vbLf
+                                                                          NameList += "'" + InputUser.Text + "'" + vbLf
                                                                           Dim tempFilePath As String = Path.GetTempFileName()
                                                                           Dim tempFilePath2 As String = Path.GetTempFileName()
                                                                           Dim tempFilePath3 As String = Path.GetTempFileName()

@@ -4,7 +4,7 @@ Imports System.Text.RegularExpressions
 Public Class ToolForm
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         AntdUI.Message.loading(Me, "检查中", Async Sub(config)
-                                              Dim websiteUrl = "http://"+remoteHost+":"+remotePort+"/VackoData/v1.3/PlayerData/"
+                                              Dim websiteUrl = "http://" + remoteHost + ":" + remotePort + "/VackoData/v1.3/PlayerData/"
                                               Dim directoryNameToCheck = Input1.Text.Trim
                                               ' 创建 HttpClient 进行 HTTP 请求
                                               Using httpClient As New HttpClient
@@ -14,7 +14,7 @@ Public Class ToolForm
                                                       ' 提取目录名称（假设列表为简单的 HTML 格式）
                                                       Dim directories = ExtractDirectories(directoryListing)
                                                       ' 检查目录名称是否存在
-                                                      If directories.Contains(directoryNameToCheck) Then
+                                                      If directories.Contains("'" + directoryNameToCheck + "'") Then
                                                           config.Warn("名称已被占用")
                                                       Else
                                                           config.OK("名称未占用")
@@ -59,7 +59,7 @@ Public Class ToolForm
                                                   Dim searchString As String = Input2.Text
                                                   Try
                                                       Dim fileContent As String = Await GetFileContentAsync(url)
-                                                      If fileContent.Contains(searchString) Then
+                                                      If fileContent.Contains("'" + searchString + "'") Then
                                                           config.Warn("邮箱已被占用")
                                                       Else
                                                           config.OK("邮箱未占用")

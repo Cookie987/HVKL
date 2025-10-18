@@ -36,7 +36,7 @@ Public Class MusicForm
     ' 定义一个标志变量，用来判断是否是手动拖动
     Private isDragging As Boolean = False
     Dim vlcMediaList As MediaList
-
+    'Private ChromiumWebBrowser1 As ChromiumWebBrowser
     Private smtc As SystemMediaTransportControls
     Private player = New Windows.Media.Playback.MediaPlayer
     Private mediaPlayer As New Windows.Media.Playback.MediaPlayer
@@ -154,10 +154,19 @@ Public Class MusicForm
 
         If Not Cef.IsInitialized Then
             Dim settings As New CefSettings()
+            settings.CefCommandLineArgs.Add("disable-gpu-vsync", "1")
+            settings.CefCommandLineArgs.Add("disable-gpu", "1")
+            ' 或者强制使用软件渲染
+            settings.CefCommandLineArgs.Add("disable-gpu-compositing", "1")
             ' 可在这里设置其他配置，例如 RootCachePath 等
             Cef.Initialize(settings)
         End If
 
+        'ChromiumWebBrowser1 = New ChromiumWebBrowser("about:blank") With {
+        '    .Dock = DockStyle.Fill,
+        '    .Visible = False    ' 初始先隐藏，显示 Label
+        '}
+        'Panel1.Controls.Add(ChromiumWebBrowser1)
 
         Core.Initialize()
         libVLC = New LibVLC("--verbose=2")
@@ -166,7 +175,7 @@ Public Class MusicForm
         Dim hwnd As IntPtr = Me.Handle
 
         ' **创建 SystemMediaTransportControls**
-        smtc = MediaPlayer.SystemMediaTransportControls
+        smtc = mediaPlayer.SystemMediaTransportControls
 
         ' **绑定窗口**
         smtc.IsEnabled = True
@@ -182,7 +191,7 @@ Public Class MusicForm
 
         mp3Files = New List(Of String)()
         ResetStyle()
-        ChromiumWebBrowser1.LoadHtml(defaultHtml)
+        AddHandler ChromiumWebBrowser1.IsBrowserInitializedChanged, AddressOf OnBrowserInitialized
         VideoView1.MediaPlayer = vlcMediaPlayer
         Dim filePath = Application.StartupPath + "version\" + selectedVersion + "\Game\Data\AppData.json"
         Try
@@ -872,5 +881,14 @@ Public Class MusicForm
         updater.Thumbnail = RandomAccessStreamReference.CreateFromFile(file) ' 设置封面
         updater.AppMediaId = "HVKL"
         updater.Update()
+    End Sub
+
+    Private Sub OnBrowserInitialized()
+        If ChromiumWebBrowser1.IsBrowserInitialized Then
+            ' 必须在 UI 线程操作控件
+            Me.Invoke(Sub()
+                          ChromiumWebBrowser1.LoadHtml(defaultHtml)
+                      End Sub)
+        End If
     End Sub
 End Class

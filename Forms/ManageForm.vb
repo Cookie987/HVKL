@@ -90,6 +90,11 @@ Public Class ManageForm
                 Else
                     Button5.Enabled = False
                 End If
+                If Family = "BanGDream" Then
+                    Button6.Enabled = True
+                Else
+                    Button6.Enabled = False
+                End If
             Catch ex As Exception
                 AntdUI.Notification.error(Me, "读取版本配置文件错误", ex.Message,,, 0)
             End Try
@@ -199,5 +204,11 @@ Public Class ManageForm
     End Sub
 
     Private Sub ManageForm_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+    End Sub
+
+    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        selectedVersion2 = Select2.SelectedValue
+        VackoSettings.Show()
+        Button6.Enabled = False
     End Sub
 End Class

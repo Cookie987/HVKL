@@ -9,6 +9,7 @@ Public Class MainForm
     Dim mutex As Mutex
     Private overlay As OverlayWindow ' 覆盖层窗体
     Dim Starting As Boolean = True
+    Dim supportQuickUpdate As Boolean = False
     Private Async Function StartGame(StartVer As String) As Task(Of Integer)
         ' 定义父目录路径
         If StartVer = "" Then
@@ -25,8 +26,11 @@ Public Class MainForm
             AntdUI.Notification.error(Me, "读取版本配置文件错误", ex.Message,,, 0)
             Return 1
         End Try
+        Dim quickUpdateSuccess = ""
         If Family = "BanGDream" Then
             ' BanGDream架构
+            supportQuickUpdate = True
+            quickUpdateSuccess = "noupdate"
             Try
                 ' 登录
                 If RadioHVKLLogin.Checked = True Then
@@ -321,6 +325,48 @@ Public Class MainForm
             Return 1
         End If
 
+        If supportQuickUpdate Then
+            Try
+                Dim cacheTxt = File.ReadAllText(Application.StartupPath + "version\" + StartVer + "\Config\Setup\cache.txt")
+                If cacheTxt = "$@70#!t3" Then
+                    Dim quickUpdatePath = Application.StartupPath + "version\" + StartVer + "\Game\"
+                    Try
+                        AntdUI.Modal.open(New AntdUI.Modal.Config(Me, "提示", "Vacko 即将应用快速更新。" + vbCrLf + vbCrLf +
+                                            "点击““应用””将自动把 Vacko 本体替换为已经下载好的最新 Vacko (~5MB)", AntdUI.TType.Info) With {
+                                        .OkText = "应用",
+                                        .OkType = TTypeMini.Primary,
+                                        .OnOk = Function(config)
+
+                                                    Return True
+                                                End Function
+                                        })
+                        File.Move(quickUpdatePath + "Vacko2.exe", quickUpdatePath + "Vacko2.bak")
+                        Try
+                            File.Move(quickUpdatePath + "newVacko2.exe", quickUpdatePath + "Vacko2.exe")
+                            File.Delete(quickUpdatePath + "Vacko2.bak")
+                            File.Delete(Application.StartupPath + "version\" + StartVer + "\Config\Setup\cache.txt")
+                        Catch ex As Exception
+                            AntdUI.Notification.error(Me, "错误", "应用快速更新失败，已回退至旧版本：" + vbCrLf + ex.Message,,, 0)
+                            Return 235
+                        End Try
+
+                    Catch ex As Exception
+                        AntdUI.Notification.error(Me, "错误", "应用快速更新失败：" + vbCrLf + ex.Message,,, 0)
+                        Return 234
+                    End Try
+                Else
+                    AntdUI.Notification.error(Me, "错误", "应用快速更新失败：" + vbCrLf + "cache.txt 内容不合法",,, 0)
+                    Return 233
+                End If
+                AntdUI.Notification.success(Me, "应用快速更新成功", "" + CustomName,,, 5)
+                quickUpdateSuccess = "@&92"
+            Catch ex As Exception
+
+            End Try
+
+        End If
+
+
         Dim appPath As String = Path.Combine(parentDirectory, SubDirectory, ExeName)
 
         ' 创建互斥锁 （Vacko1.2.2）
@@ -332,7 +378,7 @@ Public Class MainForm
             .WorkingDirectory = parentDirectory,
             .RedirectStandardOutput = False,  ' 将工作目录设置为父目录
             .UseShellExecute = False,
-            .Arguments = Args
+            .Arguments = Args + " " + quickUpdateSuccess
             }
 
         Dim process As New Process With {

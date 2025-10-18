@@ -37,14 +37,14 @@ Public Class SettingForm
     End Sub
 
     Private Sub CheckUpdate()
-        Dim cloudUrl As String = "https://987assests.s3.bitiful.net/vacko2/HVKLVer.txt"
+        Dim cloudUrl As String = "https://assets.cookie987.top/vacko2/HVKLVer.txt"
         ' 初始化HttpClient
         Dim client As New HttpClient()
         Try
             Dim cloudVersion As String = client.GetStringAsync(cloudUrl).Result.Trim()
             If Not HVKLVersion = cloudVersion Then
                 ' 获取更新日志
-                Dim logUrl As String = "https://987assests.s3.bitiful.net/vacko2/updateLog/" + cloudVersion + ".txt"
+                Dim logUrl As String = "https://assets.cookie987.top/vacko2/updateLog/" + cloudVersion + ".txt"
                 Dim updateLog As String = client.GetStringAsync(logUrl).Result
                 Dim result = AntdUI.Modal.open(New AntdUI.Modal.Config(Me, "有新版本可用：" + cloudVersion, "更新日志：" + vbCrLf + updateLog + vbCrLf + vbCrLf + "点击确定将访问本项目官方Release界面", AntdUI.TType.Info))
                 If result = DialogResult.OK Then

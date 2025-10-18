@@ -125,7 +125,7 @@ Public Class VersionForm
         Select1.Items.Clear()
         AntdUI.Message.loading(Me, "获取版本中", Async Sub(config)
                                                 ' 云端文件的URL
-                                                Dim fileUrl As String = "https://987assests.s3.bitiful.net/vacko2/versions.txt"
+                                                Dim fileUrl As String = "https://assets.cookie987.top/vacko2/versions.txt"
                                                 Progress1.Loading = True
                                                 ' 下载文本文件并处理
                                                 Try

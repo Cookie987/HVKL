@@ -62,10 +62,11 @@ Partial Class MusicForm
         ' 
         PageHeader1.Icon = CType(resources.GetObject("PageHeader1.Icon"), Image)
         PageHeader1.Location = New Point(0, 0)
+        PageHeader1.Margin = New Padding(6, 5, 6, 5)
         PageHeader1.MaximizeBox = False
         PageHeader1.Name = "PageHeader1"
         PageHeader1.ShowButton = True
-        PageHeader1.Size = New Size(919, 23)
+        PageHeader1.Size = New Size(1838, 42)
         PageHeader1.TabIndex = 11
         PageHeader1.Text = "音乐播放"
         ' 
@@ -75,9 +76,10 @@ Partial Class MusicForm
         ' Image3d1
         ' 
         Image3d1.BackColor = Color.Transparent
-        Image3d1.Location = New Point(253, 43)
+        Image3d1.Location = New Point(506, 78)
+        Image3d1.Margin = New Padding(6, 5, 6, 5)
         Image3d1.Name = "Image3d1"
-        Image3d1.Size = New Size(210, 210)
+        Image3d1.Size = New Size(420, 383)
         Image3d1.TabIndex = 21
         Image3d1.Text = "Image3d1"
         Image3d1.Visible = False
@@ -86,20 +88,21 @@ Partial Class MusicForm
         ' 
         Panel1.Controls.Add(ChromiumWebBrowser1)
         Panel1.Controls.Add(Label1)
-        Panel1.Location = New Point(0, 29)
+        Panel1.Location = New Point(0, 53)
+        Panel1.Margin = New Padding(6, 5, 6, 5)
         Panel1.Name = "Panel1"
         Panel1.Shadow = 15
         Panel1.ShadowOpacityAnimation = True
-        Panel1.Size = New Size(919, 123)
+        Panel1.Size = New Size(1838, 224)
         Panel1.TabIndex = 29
         Panel1.Text = "Panel1"
         ' 
         ' ChromiumWebBrowser1
         ' 
         ChromiumWebBrowser1.ActivateBrowserOnCreation = False
-        ChromiumWebBrowser1.Location = New Point(20, 19)
+        ChromiumWebBrowser1.Location = New Point(42, 35)
         ChromiumWebBrowser1.Name = "ChromiumWebBrowser1"
-        ChromiumWebBrowser1.Size = New Size(880, 85)
+        ChromiumWebBrowser1.Size = New Size(1763, 149)
         ChromiumWebBrowser1.TabIndex = 20
         ' 
         ' Label1
@@ -107,14 +110,15 @@ Partial Class MusicForm
         Label1.BackColor = Color.Transparent
         Label1.ColorExtend = ""
         Label1.Font = New Font("Microsoft YaHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(134))
-        Label1.Location = New Point(93, 23)
+        Label1.Location = New Point(42, 42)
+        Label1.Margin = New Padding(6, 5, 6, 5)
         Label1.Name = "Label1"
         Label1.Shadow = 5
         Label1.ShadowColor = Color.Black
         Label1.ShadowOffsetX = 2
         Label1.ShadowOffsetY = 2
         Label1.ShadowOpacity = 0.2F
-        Label1.Size = New Size(733, 77)
+        Label1.Size = New Size(1753, 140)
         Label1.TabIndex = 19
         Label1.TabStop = False
         Label1.Text = "（歌词）"
@@ -123,10 +127,11 @@ Partial Class MusicForm
         ' VideoView1
         ' 
         VideoView1.BackColor = Color.Black
-        VideoView1.Location = New Point(594, 121)
+        VideoView1.Location = New Point(1188, 221)
+        VideoView1.Margin = New Padding(6, 5, 6, 5)
         VideoView1.MediaPlayer = Nothing
         VideoView1.Name = "VideoView1"
-        VideoView1.Size = New Size(94, 55)
+        VideoView1.Size = New Size(188, 100)
         VideoView1.TabIndex = 32
         VideoView1.Text = "VideoView1"
         VideoView1.Visible = False
@@ -146,37 +151,41 @@ Partial Class MusicForm
         Panel2.Controls.Add(BtnPrevious)
         Panel2.Controls.Add(Button2)
         Panel2.Controls.Add(BtnStop)
-        Panel2.Location = New Point(189, 406)
+        Panel2.Location = New Point(378, 740)
+        Panel2.Margin = New Padding(6, 5, 6, 5)
         Panel2.Name = "Panel2"
         Panel2.Shadow = 15
         Panel2.ShadowOpacityAnimation = True
-        Panel2.Size = New Size(730, 122)
+        Panel2.Size = New Size(1460, 222)
         Panel2.TabIndex = 30
         Panel2.Text = "Panel2"
         ' 
         ' SelectSpeed
         ' 
         SelectSpeed.Items.AddRange(New Object() {"0.5x", "1.0x", "1.5x", "2.0x"})
-        SelectSpeed.Location = New Point(512, 57)
+        SelectSpeed.Location = New Point(1024, 104)
+        SelectSpeed.Margin = New Padding(6, 5, 6, 5)
         SelectSpeed.Name = "SelectSpeed"
-        SelectSpeed.Size = New Size(68, 35)
+        SelectSpeed.Size = New Size(136, 64)
         SelectSpeed.TabIndex = 14
         ' 
         ' Checkbox1
         ' 
         Checkbox1.BackColor = Color.Transparent
-        Checkbox1.Location = New Point(341, 64)
+        Checkbox1.Location = New Point(682, 117)
+        Checkbox1.Margin = New Padding(6, 5, 6, 5)
         Checkbox1.Name = "Checkbox1"
-        Checkbox1.Size = New Size(59, 23)
+        Checkbox1.Size = New Size(118, 42)
         Checkbox1.TabIndex = 13
         Checkbox1.Text = "置顶"
         ' 
         ' LblProgress
         ' 
         LblProgress.BackColor = Color.Transparent
-        LblProgress.Location = New Point(603, 27)
+        LblProgress.Location = New Point(1206, 49)
+        LblProgress.Margin = New Padding(6, 5, 6, 5)
         LblProgress.Name = "LblProgress"
-        LblProgress.Size = New Size(77, 23)
+        LblProgress.Size = New Size(154, 42)
         LblProgress.TabIndex = 12
         LblProgress.Text = "00:00/00:00"
         ' 
@@ -184,19 +193,21 @@ Partial Class MusicForm
         ' 
         Button3.IconRatio = 1.2F
         Button3.IconSvg = resources.GetString("Button3.IconSvg")
-        Button3.Location = New Point(214, 57)
+        Button3.Location = New Point(428, 104)
+        Button3.Margin = New Padding(6, 5, 6, 5)
         Button3.Name = "Button3"
-        Button3.Size = New Size(39, 36)
+        Button3.Size = New Size(78, 66)
         Button3.TabIndex = 7
         Button3.Type = AntdUI.TTypeMini.Primary
         ' 
         ' VolSlider
         ' 
         VolSlider.BackColor = Color.Transparent
-        VolSlider.Location = New Point(253, 64)
+        VolSlider.Location = New Point(506, 117)
+        VolSlider.Margin = New Padding(6, 5, 6, 5)
         VolSlider.Name = "VolSlider"
         VolSlider.ShowValue = True
-        VolSlider.Size = New Size(99, 23)
+        VolSlider.Size = New Size(198, 42)
         VolSlider.TabIndex = 8
         VolSlider.Text = "Slider2"
         VolSlider.Value = 50
@@ -205,9 +216,10 @@ Partial Class MusicForm
         ' 
         BtnNext.IconRatio = 1.2F
         BtnNext.IconSvg = "<svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 24 24""><title>skip-next-outline</title><path d=""M6,18L14.5,12L6,6M8,9.86L11.03,12L8,14.14M16,6H18V18H16"" /></svg>"
-        BtnNext.Location = New Point(169, 57)
+        BtnNext.Location = New Point(338, 104)
+        BtnNext.Margin = New Padding(6, 5, 6, 5)
         BtnNext.Name = "BtnNext"
-        BtnNext.Size = New Size(39, 36)
+        BtnNext.Size = New Size(78, 66)
         BtnNext.TabIndex = 6
         BtnNext.Type = AntdUI.TTypeMini.Primary
         ' 
@@ -215,9 +227,10 @@ Partial Class MusicForm
         ' 
         BtnPlayPause.IconRatio = 1.2F
         BtnPlayPause.IconSvg = "<svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 24 24""><title>play-outline</title><path d=""M8.5,8.64L13.77,12L8.5,15.36V8.64M6.5,5V19L17.5,12"" /></svg>"
-        BtnPlayPause.Location = New Point(34, 57)
+        BtnPlayPause.Location = New Point(68, 104)
+        BtnPlayPause.Margin = New Padding(6, 5, 6, 5)
         BtnPlayPause.Name = "BtnPlayPause"
-        BtnPlayPause.Size = New Size(39, 36)
+        BtnPlayPause.Size = New Size(78, 66)
         BtnPlayPause.TabIndex = 3
         BtnPlayPause.Type = AntdUI.TTypeMini.Primary
         ' 
@@ -225,18 +238,20 @@ Partial Class MusicForm
         ' 
         Slider1.BackColor = Color.Transparent
         Slider1.LineSize = 6
-        Slider1.Location = New Point(28, 23)
+        Slider1.Location = New Point(56, 42)
+        Slider1.Margin = New Padding(6, 5, 6, 5)
         Slider1.MaxValue = 1000
         Slider1.Name = "Slider1"
-        Slider1.Size = New Size(579, 33)
+        Slider1.Size = New Size(1158, 60)
         Slider1.TabIndex = 2
         Slider1.Text = "Slider1"
         ' 
         ' Button1
         ' 
-        Button1.Location = New Point(456, 56)
+        Button1.Location = New Point(912, 102)
+        Button1.Margin = New Padding(6, 5, 6, 5)
         Button1.Name = "Button1"
-        Button1.Size = New Size(55, 36)
+        Button1.Size = New Size(110, 66)
         Button1.TabIndex = 10
         Button1.Text = "刷新"
         Button1.Type = AntdUI.TTypeMini.Primary
@@ -244,26 +259,29 @@ Partial Class MusicForm
         ' Select1
         ' 
         Select1.Items.AddRange(New Object() {"单曲循环", "列表循环", "随机播放"})
-        Select1.Location = New Point(586, 57)
+        Select1.Location = New Point(1172, 104)
+        Select1.Margin = New Padding(6, 5, 6, 5)
         Select1.Name = "Select1"
-        Select1.Size = New Size(88, 35)
+        Select1.Size = New Size(176, 64)
         Select1.TabIndex = 11
         ' 
         ' BtnPrevious
         ' 
         BtnPrevious.IconRatio = 1.2F
         BtnPrevious.IconSvg = "<svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 24 24""><title>skip-previous-outline</title><path d=""M6,6H8V18H6M9.5,12L18,18V6M16,14.14L12.97,12L16,9.86V14.14Z"" /></svg>"
-        BtnPrevious.Location = New Point(124, 57)
+        BtnPrevious.Location = New Point(248, 104)
+        BtnPrevious.Margin = New Padding(6, 5, 6, 5)
         BtnPrevious.Name = "BtnPrevious"
-        BtnPrevious.Size = New Size(39, 36)
+        BtnPrevious.Size = New Size(78, 66)
         BtnPrevious.TabIndex = 5
         BtnPrevious.Type = AntdUI.TTypeMini.Primary
         ' 
         ' Button2
         ' 
-        Button2.Location = New Point(397, 56)
+        Button2.Location = New Point(794, 102)
+        Button2.Margin = New Padding(6, 5, 6, 5)
         Button2.Name = "Button2"
-        Button2.Size = New Size(57, 36)
+        Button2.Size = New Size(114, 66)
         Button2.TabIndex = 9
         Button2.Text = "管理"
         Button2.Type = AntdUI.TTypeMini.Primary
@@ -272,9 +290,10 @@ Partial Class MusicForm
         ' 
         BtnStop.IconRatio = 1.2F
         BtnStop.IconSvg = "<svg xmlns=""http://www.w3.org/2000/svg"" viewBox=""0 0 24 24""><title>stop</title><path d=""M18,18H6V6H18V18Z"" /></svg>"
-        BtnStop.Location = New Point(79, 57)
+        BtnStop.Location = New Point(158, 104)
+        BtnStop.Margin = New Padding(6, 5, 6, 5)
         BtnStop.Name = "BtnStop"
-        BtnStop.Size = New Size(39, 36)
+        BtnStop.Size = New Size(78, 66)
         BtnStop.TabIndex = 4
         BtnStop.Type = AntdUI.TTypeMini.Primary
         ' 
@@ -284,21 +303,23 @@ Partial Class MusicForm
         Tree1.BlockNode = True
         Tree1.Font = New Font("Microsoft YaHei UI", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(134))
         Tree1.Gap = 3
-        Tree1.Location = New Point(21, 23)
+        Tree1.Location = New Point(42, 42)
+        Tree1.Margin = New Padding(6, 5, 6, 5)
         Tree1.Name = "Tree1"
         Tree1.Radius = 10
-        Tree1.Size = New Size(157, 342)
+        Tree1.Size = New Size(314, 624)
         Tree1.TabIndex = 1
         Tree1.Text = "Tree1"
         ' 
         ' Panel3
         ' 
         Panel3.Controls.Add(Tree1)
-        Panel3.Location = New Point(0, 143)
+        Panel3.Location = New Point(0, 261)
+        Panel3.Margin = New Padding(6, 5, 6, 5)
         Panel3.Name = "Panel3"
         Panel3.Shadow = 15
         Panel3.ShadowOpacityAnimation = True
-        Panel3.Size = New Size(199, 385)
+        Panel3.Size = New Size(398, 702)
         Panel3.TabIndex = 34
         Panel3.Text = "Panel3"
         ' 
@@ -307,20 +328,22 @@ Partial Class MusicForm
         Panel4.Controls.Add(Image3d1)
         Panel4.Controls.Add(VideoView1)
         Panel4.Controls.Add(Label2)
-        Panel4.Location = New Point(189, 143)
+        Panel4.Location = New Point(378, 261)
+        Panel4.Margin = New Padding(6, 5, 6, 5)
         Panel4.Name = "Panel4"
         Panel4.Shadow = 15
         Panel4.ShadowOpacityAnimation = True
-        Panel4.Size = New Size(730, 279)
+        Panel4.Size = New Size(1460, 509)
         Panel4.TabIndex = 35
         Panel4.Text = "Panel4"
         ' 
         ' Label2
         ' 
         Label2.BackColor = Color.Transparent
-        Label2.Location = New Point(28, 23)
+        Label2.Location = New Point(56, 42)
+        Label2.Margin = New Padding(6, 5, 6, 5)
         Label2.Name = "Label2"
-        Label2.Size = New Size(660, 27)
+        Label2.Size = New Size(1320, 49)
         Label2.TabIndex = 22
         Label2.Text = "未知"
         Label2.TextAlign = ContentAlignment.TopCenter
@@ -334,15 +357,16 @@ Partial Class MusicForm
         ' 
         ' MusicForm
         ' 
-        AutoScaleDimensions = New SizeF(7F, 17F)
+        AutoScaleDimensions = New SizeF(14F, 31F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(918, 526)
+        ClientSize = New Size(1838, 970)
         Controls.Add(Panel4)
         Controls.Add(Panel3)
         Controls.Add(Panel2)
         Controls.Add(PageHeader1)
         Controls.Add(Panel1)
         FormBorderStyle = FormBorderStyle.FixedSingle
+        Margin = New Padding(6, 5, 6, 5)
         Name = "MusicForm"
         Text = "MusicForm"
         Panel1.ResumeLayout(False)

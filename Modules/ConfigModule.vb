@@ -27,6 +27,7 @@ Module ConfigModule
 
     Public ConfigFilePath = Application.StartupPath + "\config.json"
     Public selectedVersion
+    Public selectedVersion2
 
     ' 定义配置类
     Public Class Config
